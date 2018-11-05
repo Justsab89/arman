@@ -123,9 +123,10 @@ pool.getConnection(function(err, connection) {
         else {
             if (user[0].id_user == 336243307) {
                       if (msg.text === config.keyboard.kb2.one) {show_products(msg)}
-                      else if (msg.text === config.keyboard.kb2.two) {}
+                      else if (msg.text === config.keyboard.kb2.two) {show_commands(msg)}
                       else if (msg.text === config.keyboard.kb2.three) {show_users(msg)}
                       else if (msg.text === config.keyboard.kb2.four) {show_managers(msg)}
+                      else if (msg.text === config.keyboard.kb2.five) {show_products(msg)}
 
                       bot.sendMessage(user_id, 'Вы администратор', {
                                      reply_markup: {
@@ -198,7 +199,47 @@ bot.on('callback_query', query => {
   else if (res[0] =='send')  { ask_tel(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='manager')  { appoint_manager(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='del_manager')  { delete_manager(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
+  else if (res[0] =='del_product')  { delete_product(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
 })
+
+
+
+function delete_product(query) {
+
+var user_id = query.message.chat.id;
+  var str = query.data;
+  var res = str.split("#");
+  console.log('appoint manager res is:', res[0]);
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+    var sql = 'DELETE FROM product WHERE id = ?';
+
+    connection.query( sql , [res[2]], function(err, rows, fields) {
+    if (err) throw err;
+    var deleted = JSON.parse(JSON.stringify(rows));
+    console.log('deleted ', deleted);
+//    console.log('update affected ', upd[0].affectedRows);
+
+//    if (upd[0].affectedRows === 1){
+//    var text = res[2] + ' назначен менеджером';
+//    }
+//    else{
+//    var text = 'Никто не назначен менеджером';
+//    }
+//
+//    bot.sendMessage(user_id, text )
+    })
+})
+}
 
 
 
@@ -321,6 +362,60 @@ pool.getConnection(function(err, connection) {
     send_order(query)
     }
 
+    })
+})
+}
+
+
+
+function show_products(msg) {
+
+var user_id = msg.chat.id;
+var n_report = 'n_report'+user_id;
+var order_table = 'order'+user_id;
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+    var sql2 = ' SELECT * FROM product ';
+
+    connection.query( sql2 , function(err, rows, fields) {
+    if (err) throw err;
+    var product = JSON.parse(JSON.stringify(rows));
+    var keyboard = [];
+    console.log('products ', product);
+
+        for(var i = 0; i < product.length; i++){
+        keyboard.push([{'text': ('Удалить ' + product[i].name + ' ' + product[i].size) , 'callback_data': ('del_product#' + product[i].name + '#' + product[i].id)}]);
+
+
+         var text = product[i].name + ' ' + product[i].size + ' в одном А3 ' + product[i].size + ' шт' + '\n' +
+                    'Себестоимость бумаги ' + product[i].paper_exp + '\n' +
+                    'Наценка на бумагу ' + product[i].paper_profit + '\n' +
+                    'Себестоимость резки ' + product[i].cut_exp + '\n' +
+                    'Наценка на резку ' + product[i].cut_profit + '\n' +
+                    'Себестоимость печати ' + product[i].print_exp + '\n' +
+                    'Наценка на печать ' + product[i].print_profit + '\n' +
+                    'Себестоимость офф. печати ' + product[i].offprint_exp + '\n' +
+                    'Наценка на офф. печать ' + product[i].offprint_profit + '\n' +
+                    'Себестоимость цифр. печати ' + product[i].digprint_exp + '\n' +
+                    'Наценка на цифр. печать ' + product[i].digprint_profit;
+
+         bot.sendMessage( user_id, text,
+         {
+         'reply_markup': JSON.stringify({
+         inline_keyboard: keyboard
+                                        })
+         }
+         )
+        }
     })
 })
 }
