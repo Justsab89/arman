@@ -1,42 +1,8 @@
-//{
-//  "name": "kairbek",
-//  "version": "1.0.0",
-//  "description": "",
-//  "main": "index.js",
-//  "dependencies": {
-//    "date_format": "^0.1.1",
-//    "mysql": "^2.15.0",
-//    "node-telegram-bot-api": "^0.30.0",
-//    "tasktimer": "^1.0.0"
-//  },
-//  "devDependencies": {},
-//  "scripts": {
-////    "start": "node ./src/index.js"
-//    "test": "echo \"Error: no test specified\" && exit 1"
-//  },
-//  "repository": {
-//    "type": "git",
-//    "url": "git+https://github.com/Justsab89/arman.git"
-//  },
-//  "author": "",
-//  "license": "ISC",
-//  "bugs": {
-//    "url": "https://github.com/Justsab89/arman/issues"
-//  },
-//  "homepage": "https://github.com/Justsab89/arman#readme"
-//}
-
-// длытувдосты
-
 {
-  "name": "sabsql",
+  "name": "kairbek",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
-  "scripts": {
-    "start": "node ./src/index.js"
-  },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "date_format": "^0.1.1",
     "mysql": "^2.15.0",
@@ -44,5 +10,17 @@
     "tasktimer": "^1.0.0"
   },
   "devDependencies": {},
-  "description": ""
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Justsab89/arman.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Justsab89/arman/issues"
+  },
+  "homepage": "https://github.com/Justsab89/arman#readme"
 }
