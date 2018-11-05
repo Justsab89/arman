@@ -2,7 +2,7 @@
   "name": "kairbek",
   "version": "1.0.0",
   "description": "",
-  "main": "index3.js",
+  "main": "index.js",
   "dependencies": {
     "date_format": "^0.1.1",
     "mysql": "^2.15.0",
