@@ -11,8 +11,8 @@
   },
   "devDependencies": {},
   "scripts": {
-//    "start": "node ./src/index.js"
-    "test": "start "
+    "start": "node ./src/index.js"
+//    "test": "start "
   },
   "repository": {
     "type": "git",
