@@ -1,5 +1,5 @@
 module.exports = {
- TOKEN: '646259857:AAHPuOSmisOhE7aV2YbU2589bQdPCFErmsE',
+ TOKEN: '727456991:AAFDynw2UdrfayEMGD8FHvYyiLbudH9b9Vg',
  user: 'kairbek',
  db_name: 'kairbek',
  db_password: 'kairbek123',
@@ -10,10 +10,10 @@ module.exports = {
    },
    kb2: {
       one: '🔴 Посчитать заказ',
-      two: '🔧 команды',
+      two: '🔧 Список комманд',
       three: '🗑 Назначить менеджера',
       four: '📁 Удалить менеджера',
-      five: '🗒 Список комманд'
+      five: '🗒 Список продукции'
    }
  }
 }
