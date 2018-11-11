@@ -110,7 +110,7 @@ pool.getConnection(function(err, connection) {
                     [n_report] ,function(err, rows, fields) {
                     if (err) throw err;
 
-                        connection.query(' CREATE TABLE ?? (id INT(100) NOT NULL AUTO_INCREMENT, id_report INT(11), id_user INT(11), date_entry DATETIME, product VARCHAR(100), size VARCHAR(100), number INT(11), PRIMARY KEY(id)) ',
+                        connection.query(' CREATE TABLE ?? (id INT(100) NOT NULL AUTO_INCREMENT, id_report INT(11), id_user INT(11), date_entry DATETIME, product VARCHAR(100), size VARCHAR(100), number INT(11), offprice INT(11), PRIMARY KEY(id)) ',
                         [order] ,function(err, rows, fields) {
                         if (err) throw err;
                         })
@@ -201,6 +201,58 @@ bot.on('callback_query', query => {
   else if (res[0] =='del_manager')  { delete_manager(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='del_product')  { delete_product(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
 })
+
+
+
+function show_commands(msg) {
+
+var user_id = msg.chat.id;
+
+const text = '☑️ Чтобы ввести новый продукт наберите команду /product затем в этом порядке через # наберите 15 данных.\nНапример у вас следующие данные\n' +
+             '\nПервое название продукта: флаер' +
+             '\nВторое размер продукта: А5' +
+             '\nТретье кол-во на А3: 8 ' +
+             '\nЧетвертое себестоимость печати на струйном: 20 ' +
+             '\nПятое наценка печати на струйном: 10 ' +
+             '\nШестое себестоимость печати на ризографе: 10 ' +
+             '\nСедьмое наценка печати на ризографе: 5 ' +
+             '\nВосьмое себестоимость печати на офсете: 12 ' +
+             '\nДевятое наценка печати на офсете: 8 ' +
+             '\nДесятое себестоимость печати на цифровом: 30 ' +
+             '\nОдиннацатое наценка печати на цифровом: 10 ' +
+             '\nДвенадцатое себестоимость бумаги А3: 20 ' +
+             '\nТринадцатое наценка бумаги А3: 5 ' +
+             '\nЧетырнадцатое себестоимость резки: 5 ' +
+             '\nПятнадцатое наценка резки: 2 ' +
+             '\nВ итоге вы вводите следующую команду' +
+             '\n/product флаер#A5#8#20#10#10#5#12#8#30#10#20#5#5#2\n' +
+             '\n\n☑️ Чтобы ввести цену на тираж наберите команду /tiraj затем в этом порядке через # наберите 3 данных' +
+             '\nПервое цену за тираж: 50' +
+             '\nВторое кол-во ОТ: 0' +
+             '\nТретье кол-во ДО: 100 ' +
+             '\nВ итоге вы вводите следующую команду' +
+             '\n/tiraj 50#0#100' +
+
+bot.sendMessage(user_id, text)
+//    var mysql  = require('mysql');
+//    var pool  = mysql.createPool({
+//    host     : 'localhost',
+//    user     :  config.user,
+//    password :  config.db_password,
+//    database :  config.db_name
+//    })
+//
+//pool.getConnection(function(err, connection) {
+//
+//    var sql = 'DELETE FROM product WHERE id = ?';
+//
+//    connection.query( sql , [res[2]], function(err, rows, fields) {
+//    if (err) throw err;
+//    var deleted = JSON.parse(JSON.stringify(rows));
+//    })
+//})
+
+}
 
 
 
@@ -405,6 +457,8 @@ pool.getConnection(function(err, connection) {
                     'Наценка на печать ' + product[i].print_profit + '\n' +
                     'Себестоимость офф. печати ' + product[i].offprint_exp + '\n' +
                     'Наценка на офф. печать ' + product[i].offprint_profit + '\n' +
+                    'Себестоимость риз. печати ' + product[i].rizprint_exp + '\n' +
+                    'Наценка на риз. печать ' + product[i].rizprint_profit + '\n' +
                     'Себестоимость цифр. печати ' + product[i].digprint_exp + '\n' +
                     'Наценка на цифр. печать ' + product[i].digprint_profit;
 
@@ -554,10 +608,10 @@ var nomer = JSON.parse(JSON.stringify(rows));
     var test = [];
 
     for(var i = 0; i < order.length; i++){
-    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number]);
+    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number, order[i].offprice]);
     }
 
-        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number) VALUES ? ';
+        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice) VALUES ? ';
 
         connection.query( sql3 , [test], function(err, rows, fields) {
         if (err) throw err;
@@ -568,10 +622,10 @@ var nomer = JSON.parse(JSON.stringify(rows));
             }
 
             var sql4 = ' SELECT product.name, product.size, product.number AS ina3, product.print_exp, product.print_profit, product.paper_exp, product.paper_profit, product.cut_exp, product.cut_profit, product.expense, product.profit, ' +
-                       ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, ??.number ' +
+                       ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, ??.number, ??.offprice ' +
                        ' FROM product JOIN ?? WHERE product.name = ??.product AND product.size = ??.size AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
 
-            connection.query( sql4 , [order_table, order_table, order_table, order_table, order_table, order_table], function(err, rows, fields) {
+            connection.query( sql4 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table], function(err, rows, fields) {
             if (err) throw err;
             var counting = JSON.parse(JSON.stringify(rows));
             console.log('joining result ', counting);
@@ -584,15 +638,21 @@ var nomer = JSON.parse(JSON.stringify(rows));
 
              if (counting[i].number % counting[i].ina3 !== 0) {
              var kolvoa3 = counting[i].number % counting[i].ina3;
-             var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3 + 1;
+              var n_paper = counting[i].number/counting[i].ina3 + 1;
               var print_exp = counting[i].print_exp*n_paper;
               var print_profit = counting[i].print_profit*n_paper;
-              var offprint_exp = counting[i].offprint_exp*n_paper;
-              var offprint_profit = counting[i].offprint_profit*n_paper;
+//              var offprint_exp = counting[i].offprint_exp*n_paper;
+//              var offprint_profit = counting[i].offprint_profit*n_paper;
+              var offprint_exp = counting[i].offprice*n_paper/2;
+              var offprint_profit = counting[i].offprice*n_paper/2;
+
+              var rizprint_exp = counting[i].rizprint_exp*n_paper;
+              var rizprint_profit = counting[i].rizprint_profit*n_paper;
               var digprint_exp = counting[i].digprint_exp*n_paper;
               var digprint_profit = counting[i].digprint_profit*n_paper;
               var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
               var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
+              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
               var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
               var paper_exp = counting[i].paper_exp*n_paper;
               var paper_profit = counting[i].paper_profit*n_paper;
@@ -600,6 +660,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var cut_exp = counting[i].cut_exp*n_paper;
               var cut_profit = counting[i].cut_profit*n_paper;
               var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
+
               var exp = print_exp + paper_exp + cut_exp;
               var profit = print_profit + paper_profit + cut_profit;
               var total = profit + exp;
@@ -609,20 +670,29 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var digexp = digprint_exp + paper_exp + cut_exp;
               var digprofit = digprint_profit + paper_profit + cut_profit;
               var digtotal = digexp + digprofit;
+              var rizexp = rizprint_exp + paper_exp + cut_exp;
+              var rizprofit = rizprint_profit + paper_profit + cut_profit;
+              var riztotal = rizexp + rizprofit;
 
-             var sum = print_exp+print_profit+paper_exp+paper_profit+cut_exp+cut_profit;
+              var sum = print_exp+print_profit+paper_exp+paper_profit+cut_exp+cut_profit;
              }
 
              else {
               var n_paper = counting[i].number/counting[i].ina3 + 1;
               var print_exp = counting[i].print_exp*n_paper;
               var print_profit = counting[i].print_profit*n_paper;
-              var offprint_exp = counting[i].offprint_exp*n_paper;
-              var offprint_profit = counting[i].offprint_profit*n_paper;
+//              var offprint_exp = counting[i].offprint_exp*n_paper;
+//              var offprint_profit = counting[i].offprint_profit*n_paper;
+              var offprint_exp = counting[i].offprice*n_paper/2;
+              var offprint_profit = counting[i].offprice*n_paper/2;
+
+              var rizprint_exp = counting[i].rizprint_exp*n_paper;
+              var rizprint_profit = counting[i].rizprint_profit*n_paper;
               var digprint_exp = counting[i].digprint_exp*n_paper;
               var digprint_profit = counting[i].digprint_profit*n_paper;
               var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
               var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
+              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
               var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
               var paper_exp = counting[i].paper_exp*n_paper;
               var paper_profit = counting[i].paper_profit*n_paper;
@@ -640,12 +710,16 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var digexp = digprint_exp + paper_exp + cut_exp;
               var digprofit = digprint_profit + paper_profit + cut_profit;
               var digtotal = digexp + digprofit;
+              var rizexp = rizprint_exp + paper_exp + cut_exp;
+              var rizprofit = rizprint_profit + paper_profit + cut_profit;
+              var riztotal = rizexp + rizprofit;
 
               var sum = print_exp+print_profit+paper_exp+paper_profit+cut_exp+cut_profit;
              }
 
 
-               text += '🔹 ' + counting[i].name + ' ' +  counting[i].size + ' на сумму ' + sum + '\n' +
+               text += ' Имя: ' + nomer[0].username + ' номер: ' + '+' + nomer[0].tel + '\n' +
+                       '🔹 ' + counting[i].name + ' ' +  counting[i].size + ' на сумму ' + sum + '\n' +
                        ' кол-во А3 - ' + n_paper + '\n' +
                        '(себестоимость и наценка)' + '\n' +
                        'Струйная печать' + '\n' +
@@ -653,6 +727,11 @@ var nomer = JSON.parse(JSON.stringify(rows));
                        ' ЦБ ' + paper_exp + ' + ' + paper_profit + ' = ' + paper + '\n' +
                        ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                        ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
+                       'Ризограф печать' + '\n' +
+                       ' ЦП ' + rizprint_exp + ' + ' + rizprint_profit + ' = ' + rizprint + '\n' +
+                       ' ЦБ ' + paper_exp + ' + ' + paper_profit + ' = ' + paper + '\n' +
+                       ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
+                       ' Всего ' + rizexp + ' + ' + rizprofit + ' = ' + riztotal + '\n' +
                        'Офсетная печать' + '\n' +
                        ' ЦП ' + offprint_exp + ' + ' + offprint_profit + ' = ' + offprint + '\n' +
                        ' ЦБ ' + paper_exp + ' + ' + paper_profit + ' = ' + paper + '\n' +
@@ -699,7 +778,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
 }
 
 
-
+//когда уже номер зарегистрирован в базе и сразу после нажатия на "отправить заявку" срабатывает эта функция
 function send_order(query) {
 
 var user_id = query.message.chat.id;
@@ -731,10 +810,10 @@ var nomer = JSON.parse(JSON.stringify(rows));
     var test = [];
 
     for(var i = 0; i < order.length; i++){
-    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number]);
+    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number, order[i].offprice]);
     }
 
-        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number) VALUES ? ';
+        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice) VALUES ? ';
 
         connection.query( sql3 , [test], function(err, rows, fields) {
         if (err) throw err;
@@ -745,10 +824,10 @@ var nomer = JSON.parse(JSON.stringify(rows));
             }
 
             var sql4 = ' SELECT product.name, product.size, product.number AS ina3, product.print_exp, product.print_profit, product.paper_exp, product.paper_profit, product.cut_exp, product.cut_profit, product.expense, product.profit, ' +
-                       ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, ??.number ' +
+                       ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, ??.number, ??.offprice ' +
                        ' FROM product JOIN ?? WHERE product.name = ??.product AND product.size = ??.size AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
 
-            connection.query( sql4 , [order_table, order_table, order_table, order_table, order_table, order_table], function(err, rows, fields) {
+            connection.query( sql4 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table], function(err, rows, fields) {
             if (err) throw err;
             var counting = JSON.parse(JSON.stringify(rows));
             console.log('joining result ', counting);
@@ -761,15 +840,28 @@ var nomer = JSON.parse(JSON.stringify(rows));
 
              if (counting[i].number % counting[i].ina3 !== 0) {
              var kolvoa3 = counting[i].number % counting[i].ina3;
-             var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3 + 1;
+             var n_paper = counting[i].number/counting[i].ina3 + 1;
+
+//                var sql5 = ' SELECT price FROM tiraj WHERE n_from > ? AND n_to < ? ';
+//                connection.query( sql5 , [order_table, order_table], function(err, rows, fields) {
+//                if (err) throw err;
+//                var counting = JSON.parse(JSON.stringify(rows));
+//                })
+
               var print_exp = counting[i].print_exp*n_paper;
               var print_profit = counting[i].print_profit*n_paper;
-              var offprint_exp = counting[i].offprint_exp*n_paper;
-              var offprint_profit = counting[i].offprint_profit*n_paper;
+//              var offprint_exp = counting[i].offprint_exp;
+//              var offprint_profit = counting[i].offprint_profit;
+              var offprint_exp = counting[i].offprice*n_paper/2;
+              var offprint_profit = counting[i].offprice*n_paper/2;
+
+              var rizprint_exp = counting[i].rizprint_exp*n_paper;
+              var rizprint_profit = counting[i].rizprint_profit*n_paper;
               var digprint_exp = counting[i].digprint_exp*n_paper;
               var digprint_profit = counting[i].digprint_profit*n_paper;
               var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
               var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
+              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
               var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
               var paper_exp = counting[i].paper_exp*n_paper;
               var paper_profit = counting[i].paper_profit*n_paper;
@@ -777,6 +869,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var cut_exp = counting[i].cut_exp*n_paper;
               var cut_profit = counting[i].cut_profit*n_paper;
               var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
+
               var exp = print_exp + paper_exp + cut_exp;
               var profit = print_profit + paper_profit + cut_profit;
               var total = profit + exp;
@@ -786,20 +879,29 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var digexp = digprint_exp + paper_exp + cut_exp;
               var digprofit = digprint_profit + paper_profit + cut_profit;
               var digtotal = digexp + digprofit;
+              var rizexp = rizprint_exp + paper_exp + cut_exp;
+              var rizprofit = rizprint_profit + paper_profit + cut_profit;
+              var riztotal = rizexp + rizprofit;
 
-             var sum = print_exp+print_profit+paper_exp+paper_profit+cut_exp+cut_profit;
+              var sum = print_exp+print_profit+paper_exp+paper_profit+cut_exp+cut_profit;
              }
 
              else {
               var n_paper = counting[i].number/counting[i].ina3 + 1;
               var print_exp = counting[i].print_exp*n_paper;
               var print_profit = counting[i].print_profit*n_paper;
-              var offprint_exp = counting[i].offprint_exp*n_paper;
-              var offprint_profit = counting[i].offprint_profit*n_paper;
+//              var offprint_exp = counting[i].offprint_exp;
+//              var offprint_profit = counting[i].offprint_profit;
+              var offprint_exp = counting[i].offprice*n_paper/2;
+              var offprint_profit = counting[i].offprice*n_paper/2;
+
+              var rizprint_exp = counting[i].rizprint_exp*n_paper;
+              var rizprint_profit = counting[i].rizprint_profit*n_paper;
               var digprint_exp = counting[i].digprint_exp*n_paper;
               var digprint_profit = counting[i].digprint_profit*n_paper;
               var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
               var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
+              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
               var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
               var paper_exp = counting[i].paper_exp*n_paper;
               var paper_profit = counting[i].paper_profit*n_paper;
@@ -817,6 +919,9 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var digexp = digprint_exp + paper_exp + cut_exp;
               var digprofit = digprint_profit + paper_profit + cut_profit;
               var digtotal = digexp + digprofit;
+              var rizexp = rizprint_exp + paper_exp + cut_exp;
+              var rizprofit = rizprint_profit + paper_profit + cut_profit;
+              var riztotal = rizexp + rizprofit;
 
               var sum = print_exp+print_profit+paper_exp+paper_profit+cut_exp+cut_profit;
              }
@@ -831,6 +936,11 @@ var nomer = JSON.parse(JSON.stringify(rows));
                        ' ЦБ ' + paper_exp + ' + ' + paper_profit + ' = ' + paper + '\n' +
                        ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                        ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
+                       'Ризограф печать' + '\n' +
+                       ' ЦП ' + rizprint_exp + ' + ' + rizprint_profit + ' = ' + rizprint + '\n' +
+                       ' ЦБ ' + paper_exp + ' + ' + paper_profit + ' = ' + paper + '\n' +
+                       ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
+                       ' Всего ' + rizexp + ' + ' + rizprofit + ' = ' + riztotal + '\n' +
                        'Офсетная печать' + '\n' +
                        ' ЦП ' + offprint_exp + ' + ' + offprint_profit + ' = ' + offprint + '\n' +
                        ' ЦБ ' + paper_exp + ' + ' + paper_profit + ' = ' + paper + '\n' +
@@ -1167,39 +1277,48 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
     if (err) throw err;
     var id = JSON.parse(JSON.stringify(rows));
 
-    var sql2 = ' UPDATE ?? SET number = ? WHERE id = ? ';
+    var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to > ? ';
 
-        connection.query( sql2 , [ order, res[1], id[0].id ], function(err, rows, fields) {
+        connection.query( sql11 , [ res[1], res[1] ], function(err, rows, fields) {
         if (err) throw err;
+        var price = JSON.parse(JSON.stringify(rows));
+        console.log(' offprice: ', price);
 
-        var sql3 = ' SELECT * FROM ?? WHERE id_report = (SELECT id FROM ?? ORDER BY id DESC LIMIT 1) ';
+        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
 
-            connection.query( sql3 , [order, n_report], function(err, rows, fields) {
+            connection.query( sql2 , [ order, res[1], price[0].price, id[0].id ], function(err, rows, fields) {
             if (err) throw err;
-            var order = JSON.parse(JSON.stringify(rows));
-            var text = 'Вы сделали заявку на ';
+            console.log('update offprice: ', rows);
 
-            for(var i = 0; i < order.length; i++){
-            text += order[i].product + ' размер ' + order[i].size + ' тиражом ' + order[i].number + '\n';
-            }
+            var sql3 = ' SELECT * FROM ?? WHERE id_report = (SELECT id FROM ?? ORDER BY id DESC LIMIT 1) ';
 
-            bot.sendMessage(user_id, text, {
-                                         reply_markup: {
-                                           inline_keyboard: [
-                                             [{
-                                               text: 'Сделать заказ еще одних вещей',
-                                               callback_data: 'more'
-                                             }],
+                connection.query( sql3 , [order, n_report], function(err, rows, fields) {
+                if (err) throw err;
+                var order = JSON.parse(JSON.stringify(rows));
+                var text = 'Вы сделали заявку на ';
 
-                                             [{
-                                               text: 'Отправить заявку',
-                                               callback_data: 'send'
-                                             }]
-                                           ]
-                                         }
-                                   })
-             })
+                for(var i = 0; i < order.length; i++){
+                text += order[i].product + ' размер ' + order[i].size + ' тиражом ' + order[i].number + '\n';
+                }
+
+                bot.sendMessage(user_id, text, {
+                                             reply_markup: {
+                                               inline_keyboard: [
+                                                 [{
+                                                   text: 'Сделать заказ еще одних вещей',
+                                                   callback_data: 'more'
+                                                 }],
+
+                                                 [{
+                                                   text: 'Отправить заявку',
+                                                   callback_data: 'send'
+                                                 }]
+                                               ]
+                                             }
+                                       })
+                 })
         })
+      })
     })
 })
 }
@@ -1274,66 +1393,6 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
 
 
 
-function insert_entrance (query) {
-
-var str = query.data;
-var res = str.split(" ");
-console.log('res is:', res[0]);
-console.log('res is:', res[1]);
-
-var user_id = query.message.chat.id;
-var n_report = 'n_report'+user_id;
-
-    var mysql  = require('mysql');
-    var pool  = mysql.createPool({
-    host     : 'localhost',
-    user     :  config.user,
-    password :  config.db_password,
-    database :  config.db_name
-    })
-
-pool.getConnection(function(err, connection) {
-// (id_user, worker_name, date_entry, date_report, res_complex, entrance, floor, task_type, n_done)
-    var sql = ' UPDATE report SET entrance = ? WHERE id_user = ? AND id_report = (SELECT id FROM ?? ORDER BY id DESC LIMIT 1)  ';
-
-    connection.query( sql , [ res[1], user_id, n_report ], function(err, rows, fields) {
-    if (err) throw err;
-
-//    var sql2 = '  INSERT INTO report (id_report, id_user, worker_name, date_entry, date_report) VALUES ((SELECT id FROM ?? ORDER BY id DESC LIMIT 1), ?, (SELECT DISTINCT name FROM users WHERE id_user = ?),  ADDTIME (NOW(), "03:00:00"), ? ) ';
-
-//        connection.query( sql2 , [ n_report, user_id, user_id, res[1] ], function(err, rows, fields) {
-//        if (err) throw err;
-//
-//        var sql3 = ' SELECT DISTINCT * FROM residential_complex ';
-//
-//            connection.query( sql3 , function(err, rows, fields) {
-//            if (err) throw err;
-//            var all_jk = JSON.parse(JSON.stringify(rows));
-//            var keyboard = [];
-//
-//            for(var i = 0; i < all_jk.length; i++){
-//            keyboard.push([{'text': ( all_jk[i].name ) , 'callback_data': ('JK ' + all_jk[i].name)}]);
-//            }
-            const text = 'Теперь укажите этажи, где вы провели все 6 видов работ:\n1) Бурение отверстий для аэростата' +
-            '\n2) Монтаж аэростата' +
-            '\n3) Бурение отверстий для клапана' +
-            '\n4) Монтаж клапана' +
-            '\n5) Бурение отверстий для анимостата' +
-            '\n4) Монтаж анимостата' +
-            '\nЧтобы указать напишите боту следующее  "/sv 1#2#3#4#9$270". Только без кавычек. В этом примере 1,2,3,4,9 это этажи, а 270 кол-во проделанной работы' +
-
-                 bot.sendMessage( user_id, text,
-                 {
-                 'reply_markup': JSON.stringify({
-                 inline_keyboard: keyboard
-                                                })
-                 }
-                 )
-//            })
-//        })
-    })
-})
-}
 
 
 // Это функция прибавляет дни
@@ -1600,9 +1659,9 @@ console.log('NNtext ', splited)
 
 pool.getConnection(function(err, connection) {
 
-    var sql = ' INSERT INTO product (name, size, number, print_exp, print_profit, offprint_exp, offprint_profit, digprint_exp, digprint_profit, paper_exp, paper_profit, cut_exp, cut_profit ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    var sql = ' INSERT INTO product (name, size, number, print_exp, print_profit, rizprint_exp, rizprint_profit, offprint_exp, offprint_profit, digprint_exp, digprint_profit, paper_exp, paper_profit, cut_exp, cut_profit ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
-    connection.query( sql , [ splited[0], id_jk, splited[1], splited[2], splited[3], splited[4], splited[5], splited[6], splited[7], splited[8], splited[9], splited[10], splited[11], splited[12], splited[13] ], function(err, rows, fields) {
+    connection.query( sql , [ splited[0], id_jk, splited[1], splited[2], splited[3], splited[4], splited[5], splited[6], splited[7], splited[8], splited[9], splited[10], splited[11], splited[12], splited[13], splited[14], splited[15] ], function(err, rows, fields) {
     if (err) throw err;
 //    const text = 'Вы ввели в БД новый ЖК '  + edited_text + ' с ' + id_jk[0] + ' подъездами'
 //    bot.sendMessage(user_id, text)
@@ -1626,6 +1685,49 @@ pool.getConnection(function(err, connection) {
     })
 })
 })
+
+
+
+bot.onText(/\/tiraj (.+)/, (msg, [source, match]) => {
+
+var user_id = msg.chat.id;
+var msg_text = msg.text;
+
+var text = msg_text.replace("/tiraj", "");
+var splited = text.split("#");
+
+console.log('NNtext ', splited)
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+    var sql = ' INSERT INTO tiraj (price, n_from, n_to) VALUES (?,?,?) ';
+
+    connection.query( sql , [ splited[0], splited[1], splited[2] ], function(err, rows, fields) {
+    if (err) throw err;
+
+        var sql1 = ' SELECT * FROM tiraj ';
+
+        connection.query( sql1 , function(err, rows, fields) {
+        if (err) throw err;
+        var tiraj = JSON.parse(JSON.stringify(rows));
+        var text = 'Цены по тиражам: \n';
+        for(var i = 0; i < tiraj.length; i++){
+        text += tiraj[i].n_from  + ' - ' + tiraj[i].n_to + ' цена ' + tiraj[i].price + ' тг' + '\n';
+        }
+        bot.sendMessage(user_id, text)
+        })
+    })
+})
+})
+
 
 
 bot.onText(/\/nov-rab (.+)/, (msg, [source, match]) => {
