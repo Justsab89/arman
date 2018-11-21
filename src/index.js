@@ -127,6 +127,7 @@ pool.getConnection(function(err, connection) {
                       else if (msg.text === config.keyboard.kb2.three) {show_users(msg)}
                       else if (msg.text === config.keyboard.kb2.four) {show_managers(msg)}
                       else if (msg.text === config.keyboard.kb2.five) {show_products(msg)}
+                      else if (msg.text === config.keyboard.kb2.six) {show_tiraj(msg)}
 
                       bot.sendMessage(user_id, 'Вы администратор', {
                                      reply_markup: {
@@ -145,6 +146,14 @@ pool.getConnection(function(err, connection) {
 
                                          [{
                                            text: config.keyboard.kb2.four
+                                         }],
+
+                                         [{
+                                           text: config.keyboard.kb2.five
+                                         }],
+
+                                         [{
+                                           text: config.keyboard.kb2.six
                                          }]
                                        ],
                                        resize_keyboard: true
@@ -200,6 +209,7 @@ bot.on('callback_query', query => {
   else if (res[0] =='manager')  { appoint_manager(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='del_manager')  { delete_manager(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='del_product')  { delete_product(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
+  else if (res[0] =='del_tiraj')  { delete_tiraj(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
 })
 
 
@@ -231,7 +241,7 @@ const text = '☑️ Чтобы ввести новый продукт набе�
              '\nВторое кол-во ОТ: 0' +
              '\nТретье кол-во ДО: 100 ' +
              '\nВ итоге вы вводите следующую команду' +
-             '\n/tiraj 50#0#100' 
+             '\n/tiraj 50#0#100'
 
 bot.sendMessage(user_id, text)
 //    var mysql  = require('mysql');
@@ -252,6 +262,45 @@ bot.sendMessage(user_id, text)
 //    })
 //})
 
+}
+
+
+
+function delete_tiraj(query) {
+
+var user_id = query.message.chat.id;
+  var str = query.data;
+  var res = str.split("#");
+  console.log('appoint manager res is:', res[0]);
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+    var sql = 'DELETE FROM tiraj WHERE id = ?';
+
+    connection.query( sql , [res[1]], function(err, rows, fields) {
+    if (err) throw err;
+    var deleted = JSON.parse(JSON.stringify(rows));
+    console.log('deleted ', deleted);
+//    console.log('update affected ', upd[0].affectedRows);
+
+//    if (upd[0].affectedRows === 1){
+//    var text = res[2] + ' назначен менеджером';
+//    }
+//    else{
+//    var text = 'Никто не назначен менеджером';
+//    }
+//
+//    bot.sendMessage(user_id, text )
+    })
+})
 }
 
 
@@ -414,6 +463,50 @@ pool.getConnection(function(err, connection) {
     send_order(query)
     }
 
+    })
+})
+}
+
+
+
+function show_tiraj(msg) {
+
+var user_id = msg.chat.id;
+var n_report = 'n_report'+user_id;
+var order_table = 'order'+user_id;
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+    var sql = ' SELECT * FROM tiraj ';
+
+    connection.query( sql , function(err, rows, fields) {
+    if (err) throw err;
+    var tiraj = JSON.parse(JSON.stringify(rows));
+    var keyboard = [];
+    console.log('products ', tiraj);
+
+        for(var i = 0; i < tiraj.length; i++){
+        keyboard.push([{'text': ('Удалить строку') , 'callback_data': ('del_tiraj#' + tiraj[i].id)}]);
+
+
+         var text = 'Тираж от ' + tiraj[i].n_from+ ' до ' + tiraj[i].n_to + ' цена - ' + tiraj[i].price ;
+
+         bot.sendMessage( user_id, text,
+         {
+         'reply_markup': JSON.stringify({
+         inline_keyboard: keyboard
+                                        })
+         }
+         )
+        }
     })
 })
 }
@@ -1176,10 +1269,7 @@ pool.getConnection(function(err, connection) {
                                                 })
                  }
                  )
-                // Теперь рисунок с видами размеров
-                 bot.sendPhoto(user_id, fs.readFileSync(__dirname + '/picture-map.png'), {
-                 caption: 'Посмотрите виды размеров'
-                 })
+
             })
         })
     })
