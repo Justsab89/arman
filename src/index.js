@@ -174,10 +174,6 @@ pool.getConnection(function(err, connection) {
                                          [{
                                            text: config.keyboard.kb1.two
                                          }]
-//                                          ,
-//                                         [{
-//                                           text: config.keyboard.kb1.three
-//                                         }]
                                        ],
                                        resize_keyboard: true
                                      }
@@ -494,7 +490,7 @@ pool.getConnection(function(err, connection) {
     console.log('products ', tiraj);
 
         for(var i = 0; i < tiraj.length; i++){
-        keyboard.push([{'text': ('Удалить строку') , 'callback_data': ('del_tiraj#' + tiraj[i].id)}]);
+//        keyboard.push([{'text': ('Удалить строку') , 'callback_data': ('del_tiraj#' + tiraj[i].id)}]);
 
 
          var text = 'Тираж от ' + tiraj[i].n_from+ ' до ' + tiraj[i].n_to + ' цена - ' + tiraj[i].price ;
@@ -502,7 +498,7 @@ pool.getConnection(function(err, connection) {
          bot.sendMessage( user_id, text,
          {
          'reply_markup': JSON.stringify({
-         inline_keyboard: keyboard
+         inline_keyboard: [{'text': ('Удалить строку') , 'callback_data': ('del_tiraj#' + tiraj[i].id)}]
                                         })
          }
          )
