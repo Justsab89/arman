@@ -495,13 +495,17 @@ pool.getConnection(function(err, connection) {
 
          var text = 'Тираж от ' + tiraj[i].n_from+ ' до ' + tiraj[i].n_to + ' цена - ' + tiraj[i].price ;
 
-         bot.sendMessage( user_id, text,
-         {
-         'reply_markup': JSON.stringify({
-         inline_keyboard: [{'text': ('Удалить строку') , 'callback_data': ('del_tiraj#' + tiraj[i].id)}]
-                                        })
-         }
-         )
+         bot.sendMessage(user_id, text, {
+                                     reply_markup: {
+                                       inline_keyboard: [
+                                         [{
+                                           text: 'Удалить строку',
+                                           callback_data: 'del_tiraj#' + tiraj[i].id
+                                         }]
+                                       ],
+                                       resize_keyboard: true
+                                     }
+                               })
         }
     })
 })
