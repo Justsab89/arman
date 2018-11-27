@@ -7,6 +7,9 @@ const helper = require('./helper')
 const fs = require('fs')
 //const TaskTimer = require('tasktimer')
 //const database = require('./database')
+const admin = 336243307
+
+
 
 const bot = new TelegramBot(config.TOKEN, {
   polling: true
@@ -121,7 +124,7 @@ pool.getConnection(function(err, connection) {
         }
 // В ином случае, если только это не запрос от админа, то вводим имя юзера в БД либо обрабатываем другие запросы
         else {
-            if (user[0].id_user == 336243307) {
+            if (user[0].id_user == admin) {
                       if (msg.text === config.keyboard.kb2.one) {show_products(msg)}
                       else if (msg.text === config.keyboard.kb2.two) {show_commands(msg)}
                       else if (msg.text === config.keyboard.kb2.three) {show_users(msg)}
@@ -207,6 +210,8 @@ bot.on('callback_query', query => {
   else if (res[0] =='del_product')  { delete_product(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='del_tiraj')  { delete_tiraj(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
 })
+
+
 
 
 
@@ -1875,3 +1880,70 @@ pool.getConnection(function(err, connection) {
 //               for(var i = 0; i < street.length; i++){
 //               keyboard.push([{'text': ( street[i].interception ) , 'callback_data': ('22 ' + street[i].id_interception)}]);
 //               }
+
+
+bot.onText(/\/opt (.+)/, (msg, [source, match]) => {
+
+var user_id = msg.chat.id;
+var msg_text = msg.text;
+
+var text = msg_text.replace("/opt", "");
+var splited = text.split("#");
+
+console.log('NNtext ', splited)
+
+if(splited[0]<splited[1]) {
+var long = splited[1];
+var short = splited[0];
+}
+else
+{
+var long = splited[0];
+var short = splited[1];
+}
+
+var rem_long = 45%long;
+var rem_short = 22%short;
+
+var rem_45short = 45%short;
+var rem_22long = 22%long;
+
+var llss = (45-rem_long)/long*(22-rem_short)/short;
+var lsls = (45-rem_45short)/short*(22-rem_22long)/long;
+
+if(llss>lsls) { var ina3 = llss; }
+else { var ina3 = lsls; }
+
+var text = 'haha ' + ina3;
+
+bot.sendMessage(user_id, text)
+
+//    var mysql  = require('mysql');
+//    var pool  = mysql.createPool({
+//    host     : 'localhost',
+//    user     :  config.user,
+//    password :  config.db_password,
+//    database :  config.db_name
+//    })
+//
+//pool.getConnection(function(err, connection) {
+//
+//    var sql = ' INSERT INTO tiraj (price, n_from, n_to) VALUES (?,?,?) ';
+//
+//    connection.query( sql , [ splited[0], splited[1], splited[2] ], function(err, rows, fields) {
+//    if (err) throw err;
+//
+//        var sql1 = ' SELECT * FROM tiraj ';
+//
+//        connection.query( sql1 , function(err, rows, fields) {
+//        if (err) throw err;
+//        var tiraj = JSON.parse(JSON.stringify(rows));
+//        var text = 'Цены по тиражам: \n';
+//        for(var i = 0; i < tiraj.length; i++){
+//        text += tiraj[i].n_from  + ' - ' + tiraj[i].n_to + ' цена ' + tiraj[i].price + ' тг' + '\n';
+//        }
+//        bot.sendMessage(user_id, text)
+//        })
+//    })
+//})
+})
