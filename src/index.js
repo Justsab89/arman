@@ -203,6 +203,7 @@ bot.on('callback_query', query => {
   else if (res[0] =='size')  { insert_size(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='product_more') { insert_product_more(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='number')  { insert_number(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
+  else if (res[0] =='paper')  { insert_paper(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='more')  { show_products_query(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='send')  { ask_tel(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='manager')  { appoint_manager(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
@@ -1314,6 +1315,92 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
     var sql2 = ' UPDATE ?? SET size = ? WHERE id = ? ';
 
         connection.query( sql2 , [ order, res[1], id[0].id ], function(err, rows, fields) {
+        if (err) throw err;
+
+// отсюд новое
+        var sql3 = ' SELECT thickness, price FROM paper ';
+
+            connection.query( sql3 , function(err, rows, fields) {
+            if (err) throw err;
+            var product = JSON.parse(JSON.stringify(rows));
+            var keyboard = [];
+
+            keyboard.push([{'text': ( 'Вы сами выберите мне оптимальную толщину бумаги' ) , 'callback_data': ('paper_pofig#')}]);
+            for(var i = 0; i < product.length; i++){
+            keyboard.push([{'text': ( product[i].number ) , 'callback_data': ('paper#'  + product[i].thickness + product[i].price)}]);
+            }
+
+
+            const text = 'Теперь выберите толщину бумаги '
+
+                 bot.sendMessage( user_id, text,
+                 {
+                 'reply_markup': JSON.stringify({
+                 inline_keyboard: keyboard
+                                                })
+                 }
+                 )
+            })
+
+//        var sql3 = ' SELECT number FROM product WHERE name = ? ORDER BY id DESC LIMIT 1 ';
+//
+//            connection.query( sql3 , res[2], function(err, rows, fields) {
+//            if (err) throw err;
+//            var product = JSON.parse(JSON.stringify(rows));
+//            var keyboard = [];
+//
+//            for(var i = 0; i < 20; i++){
+//            var num = product[0].number*i;
+//            keyboard.push([{'text': ( num ) , 'callback_data': ('number#' + num)}]);
+//            }
+//            const text = 'Теперь укажите тираж '
+//
+//                 bot.sendMessage( user_id, text,
+//                 {
+//                 'reply_markup': JSON.stringify({
+//                 inline_keyboard: keyboard
+//                                                })
+//                 }
+//                 )
+//            })
+        })
+    })
+})
+}
+
+
+
+function insert_paper (query) {
+
+var str = query.data;
+var res = str.split("#");
+console.log('res is:', res[0]);
+console.log('res is:', res[1]);
+console.log('res is:', res[2]);
+
+var user_id = query.message.chat.id;
+var n_report = 'n_report'+user_id;
+var order = 'order'+user_id;
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
+
+    connection.query( sql1 , [ order ], function(err, rows, fields) {
+    if (err) throw err;
+    var id = JSON.parse(JSON.stringify(rows));
+
+    var sql2 = ' UPDATE ?? SET paper_exp = ?, paper_type = ?   WHERE id = ? ';
+
+        connection.query( sql2 , [ order, res[1], res[2] ], function(err, rows, fields) {
         if (err) throw err;
 
         var sql3 = ' SELECT number FROM product WHERE name = ? ORDER BY id DESC LIMIT 1 ';
