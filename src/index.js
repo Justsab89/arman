@@ -1256,7 +1256,7 @@ pool.getConnection(function(err, connection) {
         connection.query( sql2 , [ order, n_report, user_id, res[1] ], function(err, rows, fields) {
         if (err) throw err;
 
-        var sql3 = ' SELECT name,size FROM product WHERE name = ? ';
+        var sql3 = ' SELECT id,name,size FROM product WHERE name = ? ';
 
             connection.query( sql3 , res[1], function(err, rows, fields) {
             if (err) throw err;
