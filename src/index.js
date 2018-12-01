@@ -1403,7 +1403,7 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
 //  ORDER BY id DESC LIMIT 1  res[3], res[4]    size = ? AND name = ?
         var sql3 = ' SELECT interval FROM product WHERE id = ?';
 
-            connection.query( sql3 , [res[4]], function(err, rows, fields) {
+            connection.query( sql3 , res[4], function(err, rows, fields) {
             if (err) throw err;
             var product = JSON.parse(JSON.stringify(rows));
             var keyboard = [];
