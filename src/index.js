@@ -1256,7 +1256,7 @@ pool.getConnection(function(err, connection) {
         connection.query( sql2 , [ order, n_report, user_id, res[1] ], function(err, rows, fields) {
         if (err) throw err;
 
-        var sql3 = ' SELECT size FROM product WHERE name = ? ';
+        var sql3 = ' SELECT size,name FROM product WHERE name = ? ';
 
             connection.query( sql3 , res[1], function(err, rows, fields) {
             if (err) throw err;
@@ -1264,7 +1264,7 @@ pool.getConnection(function(err, connection) {
             var keyboard = [];
 
             for(var i = 0; i < product.length; i++){
-            keyboard.push([{'text': ( product[i].size ) , 'callback_data': ('size#' + product[i].size + '#' + res[1] )}]);
+            keyboard.push([{'text': ( product[i].size ) , 'callback_data': ('size#' + product[i].size + '#' + res[1] + '#' + product[i].name )}]);
             }
             const text = 'Теперь выберите размер '
 
@@ -1326,7 +1326,7 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
 
             keyboard.push([{'text': ( 'Вы сами выберите мне оптимальную толщину бумаги' ) , 'callback_data': ('paper_pofig#')}]);
             for(var i = 0; i < product.length; i++){
-            keyboard.push([{'text': ( product[i].thickness ) , 'callback_data': ('paper#'  + product[i].thickness + '#' +  product[i].price  + '#' + res[1] )}]);
+            keyboard.push([{'text': ( product[i].thickness ) , 'callback_data': ('paper#'  + product[i].thickness + '#' +  product[i].price  + '#' + res[1] + '#' + res[3]  )}]);
             }
 
             const text = 'Теперь выберите толщину бумаги '
@@ -1401,9 +1401,9 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
         connection.query( sql2 , [ order, res[1], res[2], id[0].id ], function(err, rows, fields) {
         if (err) throw err;
 
-        var sql3 = ' SELECT interval FROM product WHERE name = ? ORDER BY id DESC LIMIT 1 ';
+        var sql3 = ' SELECT interval FROM product WHERE size = ? AND name = ? ORDER BY id DESC LIMIT 1 ';
 
-            connection.query( sql3 , res[3], function(err, rows, fields) {
+            connection.query( sql3 , [res[3], res[4]], function(err, rows, fields) {
             if (err) throw err;
             var product = JSON.parse(JSON.stringify(rows));
             var keyboard = [];
