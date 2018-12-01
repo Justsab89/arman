@@ -1398,7 +1398,7 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
 
     var sql2 = ' UPDATE ?? SET paper_type = ?, paper_exp = ?   WHERE id = ? ';
 
-        connection.query( sql2 , [ order, res[1], res[2] ], function(err, rows, fields) {
+        connection.query( sql2 , [ order, res[1], res[2], id[0].id ], function(err, rows, fields) {
         if (err) throw err;
 
         var sql3 = ' SELECT number FROM product WHERE name = ? ORDER BY id DESC LIMIT 1 ';
