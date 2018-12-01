@@ -1256,7 +1256,7 @@ pool.getConnection(function(err, connection) {
         connection.query( sql2 , [ order, n_report, user_id, res[1] ], function(err, rows, fields) {
         if (err) throw err;
 
-        var sql3 = ' SELECT size,name FROM product WHERE name = ? ';
+        var sql3 = ' SELECT name,size FROM product WHERE name = ? ';
 
             connection.query( sql3 , res[1], function(err, rows, fields) {
             if (err) throw err;
@@ -1400,8 +1400,8 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
 
         connection.query( sql2 , [ order, res[1], res[2], id[0].id ], function(err, rows, fields) {
         if (err) throw err;
-
-        var sql3 = ' SELECT interval FROM product WHERE size = ? AND name = ? ORDER BY id DESC LIMIT 1 ';
+//  ORDER BY id DESC LIMIT 1 
+        var sql3 = ' SELECT interval FROM product WHERE size = ? AND name = ?';
 
             connection.query( sql3 , [res[3], res[4]], function(err, rows, fields) {
             if (err) throw err;
