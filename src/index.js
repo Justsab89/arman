@@ -1264,7 +1264,7 @@ pool.getConnection(function(err, connection) {
             var keyboard = [];
 
             for(var i = 0; i < product.length; i++){
-            keyboard.push([{'text': ( product[i].size ) , 'callback_data': ('size#' + product[i].size + '#' + res[1] + '#' + product[i].name )}]);
+            keyboard.push([{'text': ( product[i].size ) , 'callback_data': ('size#' + product[i].size + '#' + res[1] + '#' + product[i].id )}]);
             }
             const text = 'Теперь выберите размер '
 
@@ -1400,10 +1400,10 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
 
         connection.query( sql2 , [ order, res[1], res[2], id[0].id ], function(err, rows, fields) {
         if (err) throw err;
-//  ORDER BY id DESC LIMIT 1 
-        var sql3 = ' SELECT interval FROM product WHERE size = ? AND name = ?';
+//  ORDER BY id DESC LIMIT 1  res[3], res[4]    size = ? AND name = ?
+        var sql3 = ' SELECT interval FROM product WHERE id = ?';
 
-            connection.query( sql3 , [res[3], res[4]], function(err, rows, fields) {
+            connection.query( sql3 , [res[4]], function(err, rows, fields) {
             if (err) throw err;
             var product = JSON.parse(JSON.stringify(rows));
             var keyboard = [];
