@@ -1396,7 +1396,7 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
     if (err) throw err;
     var id = JSON.parse(JSON.stringify(rows));
 
-    var sql2 = ' UPDATE ?? SET paper_exp = ?, paper_type = ?   WHERE id = ? ';
+    var sql2 = ' UPDATE ?? SET paper_type = ?, paper_exp = ?   WHERE id = ? ';
 
         connection.query( sql2 , [ order, res[1], res[2] ], function(err, rows, fields) {
         if (err) throw err;
