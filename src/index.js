@@ -113,7 +113,7 @@ pool.getConnection(function(err, connection) {
                     [n_report] ,function(err, rows, fields) {
                     if (err) throw err;
 
-                        connection.query(' CREATE TABLE ?? (id INT(100) NOT NULL AUTO_INCREMENT, id_report INT(11), id_user INT(11), date_entry DATETIME, product VARCHAR(100), size VARCHAR(100), number INT(11), offprice INT(11), PRIMARY KEY(id)) ',
+                        connection.query(' CREATE TABLE ?? (id INT(100) NOT NULL AUTO_INCREMENT, id_report INT(11), id_user INT(11), date_entry DATETIME, product VARCHAR(100), size VARCHAR(100), number INT(11), offprice INT(11), paper_type VARCHAR(100), paper_exp INT(11), PRIMARY KEY(id)) ',
                         [order] ,function(err, rows, fields) {
                         if (err) throw err;
                         })
@@ -707,10 +707,10 @@ var nomer = JSON.parse(JSON.stringify(rows));
     var test = [];
 
     for(var i = 0; i < order.length; i++){
-    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number, order[i].offprice]);
+    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number, order[i].offprice, order[i].paper_type, order[i].paper_exp]);
     }
 
-        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice) VALUES ? ';
+        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice, paper_type, paper_exp) VALUES ? ';
 
         connection.query( sql3 , [test], function(err, rows, fields) {
         if (err) throw err;
@@ -720,7 +720,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
             text += order[i].product + ' размер ' + order[i].size + ' тиражом ' + order[i].number + '\n';
             }
 
-            var sql4 = ' SELECT product.name, product.size, product.number AS ina3, product.print_exp, product.print_profit, product.paper_exp, product.paper_profit, product.cut_exp, product.cut_profit, product.expense, product.profit, ' +
+            var sql4 = ' SELECT product.name, product.size, product.number AS ina3, product.print_exp, product.print_profit, product.paper_exp, product.paper_type, product.cut_exp, product.cut_profit, product.expense, product.profit, ' +
                        ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, ??.number, ??.offprice ' +
                        ' FROM product JOIN ?? WHERE product.name = ??.product AND product.size = ??.size AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
 
@@ -754,7 +754,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
               var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
               var paper_exp = counting[i].paper_exp*n_paper;
-              var paper_profit = counting[i].paper_profit*n_paper;
+              var paper_profit = counting[i].paper_type*n_paper;
               var paper = counting[i].paper_exp*n_paper + counting[i].paper_profit*n_paper;
               var cut_exp = counting[i].cut_exp*n_paper;
               var cut_profit = counting[i].cut_profit*n_paper;
@@ -794,7 +794,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
               var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
               var paper_exp = counting[i].paper_exp*n_paper;
-              var paper_profit = counting[i].paper_profit*n_paper;
+              var paper_profit = counting[i].paper_type*n_paper;
               var paper = counting[i].paper_exp*n_paper + counting[i].paper_profit*n_paper;
               var cut_exp = counting[i].cut_exp*n_paper;
               var cut_profit = counting[i].cut_profit*n_paper;
