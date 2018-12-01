@@ -1326,7 +1326,7 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
 
             keyboard.push([{'text': ( 'Вы сами выберите мне оптимальную толщину бумаги' ) , 'callback_data': ('paper_pofig#')}]);
             for(var i = 0; i < product.length; i++){
-            keyboard.push([{'text': ( product[i].number ) , 'callback_data': ('paper#'  + product[i].thickness + '#' +  product[i].price)}]);
+            keyboard.push([{'text': ( product[i].thickness ) , 'callback_data': ('paper#'  + product[i].thickness + '#' +  product[i].price)}]);
             }
 
             const text = 'Теперь выберите толщину бумаги '
