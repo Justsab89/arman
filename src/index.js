@@ -1401,7 +1401,7 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
         connection.query( sql2 , [ order, res[1], res[2], id[0].id ], function(err, rows, fields) {
         if (err) throw err;
 //  ORDER BY id DESC LIMIT 1  res[3], res[4]    size = ? AND name = ?  WHERE id = ?
-        var sql3 = ' SELECT interval FROM product ';
+        var sql3 = ' SELECT * FROM product ';
 
             connection.query( sql3 , res[4], function(err, rows, fields) {
             if (err) throw err;
