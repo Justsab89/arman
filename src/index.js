@@ -1401,7 +1401,7 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
         connection.query( sql2 , [ order, res[1], res[2], id[0].id ], function(err, rows, fields) {
         if (err) throw err;
 
-        var sql3 = ' SELECT number FROM product WHERE name = ? ORDER BY id DESC LIMIT 1 ';
+        var sql3 = ' SELECT interval FROM product WHERE name = ? ORDER BY id DESC LIMIT 1 ';
 
             connection.query( sql3 , res[3], function(err, rows, fields) {
             if (err) throw err;
@@ -1409,7 +1409,7 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
             var keyboard = [];
 
             for(var i = 0; i < 20; i++){
-            var num = product[0].number*i;
+            var num = product[0].interval*i;
             keyboard.push([{'text': ( num ) , 'callback_data': ('number#' + num)}]);
             }
             const text = 'Теперь укажите тираж '
