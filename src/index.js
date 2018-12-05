@@ -7,8 +7,10 @@ const helper = require('./helper')
 const fs = require('fs')
 //const TaskTimer = require('tasktimer')
 //const database = require('./database')
-const admin = 336243307
+const admin = 110638690
 
+//SABYR  336243307
+//ARMAN  110638690
 
 
 const bot = new TelegramBot(config.TOKEN, {
@@ -196,7 +198,6 @@ bot.on('callback_query', query => {
   var res = str.split("#");
   console.log('res is:', res[0]);
 //  var res2 = str.split("#");
-//  console.log('res is:', res2[0]); send_order(query);
 
 
   if (res[0] =='product') { insert_product(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
