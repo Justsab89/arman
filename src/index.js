@@ -113,7 +113,7 @@ pool.getConnection(function(err, connection) {
                     [n_report] ,function(err, rows, fields) {
                     if (err) throw err;
 
-                        connection.query(' CREATE TABLE ?? (id INT(100) NOT NULL AUTO_INCREMENT, id_report INT(11), id_user INT(11), date_entry DATETIME, product VARCHAR(100), size VARCHAR(100), number INT(11), offprice INT(11), paper_type VARCHAR(100), paper_exp INT(11), PRIMARY KEY(id)) ',
+                        connection.query(' CREATE TABLE ?? (id INT(100) NOT NULL AUTO_INCREMENT, id_report INT(11), id_user INT(11), date_entry DATETIME, product VARCHAR(100), size VARCHAR(100), number INT(11), offprice INT(11), paper_type VARCHAR(100), paper_exp INT(11), paper_side VARCHAR(10), PRIMARY KEY(id)) ',
                         [order] ,function(err, rows, fields) {
                         if (err) throw err;
                         })
@@ -204,6 +204,7 @@ bot.on('callback_query', query => {
   else if (res[0] =='product_more') { insert_product_more(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='number')  { insert_number(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='paper')  { insert_paper(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
+  else if (res[0] =='side')  { insert_side(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='more')  { show_products_query(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='send')  { ask_tel(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='manager')  { appoint_manager(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
@@ -549,7 +550,6 @@ pool.getConnection(function(err, connection) {
 
          var text = product[i].name + ' ' + product[i].size + ' в одном А3 ' + product[i].size + ' шт' + '\n' +
                     'Себестоимость бумаги ' + product[i].paper_exp + '\n' +
-                    'Наценка на бумагу ' + product[i].paper_profit + '\n' +
                     'Себестоимость резки ' + product[i].cut_exp + '\n' +
                     'Наценка на резку ' + product[i].cut_profit + '\n' +
                     'Себестоимость печати ' + product[i].print_exp + '\n' +
@@ -707,10 +707,11 @@ var nomer = JSON.parse(JSON.stringify(rows));
     var test = [];
 
     for(var i = 0; i < order.length; i++){
-    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number, order[i].offprice, order[i].paper_type, order[i].paper_exp]);
+    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number, order[i].offprice, order[i].paper_type, order[i].paper_exp, order[i].paper_side]);
     }
 
-        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice, paper_type, paper_exp) VALUES ? ';
+
+        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice, paper_type, paper_exp, paper_side) VALUES ? ';
 
         connection.query( sql3 , [test], function(err, rows, fields) {
         if (err) throw err;
@@ -720,11 +721,11 @@ var nomer = JSON.parse(JSON.stringify(rows));
             text += order[i].product + ' размер ' + order[i].size + ' тиражом ' + order[i].number + '\n';
             }
 
-            var sql4 = ' SELECT product.name, product.size, product.number AS ina3, product.print_exp, product.print_profit, product.paper_exp, product.paper_type, product.cut_exp, product.cut_profit, product.expense, product.profit, ' +
-                       ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, ??.number, ??.offprice ' +
+            var sql4 = ' SELECT product.name, product.size, product.number AS ina3, product.print_exp, product.print_profit, product.cut_exp, product.cut_profit, product.expense, product.profit, ' +
+                       ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, ??.number, ??.offprice, ??.paper_exp AS paper_exp, ??.paper_type, ??.paper_side ' +
                        ' FROM product JOIN ?? WHERE product.name = ??.product AND product.size = ??.size AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
 
-            connection.query( sql4 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table], function(err, rows, fields) {
+            connection.query( sql4 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table], function(err, rows, fields) {
             if (err) throw err;
             var counting = JSON.parse(JSON.stringify(rows));
             console.log('joining result ', counting);
@@ -754,26 +755,28 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
               var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
               var paper_exp = counting[i].paper_exp*n_paper;
-              var paper_profit = counting[i].paper_type*n_paper;
-              var paper = counting[i].paper_exp*n_paper + counting[i].paper_profit*n_paper;
+              var paper = counting[i].paper_exp*n_paper;
               var cut_exp = counting[i].cut_exp*n_paper;
               var cut_profit = counting[i].cut_profit*n_paper;
               var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
 
               var exp = print_exp + paper_exp + cut_exp;
-              var profit = print_profit + paper_profit + cut_profit;
+              var profit = print_profit  + cut_profit;
               var total = profit + exp;
               var offexp = offprint_exp + paper_exp + cut_exp;
-              var offprofit = offprint_profit + paper_profit + cut_profit;
+              var offprofit = offprint_profit  + cut_profit;
               var offtotal = offexp + offprofit;
               var digexp = digprint_exp + paper_exp + cut_exp;
-              var digprofit = digprint_profit + paper_profit + cut_profit;
+              var digprofit = digprint_profit  + cut_profit;
               var digtotal = digexp + digprofit;
               var rizexp = rizprint_exp + paper_exp + cut_exp;
-              var rizprofit = rizprint_profit + paper_profit + cut_profit;
+              var rizprofit = rizprint_profit  + cut_profit;
               var riztotal = rizexp + rizprofit;
 
-              var sum = print_exp+print_profit+paper_exp+paper_profit+cut_exp+cut_profit;
+              var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+              var paper_type = counting[i].paper_type;
+              var paper_side = counting[i].paper_side;
+//              var paper_type = counting[i].paper_type;
              }
 
              else {
@@ -794,69 +797,58 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
               var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
               var paper_exp = counting[i].paper_exp*n_paper;
-              var paper_profit = counting[i].paper_type*n_paper;
-              var paper = counting[i].paper_exp*n_paper + counting[i].paper_profit*n_paper;
+
+              var paper = counting[i].paper_exp*n_paper;
               var cut_exp = counting[i].cut_exp*n_paper;
               var cut_profit = counting[i].cut_profit*n_paper;
               var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
 
               var exp = print_exp + paper_exp + cut_exp;
-              var profit = print_profit + paper_profit + cut_profit;
+              var profit = print_profit + cut_profit;
               var total = profit + exp;
               var offexp = offprint_exp + paper_exp + cut_exp;
-              var offprofit = offprint_profit + paper_profit + cut_profit;
+              var offprofit = offprint_profit + cut_profit;
               var offtotal = offexp + offprofit;
               var digexp = digprint_exp + paper_exp + cut_exp;
-              var digprofit = digprint_profit + paper_profit + cut_profit;
+              var digprofit = digprint_profit + cut_profit;
               var digtotal = digexp + digprofit;
               var rizexp = rizprint_exp + paper_exp + cut_exp;
-              var rizprofit = rizprint_profit + paper_profit + cut_profit;
+              var rizprofit = rizprint_profit + cut_profit;
               var riztotal = rizexp + rizprofit;
 
-              var sum = print_exp+print_profit+paper_exp+paper_profit+cut_exp+cut_profit;
+              var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+              var paper_type = counting[i].paper_type;
+              var paper_side = counting[i].paper_side;
              }
 
+                if(counting[i].paper_side === 'one') {var side = 'Односторонняя печать';}
+                else if(counting[i].paper_side === 'two') {var side = 'Двухсторонняя печать';}
 
                text += ' Имя: ' + nomer[0].username + ' номер: ' + '+' + nomer[0].tel + '\n' +
                        '🔹 ' + counting[i].name + ' ' +  counting[i].size + ' на сумму ' + sum + '\n' +
                        ' кол-во А3 - ' + n_paper + '\n' +
                        '(себестоимость и наценка)' + '\n' +
+                       side + '\n' +
                        'Струйная печать' + '\n' +
                        ' ЦП ' + print_exp + ' + ' + print_profit + ' = ' + print + '\n' +
-                       ' ЦБ ' + paper_exp + ' + ' + paper_profit + ' = ' + paper + '\n' +
+                       ' ЦБ ' + paper_exp + ' = ' + paper + '\n' +
                        ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                        ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
                        'Ризограф печать' + '\n' +
                        ' ЦП ' + rizprint_exp + ' + ' + rizprint_profit + ' = ' + rizprint + '\n' +
-                       ' ЦБ ' + paper_exp + ' + ' + paper_profit + ' = ' + paper + '\n' +
+                       ' ЦБ ' + paper_exp + ' = ' + paper + '\n' +
                        ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                        ' Всего ' + rizexp + ' + ' + rizprofit + ' = ' + riztotal + '\n' +
                        'Офсетная печать' + '\n' +
                        ' ЦП ' + offprint_exp + ' + ' + offprint_profit + ' = ' + offprint + '\n' +
-                       ' ЦБ ' + paper_exp + ' + ' + paper_profit + ' = ' + paper + '\n' +
+                       ' ЦБ ' + paper_exp + ' = ' + paper + '\n' +
                        ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                        ' Всего ' + offexp + ' + ' + offprofit + ' = ' + offtotal + '\n' +
                        'Цифровая печать' + '\n' +
                        ' ЦП ' + digprint_exp + ' + ' + digprint_profit + ' = ' + digprint + '\n' +
-                       ' ЦБ ' + paper_exp + ' + '  + paper_profit + ' = ' + paper + '\n' +
+                       ' ЦБ ' + paper_exp + ' = ' + paper + '\n' +
                        ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                        ' Всего ' + digexp + ' + ' + digprofit + ' = ' + digtotal + '\n' ;
-
-//               text += '🔹 ' + counting[i].name + ' ' +  counting[i].size + ' на сумму ' + sum + '\n' +
-//                       ' кол-во А3 - ' + n_paper + '\n' +
-//                       '(себестоимость и наценка)' + '\n' +
-//                       'Простая печать' + '\n' +
-//                       ' ЦП ' + counting[i].print_exp + ' > ' + print_exp + ' + ' + counting[i].print_profit + ' > ' + print_profit + ' = ' + print + '\n' +
-//                       ' ЦБ ' + counting[i].paper_exp + ' > ' + paper_exp + ' + ' + counting[i].paper_profit + ' > ' + paper_profit + ' = ' + paper + '\n' +
-//                       ' ЦР ' + counting[i].cut_exp + ' > ' + cut_exp + ' + ' + counting[i].cut_profit + ' > ' + cut_profit + ' = ' + cut + '\n' +
-//                       'Офсетная печать' + '\n' +
-//                       ' ЦП ' + counting[i].offprint_exp + ' > ' + offprint_exp + ' + ' + counting[i].offprint_profit + ' > ' + offprint_profit + ' = ' + print + '\n' +
-//                       ' ЦБ ' + counting[i].paper_exp + ' > ' + paper_exp + ' + ' + counting[i].paper_profit + ' > ' + paper_profit + ' = ' + paper + '\n' +
-//                       ' ЦР ' + counting[i].cut_exp + ' > ' + cut_exp + ' + ' + counting[i].cut_profit + ' > ' + cut_profit + ' = ' + cut + '\n' +
-//                       'Цифровая печать' + '\n' +
-//                       ' ЦП ' + counting[i].digprint_exp + ' > ' + digprint_exp + ' + ' + counting[i].digprint_profit + ' > ' + digprint_profit + ' = ' + print + '\n' +
-//                       ' ЦБ ' + counting[i].paper_exp + ' > ' + paper_exp + ' + ' + counting[i].paper_profit + ' > ' + paper_profit + ' = ' + paper + '\n' +
-//                       ' ЦР ' + counting[i].cut_exp + ' > ' + cut_exp + ' + ' + counting[i].cut_profit + ' > ' + cut_profit + ' = ' + cut + '\n' ;
 
              }
 
@@ -909,10 +901,10 @@ var nomer = JSON.parse(JSON.stringify(rows));
     var test = [];
 
     for(var i = 0; i < order.length; i++){
-    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number, order[i].offprice]);
+    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number, order[i].offprice, order[i].paper_type, order[i].paper_exp, order[i].paper_side]);
     }
 
-        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice) VALUES ? ';
+        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice, paper_type, paper_exp, paper_side) VALUES ? ';
 
         connection.query( sql3 , [test], function(err, rows, fields) {
         if (err) throw err;
@@ -922,11 +914,11 @@ var nomer = JSON.parse(JSON.stringify(rows));
             text += order[i].product + ' размер ' + order[i].size + ' тиражом ' + order[i].number + '\n';
             }
 
-            var sql4 = ' SELECT product.name, product.size, product.number AS ina3, product.print_exp, product.print_profit, product.paper_exp, product.paper_profit, product.cut_exp, product.cut_profit, product.expense, product.profit, ' +
-                       ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, ??.number, ??.offprice ' +
+            var sql4 = ' SELECT product.name, product.size, product.number AS ina3, product.print_exp, product.print_profit, product.cut_exp, product.cut_profit, product.expense, product.profit, ' +
+                       ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, ??.number, ??.offprice, ??.paper_exp AS paper_exp, ??.paper_type, ??.paper_side ' +
                        ' FROM product JOIN ?? WHERE product.name = ??.product AND product.size = ??.size AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
 
-            connection.query( sql4 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table], function(err, rows, fields) {
+            connection.query( sql4 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table], function(err, rows, fields) {
             if (err) throw err;
             var counting = JSON.parse(JSON.stringify(rows));
             console.log('joining result ', counting);
@@ -939,18 +931,11 @@ var nomer = JSON.parse(JSON.stringify(rows));
 
              if (counting[i].number % counting[i].ina3 !== 0) {
              var kolvoa3 = counting[i].number % counting[i].ina3;
-             var n_paper = counting[i].number/counting[i].ina3 + 1;
-
-//                var sql5 = ' SELECT price FROM tiraj WHERE n_from > ? AND n_to < ? ';
-//                connection.query( sql5 , [order_table, order_table], function(err, rows, fields) {
-//                if (err) throw err;
-//                var counting = JSON.parse(JSON.stringify(rows));
-//                })
-
+              var n_paper = counting[i].number/counting[i].ina3 + 1;
               var print_exp = counting[i].print_exp*n_paper;
               var print_profit = counting[i].print_profit*n_paper;
-//              var offprint_exp = counting[i].offprint_exp;
-//              var offprint_profit = counting[i].offprint_profit;
+//              var offprint_exp = counting[i].offprint_exp*n_paper;
+//              var offprint_profit = counting[i].offprint_profit*n_paper;
               var offprint_exp = counting[i].offprice*n_paper/2;
               var offprint_profit = counting[i].offprice*n_paper/2;
 
@@ -963,34 +948,36 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
               var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
               var paper_exp = counting[i].paper_exp*n_paper;
-              var paper_profit = counting[i].paper_profit*n_paper;
-              var paper = counting[i].paper_exp*n_paper + counting[i].paper_profit*n_paper;
+              var paper = counting[i].paper_exp*n_paper;
               var cut_exp = counting[i].cut_exp*n_paper;
               var cut_profit = counting[i].cut_profit*n_paper;
               var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
 
               var exp = print_exp + paper_exp + cut_exp;
-              var profit = print_profit + paper_profit + cut_profit;
+              var profit = print_profit  + cut_profit;
               var total = profit + exp;
               var offexp = offprint_exp + paper_exp + cut_exp;
-              var offprofit = offprint_profit + paper_profit + cut_profit;
+              var offprofit = offprint_profit  + cut_profit;
               var offtotal = offexp + offprofit;
               var digexp = digprint_exp + paper_exp + cut_exp;
-              var digprofit = digprint_profit + paper_profit + cut_profit;
+              var digprofit = digprint_profit  + cut_profit;
               var digtotal = digexp + digprofit;
               var rizexp = rizprint_exp + paper_exp + cut_exp;
-              var rizprofit = rizprint_profit + paper_profit + cut_profit;
+              var rizprofit = rizprint_profit  + cut_profit;
               var riztotal = rizexp + rizprofit;
 
-              var sum = print_exp+print_profit+paper_exp+paper_profit+cut_exp+cut_profit;
+              var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+              var paper_type = counting[i].paper_type;
+              var paper_side = counting[i].paper_side;
+//              var paper_type = counting[i].paper_type;
              }
 
              else {
               var n_paper = counting[i].number/counting[i].ina3 + 1;
               var print_exp = counting[i].print_exp*n_paper;
               var print_profit = counting[i].print_profit*n_paper;
-//              var offprint_exp = counting[i].offprint_exp;
-//              var offprint_profit = counting[i].offprint_profit;
+//              var offprint_exp = counting[i].offprint_exp*n_paper;
+//              var offprint_profit = counting[i].offprint_profit*n_paper;
               var offprint_exp = counting[i].offprice*n_paper/2;
               var offprint_profit = counting[i].offprice*n_paper/2;
 
@@ -1003,69 +990,58 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
               var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
               var paper_exp = counting[i].paper_exp*n_paper;
-              var paper_profit = counting[i].paper_profit*n_paper;
-              var paper = counting[i].paper_exp*n_paper + counting[i].paper_profit*n_paper;
+
+              var paper = counting[i].paper_exp*n_paper;
               var cut_exp = counting[i].cut_exp*n_paper;
               var cut_profit = counting[i].cut_profit*n_paper;
               var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
 
               var exp = print_exp + paper_exp + cut_exp;
-              var profit = print_profit + paper_profit + cut_profit;
+              var profit = print_profit + cut_profit;
               var total = profit + exp;
               var offexp = offprint_exp + paper_exp + cut_exp;
-              var offprofit = offprint_profit + paper_profit + cut_profit;
+              var offprofit = offprint_profit + cut_profit;
               var offtotal = offexp + offprofit;
               var digexp = digprint_exp + paper_exp + cut_exp;
-              var digprofit = digprint_profit + paper_profit + cut_profit;
+              var digprofit = digprint_profit + cut_profit;
               var digtotal = digexp + digprofit;
               var rizexp = rizprint_exp + paper_exp + cut_exp;
-              var rizprofit = rizprint_profit + paper_profit + cut_profit;
+              var rizprofit = rizprint_profit + cut_profit;
               var riztotal = rizexp + rizprofit;
 
-              var sum = print_exp+print_profit+paper_exp+paper_profit+cut_exp+cut_profit;
+              var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+              var paper_type = counting[i].paper_type;
+              var paper_side = counting[i].paper_side;
              }
 
+                if(counting[i].paper_side === 'one') {var side = 'Односторонняя печать';}
+                else if(counting[i].paper_side === 'two') {var side = 'Двухсторонняя печать';}
 
                text += ' Имя: ' + nomer[0].username + ' номер: ' + '+' + nomer[0].tel + '\n' +
                        '🔹 ' + counting[i].name + ' ' +  counting[i].size + ' на сумму ' + sum + '\n' +
                        ' кол-во А3 - ' + n_paper + '\n' +
                        '(себестоимость и наценка)' + '\n' +
+                       side + '\n' +
                        'Струйная печать' + '\n' +
                        ' ЦП ' + print_exp + ' + ' + print_profit + ' = ' + print + '\n' +
-                       ' ЦБ ' + paper_exp + ' + ' + paper_profit + ' = ' + paper + '\n' +
+                       ' ЦБ ' + paper_exp + ' = ' + paper + '\n' +
                        ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                        ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
                        'Ризограф печать' + '\n' +
                        ' ЦП ' + rizprint_exp + ' + ' + rizprint_profit + ' = ' + rizprint + '\n' +
-                       ' ЦБ ' + paper_exp + ' + ' + paper_profit + ' = ' + paper + '\n' +
+                       ' ЦБ ' + paper_exp + ' = ' + paper + '\n' +
                        ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                        ' Всего ' + rizexp + ' + ' + rizprofit + ' = ' + riztotal + '\n' +
                        'Офсетная печать' + '\n' +
                        ' ЦП ' + offprint_exp + ' + ' + offprint_profit + ' = ' + offprint + '\n' +
-                       ' ЦБ ' + paper_exp + ' + ' + paper_profit + ' = ' + paper + '\n' +
+                       ' ЦБ ' + paper_exp + ' = ' + paper + '\n' +
                        ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                        ' Всего ' + offexp + ' + ' + offprofit + ' = ' + offtotal + '\n' +
                        'Цифровая печать' + '\n' +
                        ' ЦП ' + digprint_exp + ' + ' + digprint_profit + ' = ' + digprint + '\n' +
-                       ' ЦБ ' + paper_exp + ' + '  + paper_profit + ' = ' + paper + '\n' +
+                       ' ЦБ ' + paper_exp + ' = ' + paper + '\n' +
                        ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                        ' Всего ' + digexp + ' + ' + digprofit + ' = ' + digtotal + '\n' ;
-
-//               text += '🔹 ' + counting[i].name + ' ' +  counting[i].size + ' на сумму ' + sum + '\n' +
-//                       ' кол-во А3 - ' + n_paper + '\n' +
-//                       '(себестоимость и наценка)' + '\n' +
-//                       'Простая печать' + '\n' +
-//                       ' ЦП ' + counting[i].print_exp + ' > ' + print_exp + ' + ' + counting[i].print_profit + ' > ' + print_profit + ' = ' + print + '\n' +
-//                       ' ЦБ ' + counting[i].paper_exp + ' > ' + paper_exp + ' + ' + counting[i].paper_profit + ' > ' + paper_profit + ' = ' + paper + '\n' +
-//                       ' ЦР ' + counting[i].cut_exp + ' > ' + cut_exp + ' + ' + counting[i].cut_profit + ' > ' + cut_profit + ' = ' + cut + '\n' +
-//                       'Офсетная печать' + '\n' +
-//                       ' ЦП ' + counting[i].offprint_exp + ' > ' + offprint_exp + ' + ' + counting[i].offprint_profit + ' > ' + offprint_profit + ' = ' + print + '\n' +
-//                       ' ЦБ ' + counting[i].paper_exp + ' > ' + paper_exp + ' + ' + counting[i].paper_profit + ' > ' + paper_profit + ' = ' + paper + '\n' +
-//                       ' ЦР ' + counting[i].cut_exp + ' > ' + cut_exp + ' + ' + counting[i].cut_profit + ' > ' + cut_profit + ' = ' + cut + '\n' +
-//                       'Цифровая печать' + '\n' +
-//                       ' ЦП ' + counting[i].digprint_exp + ' > ' + digprint_exp + ' + ' + counting[i].digprint_profit + ' > ' + digprint_profit + ' = ' + print + '\n' +
-//                       ' ЦБ ' + counting[i].paper_exp + ' > ' + paper_exp + ' + ' + counting[i].paper_profit + ' > ' + paper_profit + ' = ' + paper + '\n' +
-//                       ' ЦР ' + counting[i].cut_exp + ' > ' + cut_exp + ' + ' + counting[i].cut_profit + ' > ' + cut_profit + ' = ' + cut + '\n' ;
 
              }
 
@@ -1400,10 +1376,76 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
 
         connection.query( sql2 , [ order, res[1], res[2], id[0].id ], function(err, rows, fields) {
         if (err) throw err;
-//  ORDER BY id DESC LIMIT 1  res[3], res[4]    size = ? AND name = ?  WHERE id = ?
+
+            const text = 'Одностороннее или двухсторонняя печать?'
+
+            bot.sendMessage(user_id, text, {
+                                 reply_markup: {
+                                   inline_keyboard: [
+                                     [{
+                                       text: 'Односторонняя печать',
+                                       callback_data: 'side#one#' + res[4]
+                                     }],
+
+                                     [{
+                                       text: 'Двухсторонняя печать',
+                                       callback_data: 'side#two#' + res[4]
+                                     }]
+                                 }
+                           })
+            })
+        })
+
+})
+}
+
+
+
+function insert_side (query) {
+
+var str = query.data;
+var res = str.split("#");
+console.log('res is:', res[0]);
+console.log('res is:', res[1]);
+console.log('res is:', res[2]);
+
+if (res[1] === 'one') {
+var coef = 1;
+}
+else if (res[1] === 'two')
+{
+var coef = 2;
+}
+
+var user_id = query.message.chat.id;
+var n_report = 'n_report'+user_id;
+var order = 'order'+user_id;
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+var sql1 = ' SELECT id, paper_exp FROM ??  ORDER BY id DESC LIMIT 1 ';
+
+    connection.query( sql1 , [ order ], function(err, rows, fields) {
+    if (err) throw err;
+    var id = JSON.parse(JSON.stringify(rows));
+    var exp = coef*id[0].paper_exp;
+
+    var sql2 = ' UPDATE ?? SET paper_exp = ?, paper_side = ?   WHERE id = ? ';
+
+        connection.query( sql2 , [ order, exp, res[1], id[0].id ], function(err, rows, fields) {
+        if (err) throw err;
+
         var sql3 = ' SELECT * FROM product WHERE id = ?';
 
-            connection.query( sql3 , res[4], function(err, rows, fields) {
+            connection.query( sql3 , res[2], function(err, rows, fields) {
             if (err) throw err;
             var product = JSON.parse(JSON.stringify(rows));
             var keyboard = [];
@@ -1774,46 +1816,6 @@ pool.getConnection(function(err, connection) {
 })
 
 
-bot.onText(/\/redak-pod (.+)/, (msg, [source, match]) => {
-
-var user_id = msg.chat.id;
-var msg_text = msg.text;
-
-var text = msg_text.replace("/redak-pod", "");
-var splited = text.split(" ");
-var id_jk = splited.splice(1,1);
-var edited_text = splited.join(" ");
-
-    var mysql  = require('mysql');
-    var pool  = mysql.createPool({
-    host     : 'localhost',
-    user     :  config.user,
-    password :  config.db_password,
-    database :  config.db_name
-    })
-
-pool.getConnection(function(err, connection) {
-
-    var sql = ' SELECT * FROM residential_complex WHERE id = ? ';
-
-    connection.query( sql , [ id_jk[0] ], function(err, rows, fields) {
-    if (err) throw err;
-    var prev_jk = JSON.parse(JSON.stringify(rows));
-    console.log('previous number of podezd of JK ', prev_jk)
-
-    var sql2 = ' UPDATE residential_complex SET n_entrance = ? WHERE id = ? ';
-
-        connection.query( sql2 , [ edited_text, id_jk ], function(err, rows, fields) {
-        if (err) throw err;
-        console.log('new number of JK entrance', edited_text)
-
-        const text = 'Вы отредактировали кол-во подъездов с ' + prev_jk[0].n_entrance + ' на ' + edited_text
-        bot.sendMessage(user_id, text)
-        })
-    })
-})
-})
-
 
 
 bot.onText(/\/product (.+)/, (msg, [source, match]) => {
@@ -1839,29 +1841,11 @@ console.log('NNtext ', splited)
 
 pool.getConnection(function(err, connection) {
 
-    var sql = ' INSERT INTO product (name, size, number, print_exp, print_profit, rizprint_exp, rizprint_profit, offprint_exp, offprint_profit, digprint_exp, digprint_profit, paper_exp, paper_profit, cut_exp, cut_profit ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    var sql = ' INSERT INTO product (name, size, number, print_exp, print_profit, rizprint_exp, rizprint_profit, offprint_exp, offprint_profit, digprint_exp, digprint_profit, paper_type, paper_exp, cut_exp, cut_profit ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
     connection.query( sql , [ splited[0], id_jk, splited[1], splited[2], splited[3], splited[4], splited[5], splited[6], splited[7], splited[8], splited[9], splited[10], splited[11], splited[12], splited[13], splited[14], splited[15] ], function(err, rows, fields) {
     if (err) throw err;
-//    const text = 'Вы ввели в БД новый ЖК '  + edited_text + ' с ' + id_jk[0] + ' подъездами'
-//    bot.sendMessage(user_id, text)
-//
-//
-//    var sql2 = ' SELECT * FROM residential_complex ';
-//
-//        connection.query( sql2 , function(err, rows, fields) {
-//        if (err) throw err;
-//        var all_jk = JSON.parse(JSON.stringify(rows));
-//        console.log('previous number of podezd of JK ', all_jk)
-//        var text = 'Список ЖК\n';
-//
-//        for(var i = 0; i < all_jk.length; i++){
-//        text += all_jk[i].id  + ' ' + all_jk[i].name + ' кол-во подъездов ' + all_jk[i].n_entrance + '\n';
-//        }
-//
-//        console.log('ptext ', text)
-//        bot.sendMessage(user_id, text)
-//        })
+
     })
 })
 })
@@ -1910,16 +1894,15 @@ pool.getConnection(function(err, connection) {
 
 
 
-bot.onText(/\/nov-rab (.+)/, (msg, [source, match]) => {
+bot.onText(/\/paper (.+)/, (msg, [source, match]) => {
 
 var user_id = msg.chat.id;
 var msg_text = msg.text;
 
-var text = msg_text.replace("/nov-rab", "");
-var splited = text.split(" ");
-var id_jk = splited.splice(1,1);
-var edited_text = splited.join(" ");
-console.log('edited_text ', text)
+var text = msg_text.replace("/paper", "");
+var splited = text.split("#");
+
+console.log('NNtext ', splited)
 
     var mysql  = require('mysql');
     var pool  = mysql.createPool({
@@ -1931,40 +1914,27 @@ console.log('edited_text ', text)
 
 pool.getConnection(function(err, connection) {
 
-    var sql = ' INSERT INTO task_types (name) VALUES (?)';
+    var sql = ' INSERT INTO paper (thickness, price) VALUES (?,?) ';
 
-    connection.query( sql , [ text ], function(err, rows, fields) {
+    connection.query( sql , [ splited[0], splited[1] ], function(err, rows, fields) {
     if (err) throw err;
-    const text2 = 'Вы ввели в БД новое задание '  + text
-    bot.sendMessage(user_id, text2)
 
+        var sql1 = ' SELECT * FROM paper ';
 
-//    var sql2 = ' SELECT * FROM residential_complex ';
-//
-//        connection.query( sql2 , function(err, rows, fields) {
-//        if (err) throw err;
-//        var all_jk = JSON.parse(JSON.stringify(rows));
-//        console.log('previous number of podezd of JK ', all_jk)
-//        var text = 'Список ЖК\n';
-//
-//        for(var i = 0; i < all_jk.length; i++){
-//        text += all_jk[i].id  + ' ' + all_jk[i].name + ' кол-во подъездов ' + all_jk[i].n_entrance + '\n';
-//        }
-//
-//        console.log('ptext ', text)
-//        bot.sendMessage(user_id, text)
-//        })
+        connection.query( sql1 , function(err, rows, fields) {
+        if (err) throw err;
+        var paper = JSON.parse(JSON.stringify(rows));
+        var text = 'Цены по бумагам: \n';
+        for(var i = 0; i < paper.length; i++){
+        text += paper[i].thickness  + ' гр - цена ' + paper[i].price + ' тг' + '\n';
+        }
+        bot.sendMessage(user_id, text)
+        })
     })
 })
 })
 
 
-//              var street = JSON.parse(JSON.stringify(rows));
-//               var keyboard = [];
-//
-//               for(var i = 0; i < street.length; i++){
-//               keyboard.push([{'text': ( street[i].interception ) , 'callback_data': ('22 ' + street[i].id_interception)}]);
-//               }
 
 
 bot.onText(/\/opt (.+)/, (msg, [source, match]) => {
