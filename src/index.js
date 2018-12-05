@@ -1391,6 +1391,7 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
                                        text: 'Двухсторонняя печать',
                                        callback_data: 'side#two#' + res[4]
                                      }]
+                                     ]
                                  }
                            })
             })
