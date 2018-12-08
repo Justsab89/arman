@@ -69,6 +69,9 @@ var username = msg.chat.first_name;
 var msg_text = msg.text;
 var n_report = 'n_report'+user_id;
 var order = 'order'+user_id;
+  var str = query.data;
+  var res = str.split("#");
+  console.log('res is:', res[0]);
 
 pool.getConnection(function(err, connection) {
 
@@ -168,6 +171,7 @@ pool.getConnection(function(err, connection) {
             else {
 
                       if (msg.text === config.keyboard.kb1.one) {show_products(msg)}
+//                      else if (res[0] === '/razmer') {show_products(msg)}
 //                      else if (msg.text === config.keyboard.kb1.two) {new_jk(msg)}
                       bot.sendMessage(user_id, 'nm', {
                                      reply_markup: {
@@ -194,6 +198,7 @@ pool.getConnection(function(err, connection) {
 
 bot.on('callback_query', query => {
 
+  var user_id = query.message.chat.id;
   var str = query.data;
   var res = str.split("#");
   console.log('res is:', res[0]);
@@ -202,6 +207,7 @@ bot.on('callback_query', query => {
 
   if (res[0] =='product') { insert_product(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='size')  { insert_size(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
+  else if (res[0] =='size-other')  { bot.deleteMessage(query.message.chat.id, query.message.message_id); bot.sendMessage(user_id, 'Укажите размер набрав /razmer и длину и ширину в сантиметрах через решетку. Например вот так /razmer 10#12') }
   else if (res[0] =='product_more') { insert_product_more(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='number')  { insert_number(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='paper')  { insert_paper(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
@@ -1172,12 +1178,13 @@ pool.getConnection(function(err, connection) {
         connection.query( sql2 , [ order, order, user_id, res[1] ], function(err, rows, fields) {
         if (err) throw err;
 
-        var sql3 = ' SELECT size FROM product WHERE name = ? ';
+        var sql3 = ' SELECT * FROM product WHERE name = ? ';
 
             connection.query( sql3 , res[1], function(err, rows, fields) {
             if (err) throw err;
             var product = JSON.parse(JSON.stringify(rows));
             var keyboard = [];
+            keyboard.push([{'text': ( 'Указать нестандартный размер' ) , 'callback_data': ('size-other#' + product[i].size + '#' + res[1] + '#' + product[i].id )}]);
 
             for(var i = 0; i < product.length; i++){
             keyboard.push([{'text': ( product[i].size ) , 'callback_data': ('size#' + product[i].size + '#' + res[1] )}]);
@@ -1239,6 +1246,7 @@ pool.getConnection(function(err, connection) {
             if (err) throw err;
             var product = JSON.parse(JSON.stringify(rows));
             var keyboard = [];
+            keyboard.push([{'text': ( 'Указать нестандартный размер' ) , 'callback_data': ('size-other#' + product[i].size + '#' + res[1] + '#' + product[i].id )}]);
 
             for(var i = 0; i < product.length; i++){
             keyboard.push([{'text': ( product[i].size ) , 'callback_data': ('size#' + product[i].size + '#' + res[1] + '#' + product[i].id )}]);
@@ -1446,8 +1454,9 @@ var sql1 = ' SELECT id, paper_exp FROM ??  ORDER BY id DESC LIMIT 1 ';
         if (err) throw err;
 
         var sql3 = ' SELECT * FROM product WHERE id = ?';
+        var sql3 = ' SELECT * FROM product WHERE name = (SELECT product FROM ?? ORDER BY id DESC LIMIT 1)';
 
-            connection.query( sql3 , res[2], function(err, rows, fields) {
+            connection.query( sql3 , order, function(err, rows, fields) {
             if (err) throw err;
             var product = JSON.parse(JSON.stringify(rows));
             var keyboard = [];
@@ -1939,12 +1948,12 @@ pool.getConnection(function(err, connection) {
 
 
 
-bot.onText(/\/opt (.+)/, (msg, [source, match]) => {
+bot.onText(/\/razmer (.+)/, (msg, [source, match]) => {
 
 var user_id = msg.chat.id;
 var msg_text = msg.text;
 
-var text = msg_text.replace("/opt", "");
+var text = msg_text.replace("/razmer", "");
 var splited = text.split("#");
 
 console.log('NNtext ', splited)
@@ -1968,39 +1977,62 @@ var rem_22long = 22%long;
 var llss = (45-rem_long)/long*(22-rem_short)/short;
 var lsls = (45-rem_45short)/short*(22-rem_22long)/long;
 
-if(llss>lsls) { var ina3 = llss; }
-else { var ina3 = lsls; }
+if(llss>lsls) { var ina3 = llss; var vib = '45 на длинную '; }
+else { var ina3 = lsls; var vib = '45 на короткую ';}
 
-var text = 'haha ' + ina3;
+var text = 'Максимальное кол-во будет если делить' + vib + ' получается ' + ina3;
 
 bot.sendMessage(user_id, text)
 
-//    var mysql  = require('mysql');
-//    var pool  = mysql.createPool({
-//    host     : 'localhost',
-//    user     :  config.user,
-//    password :  config.db_password,
-//    database :  config.db_name
-//    })
-//
-//pool.getConnection(function(err, connection) {
-//
-//    var sql = ' INSERT INTO tiraj (price, n_from, n_to) VALUES (?,?,?) ';
-//
-//    connection.query( sql , [ splited[0], splited[1], splited[2] ], function(err, rows, fields) {
-//    if (err) throw err;
-//
-//        var sql1 = ' SELECT * FROM tiraj ';
-//
-//        connection.query( sql1 , function(err, rows, fields) {
-//        if (err) throw err;
-//        var tiraj = JSON.parse(JSON.stringify(rows));
-//        var text = 'Цены по тиражам: \n';
-//        for(var i = 0; i < tiraj.length; i++){
-//        text += tiraj[i].n_from  + ' - ' + tiraj[i].n_to + ' цена ' + tiraj[i].price + ' тг' + '\n';
-//        }
-//        bot.sendMessage(user_id, text)
-//        })
-//    })
-//})
+var n_report = 'n_report'+user_id;
+var order = 'order'+user_id;
+// Размер продукта указываем вот так: splited[1] + '*' + splited[0]
+var size = splited[1] + '*' + splited[0];
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+var sql1 = ' SELECT id FROM ?? ORDER BY id DESC LIMIT 1 ';
+
+    connection.query( sql1 , [order], function(err, rows, fields) {
+    if (err) throw err;
+    var id = JSON.parse(JSON.stringify(rows));
+
+var sql2 = ' UPDATE ?? SET size = ? WHERE id = ?';
+
+    connection.query( sql2 , [order, size, id[0].id], function(err, rows, fields) {
+    if (err) throw err;
+
+    var sql3 = ' SELECT thickness, price FROM paper ';
+
+        connection.query( sql3 , function(err, rows, fields) {
+        if (err) throw err;
+        var paper = JSON.parse(JSON.stringify(rows));
+        var keyboard = [];
+
+        keyboard.push([{'text': ( 'Вы сами выберите мне оптимальную толщину бумаги' ) , 'callback_data': ('paper_pofig#')}]);
+        for(var i = 0; i < paper.length; i++){
+        keyboard.push([{'text': ( paper[i].thickness ) , 'callback_data': ('paper#'  + paper[i].thickness + '#' +  paper[i].price  + '#' + size + 'болванка' )}]);
+        }
+
+        const text = 'Теперь выберите толщину бумаги '
+
+             bot.sendMessage( user_id, text,
+             {
+             'reply_markup': JSON.stringify({
+             inline_keyboard: keyboard
+                                            })
+             }
+             )
+        })
+    })
+})
+})
 })
