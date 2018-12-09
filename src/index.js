@@ -975,7 +975,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
 
               var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
               var sum2 = math.floor(sum);
-                            
+
               var paper_type = counting[i].paper_type;
               var paper_side = counting[i].paper_side;
 //              var paper_type = counting[i].paper_type;
@@ -1193,7 +1193,7 @@ pool.getConnection(function(err, connection) {
             if (err) throw err;
             var product = JSON.parse(JSON.stringify(rows));
             var keyboard = [];
-            keyboard.push([{'text': ( 'Указать нестандартный размер' ) , 'callback_data': ('size-other#' + product[i].size + '#' + res[1] + '#' + product[i].id )}]);
+            keyboard.push([{'text': ( 'Указать нестандартный размер' ) , 'callback_data': ('size-other#' + 'боолванка' + '#' + res[1] + '#' + 'бооолванка' )}]);
 
             for(var i = 0; i < product.length; i++){
             keyboard.push([{'text': ( product[i].size ) , 'callback_data': ('size#' + product[i].size + '#' + res[1] )}]);
