@@ -974,6 +974,8 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var riztotal = rizexp + rizprofit;
 
               var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+              var sum2 = math.floor(sum);
+                            
               var paper_type = counting[i].paper_type;
               var paper_side = counting[i].paper_side;
 //              var paper_type = counting[i].paper_type;
@@ -1017,6 +1019,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var riztotal = rizexp + rizprofit;
 
               var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+              var sum2 = math.floor(sum);
               var paper_type = counting[i].paper_type;
               var paper_side = counting[i].paper_side;
              }
@@ -1024,8 +1027,14 @@ var nomer = JSON.parse(JSON.stringify(rows));
                 if(counting[i].paper_side === 'one') {var side = 'Односторонняя печать';}
                 else if(counting[i].paper_side === 'two') {var side = 'Двухсторонняя печать';}
 
-               text += ' Имя: ' + nomer[0].username + ' номер: ' + '+' + nomer[0].tel + '\n' +
-                       '🔹 ' + counting[i].name + ' ' +  counting[i].size + ' на сумму ' + sum + '\n' +
+                var str = counting[i].size;
+                var res = str.split("*");
+
+                if(res.length == 2) {var size_type = 'с нестандартным размером' + counting[i].size ;}
+                else {var size_type = counting[i].size ;}
+
+               text += ' Имя: ' + nomer[0].username + ' номер: ' + nomer[0].tel + '\n' +
+                       '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
                        ' кол-во А3 - ' + n_paper + '\n' +
                        '(себестоимость и наценка)' + '\n' +
                        side + '\n' +
@@ -1453,7 +1462,7 @@ var sql1 = ' SELECT id, paper_exp FROM ??  ORDER BY id DESC LIMIT 1 ';
         connection.query( sql2 , [ order, exp, res[1], id[0].id ], function(err, rows, fields) {
         if (err) throw err;
 
-        var sql3 = ' SELECT * FROM product WHERE id = ?';
+//        var sql3 = ' SELECT * FROM product WHERE id = ?';
         var sql3 = ' SELECT * FROM product WHERE name = (SELECT product FROM ?? ORDER BY id DESC LIMIT 1)';
 
             connection.query( sql3 , order, function(err, rows, fields) {
@@ -1558,151 +1567,6 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
 
 
 
-//function insert_date (query) {
-//
-//var str = query.data;
-//var res = str.split(" ");
-//console.log('res is:', res[0]);
-//console.log('res is:', res[1]);
-//
-//var user_id = query.message.chat.id;
-//var n_report = 'n_report'+user_id;
-//
-//var obj = new Date(res[1]);
-//console.log('Время конвертировано ', obj);
-//
-//var day = obj.getDate();
-//var month = obj.getMonth();
-//var year = obj.getFullYear();
-//
-//var obj1 = new Date(day + '-' + month + '-' + year);
-//console.log('Время конвертировано исправлено', obj1);
-//
-//
-//    var mysql  = require('mysql');
-//    var pool  = mysql.createPool({
-//    host     : 'localhost',
-//    user     :  config.user,
-//    password :  config.db_password,
-//    database :  config.db_name
-//    })
-//
-//pool.getConnection(function(err, connection) {
-//// (id_user, worker_name, date_entry, date_report, res_complex, entrance, floor, task_type, n_done)
-//    var sql = '  INSERT INTO ?? (id_user) VALUES (?)  ';
-//
-//    connection.query( sql , [ n_report, user_id ], function(err, rows, fields) {
-//    if (err) throw err;
-//
-//    var sql2 = '  INSERT INTO report (id_report, id_user, worker_name, date_entry, date_report) VALUES ((SELECT id FROM ?? ORDER BY id DESC LIMIT 1), ?, (SELECT DISTINCT name FROM users WHERE id_user = ?),  ADDTIME (NOW(), "03:00:00"), ? ) ';
-//
-//        connection.query( sql2 , [ n_report, user_id, user_id, res[1] ], function(err, rows, fields) {
-//        if (err) throw err;
-//
-//        var sql3 = ' SELECT DISTINCT * FROM residential_complex ';
-//
-//            connection.query( sql3 , function(err, rows, fields) {
-//            if (err) throw err;
-//            var all_jk = JSON.parse(JSON.stringify(rows));
-//            var keyboard = [];
-//
-//            for(var i = 0; i < all_jk.length; i++){
-//            keyboard.push([{'text': ( all_jk[i].name ) , 'callback_data': ('JK ' + all_jk[i].name)}]);
-//            }
-//            const text = 'Укажите жилой комплекс '
-//
-//                 bot.sendMessage( user_id, text,
-//                 {
-//                 'reply_markup': JSON.stringify({
-//                 inline_keyboard: keyboard
-//                                                })
-//                 }
-//                 )
-//            })
-//        })
-//    })
-//})
-//}
-
-
-
-
-
-// Это функция прибавляет дни
-function show_dates (msg) {
-
-Date.prototype.addDays = function(days) {
-    var date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
-}
-
-var date = new Date();
-var yesterday = date.addDays(-1);
-var minus2 = date.addDays(-2);
-var minus3 = date.addDays(-3);
-var minus4 = date.addDays(-4);
-var minus5 = date.addDays(-5);
-
-// Прибавляем 1 к месяцу
-var date_month = date.getMonth()+1;
-var yesterday_month = yesterday.getMonth()+1;
-var minus2_month = minus2.getMonth()+1;
-var minus3_month = minus3.getMonth()+1;
-var minus4_month = minus4.getMonth()+1;
-var minus5_month = minus5.getMonth()+1;
-
-var newdate = date.getDate() + '-' + date_month + '-' + date.getFullYear();
-var newyesterday = yesterday.getDate() + '-' + yesterday_month + '-' + yesterday.getFullYear();
-var newminus2 = minus2.getDate() + '-' + minus2_month + '-' + minus2.getFullYear();
-var newminus3 = minus3.getDate() + '-' + minus3_month + '-' + minus3.getFullYear();
-var newminus4 = minus4.getDate() + '-' + minus4_month + '-' + minus4.getFullYear();
-var newminus5 = minus5.getDate() + '-' + minus5_month + '-' + minus5.getFullYear();
-
-var newdateF = date.getFullYear() + '-' + date_month + '-' + date.getDate();
-var newyesterdayF = yesterday.getFullYear() + '-' + yesterday_month + '-' + yesterday.getDate();
-var newminus2F = minus2.getFullYear() + '-' + minus2_month + '-' + minus2.getDate();
-var newminus3F = minus3.getFullYear() + '-' + minus3_month + '-' + minus3.getDate();
-var newminus4F = minus4.getFullYear() + '-' + minus4_month + '-' + minus4.getDate();
-var newminus5F = minus5.getFullYear() + '-' + minus5_month + '-' + minus5.getDate();
-
-
-const chatId = msg.chat.id
-const text = 'Выберите день, за который вы отчитываетесь'
-bot.sendMessage(chatId, text, {
-                     reply_markup: {
-                       inline_keyboard: [
-                         [{
-                           text: 'Сегодня  ' + newdate,
-                           callback_data: 'date ' + newdateF
-                         }],
-
-                         [{
-                           text: 'Вчера  ' + newyesterday,
-                           callback_data: 'date ' + newyesterdayF
-                         }],
-
-                         [{
-                           text: 'Позавчера  ' + newminus2,
-                           callback_data: 'date ' + newminus2F
-                         }],
-
-                         [{
-                           text: newminus3,
-                           callback_data: 'date ' + newminus3F
-                         }],
-
-                         [{
-                           text: newminus4,
-                           callback_data: 'date ' + newminus4F
-                         }]
-                       ]
-                     }
-                })
-}
-
-
-
 // Это функция показывает продукты
 function show_product (msg) {
 
@@ -1730,101 +1594,6 @@ const text = 'Выберите продукт '
      )
 })
 }
-
-
-
-
-//// Это функция показывает подъезды
-//function show_entrance (query) {
-//
-//var str = query.data;
-//var res = str.split(" ");
-//console.log('res is:', res[0]);
-//console.log('res is:', res[1]);
-//
-//var user_id = query.message.chat.id;
-//
-//var sql3 = ' SELECT n_entrance FROM residential_complex WHERE name = ? ';
-//
-//connection.query( sql3 , [ res[1] ], function(err, rows, fields) {
-//if (err) throw err;
-//var all_jk = JSON.parse(JSON.stringify(rows));
-//var keyboard = [];
-//
-//for(var i = 0; i < all_jk.n_entrance; i++){
-//var entr = i+1;
-//keyboard.push([{'text': ( entr ) , 'callback_data': ('entrance ' + entr)}]);
-//}
-//
-//const text = 'Выберите сначала один подъезд '
-//
-//     bot.sendMessage( user_id, text,
-//     {
-//     'reply_markup': JSON.stringify({
-//     inline_keyboard: keyboard
-//                                    })
-//     }
-//     )
-//})
-//}
-
-
-
-function commands (msg) {
-
-var user_id = msg.chat.id;
-
-const text = '☑️ Чтобы создать новый ЖК наберите команду /nov-jk и название через пробел.\nНапример: /nov-jk ЖК Уют' +
-             '\n☑️ Чтобы редактировать ЖК наберите команду /redak-jk и номер редактируемого ЖК и после новое название через пробел.\nНапример:\n/redak-jk 5 ЖК Арнау' +
-             '\n☑️ Чтобы редактировать кол-во подъездов в ЖК наберите команду /redak-pod и номер редактируемого ЖК и после новое кол-во подъездов через пробел.\nНапример:\n/redak-pod 5 10' +
-             '\n☑️ Чтобы добавить новую работу наберите команду /nov-rab и название работы через пробел.\nНапример:\n/nov-rab Монтаж клапана'
-
-bot.sendMessage(user_id, text)
-
-}
-
-
-
-
-bot.onText(/\/redak-jk (.+)/, (msg, [source, match]) => {
-
-var user_id = msg.chat.id;
-var msg_text = msg.text;
-
-var text = msg_text.replace("/redak-jk", "");
-var splited = text.split(" ");
-var id_jk = splited.splice(1,1);
-var edited_text = splited.join(" ");
-
-    var mysql  = require('mysql');
-    var pool  = mysql.createPool({
-    host     : 'localhost',
-    user     :  config.user,
-    password :  config.db_password,
-    database :  config.db_name
-    })
-
-pool.getConnection(function(err, connection) {
-
-    var sql = ' SELECT * FROM residential_complex WHERE id = ? ';
-
-    connection.query( sql , [ id_jk[0] ], function(err, rows, fields) {
-    if (err) throw err;
-    var prev_jk = JSON.parse(JSON.stringify(rows));
-    console.log('previous name of JK ', prev_jk)
-
-    var sql2 = ' UPDATE residential_complex SET name = ? WHERE id = ? ';
-
-        connection.query( sql2 , [ edited_text, id_jk ], function(err, rows, fields) {
-        if (err) throw err;
-        console.log('new name of JK ', edited_text)
-
-        const text = 'Вы отредактировали ' + prev_jk[0].name + ' на ' + edited_text
-        bot.sendMessage(user_id, text)
-        })
-    })
-})
-})
 
 
 
