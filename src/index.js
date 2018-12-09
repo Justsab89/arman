@@ -69,9 +69,9 @@ var username = msg.chat.first_name;
 var msg_text = msg.text;
 var n_report = 'n_report'+user_id;
 var order = 'order'+user_id;
-  var str = query.data;
-  var res = str.split("#");
-  console.log('res is:', res[0]);
+//  var str = query.data;
+//  var res = str.split("#");
+//  console.log('res is:', res[0]);
 
 pool.getConnection(function(err, connection) {
 
