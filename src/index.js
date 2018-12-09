@@ -1526,7 +1526,7 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
     if (err) throw err;
     var id = JSON.parse(JSON.stringify(rows));
 
-    var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to > ? ';
+    var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to >= ? ';
 
         connection.query( sql11 , [ res[1], res[1] ], function(err, rows, fields) {
         if (err) throw err;
