@@ -134,7 +134,7 @@ pool.getConnection(function(err, connection) {
                       else if (msg.text === config.keyboard.kb2.two) {show_commands(msg)}
                       else if (msg.text === config.keyboard.kb2.three) {show_users(msg)}
                       else if (msg.text === config.keyboard.kb2.four) {show_managers(msg)}
-                      else if (msg.text === config.keyboard.kb2.five) {show_products(msg)}
+                      else if (msg.text === config.keyboard.kb2.five) {del_products(msg)}
                       else if (msg.text === config.keyboard.kb2.six) {show_tiraj(msg)}
 
                       bot.sendMessage(user_id, 'Вы администратор', {
@@ -527,7 +527,7 @@ pool.getConnection(function(err, connection) {
 
 
 
-function show_products(msg) {
+function del_products(msg) {
 
 var user_id = msg.chat.id;
 var n_report = 'n_report'+user_id;
