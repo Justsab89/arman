@@ -967,7 +967,11 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var offprofit = offprint_profit  + cut_profit;
               var offtotal = offexp + offprofit;
               var digexp = digprint_exp + paper_exp + cut_exp;
-              var digprofit = digprint_profit  + cut_profit;
+              var digexp2 = parseInt(digexp);
+
+              var digprofit = digprint_profit + cut_profit;
+              var digprofit2 = parseInt(digprofit);
+
               var digtotal = digexp + digprofit;
               var digtotal2 = parseInt(digtotal);
 
@@ -1015,7 +1019,11 @@ var nomer = JSON.parse(JSON.stringify(rows));
               var offprofit = offprint_profit + cut_profit;
               var offtotal = offexp + offprofit;
               var digexp = digprint_exp + paper_exp + cut_exp;
+              var digexp2 = parseInt(digexp);
+
               var digprofit = digprint_profit + cut_profit;
+              var digprofit2 = parseInt(digprofit);
+
               var digtotal = digexp + digprofit;
               var digtotal2 = parseInt(digtotal);
 
@@ -1064,7 +1072,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
                        ' ЦП ' + digprint_exp + ' + ' + digprint_profit + ' = ' + digprint + '\n' +
                        ' ЦБ ' + paper_exp + ' = ' + paper + '\n' +
                        ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
-                       ' Всего ' + digexp + ' + ' + digprofit + ' = ' + digtotal2 + '\n' ;
+                       ' Всего ' + digexp2 + ' + ' + digprofit2 + ' = ' + digtotal2 + '\n' ;
 
              }
 
