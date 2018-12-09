@@ -1205,7 +1205,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
                                     ' Всего ' + digexp + ' + ' + digprofit + ' = ' + digtotal + '\n' ;
 
                           }
-                          
+  console.log('ATEXXXT ',text)
                  var sql5 = ' SELECT * FROM users WHERE status = "manager" ';
 
                  connection.query( sql5 , [ user_id ], function(err, rows, fields) {
