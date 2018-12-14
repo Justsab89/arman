@@ -1692,10 +1692,10 @@ var nomer = JSON.parse(JSON.stringify(rows));
   console.log('ATEXXXT ',text)
 
              var sql5 = ' SELECT product.name AS name, product.number AS ina3, product.print_exp AS print_exp, product.print_profit AS print_profit, ??.cut_exp AS cut_exp, product.expense AS expense, product.profit AS profit, ' +
-                        ' product.offprint_exp AS offprint_exp, product.offprint_profit AS offprint_profit, product.digprint_exp AS digprint_exp, product.digprint_profit AS digprint_profit, ??.number AS number, ??.offprice AS offprice, ??.paper_exp AS paper_exp, ??.paper_type AS paper_type, ??.paper_side AS paper_side ' +
+                        ' product.offprint_exp AS offprint_exp, product.offprint_profit AS offprint_profit, product.digprint_exp AS digprint_exp, product.digprint_profit AS digprint_profit, ??.size AS size, ??.number AS number, ??.offprice AS offprice, ??.paper_exp AS paper_exp, ??.paper_type AS paper_type, ??.paper_side AS paper_side ' +
                         ' FROM product JOIN ?? WHERE product.name = ??.product AND ??.size LIKE "%*%" AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
 
-             connection.query( sql5 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table ], function(err, rows, fields) {
+             connection.query( sql5 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table ], function(err, rows, fields) {
              if (err) throw err;
              var counting = JSON.parse(JSON.stringify(rows));
              console.log('НЕСТАНДАРт ', counting);
