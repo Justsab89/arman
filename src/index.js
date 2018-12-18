@@ -1482,6 +1482,13 @@ var nomer = JSON.parse(JSON.stringify(rows));
             text += order[i].product + ' размер ' + order[i].size + ' тиражом ' + order[i].number + '\n';
             }
 
+            var sql31 = ' SELECT size FROM product WHERE size = "non" AND name = (SELECT name FROM ?? WHERE id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1 ) ';
+
+            connection.query( sql31 , [order_table, order_table], function(err, rows, fields) {
+            if (err) throw err;
+            var non = JSON.parse(JSON.stringify(rows));
+            if (non.length == 1) {
+
             var sql4 = ' SELECT product.name, product.size, product.number AS ina3, product.print_exp, product.print_profit, product.cut_exp, product.cut_profit, product.expense, product.profit, ' +
                        ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, ??.number AS number, ??.offprice AS offprice, ??.paper_exp AS paper_exp, ??.paper_type, ??.paper_side ' +
                        ' FROM product JOIN ?? WHERE product.name = ??.product AND product.size = ??.size AND ??.size NOT LIKE "%*%" AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
@@ -1874,22 +1881,22 @@ var nomer = JSON.parse(JSON.stringify(rows));
                                      'Струйная печать' + '\n' +
                                      ' ЦП ' + print_exp + ' + ' + print_profit + ' = ' + print + '\n' +
                                      ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
-                                     ' ЦР ' + cut_exp + ' + ' + ' = ' + cut + '\n' +
+                                     ' ЦР ' + cut_exp + ' = ' + cut + '\n' +
                                      ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
                                      'Ризограф печать' + '\n' +
                                      ' ЦП ' + rizprint_exp + ' + ' + rizprint_profit + ' = ' + rizprint + '\n' +
                                      ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
-                                     ' ЦР ' + cut_exp + ' + ' + ' = ' + cut + '\n' +
+                                     ' ЦР ' + cut_exp + ' = ' + cut + '\n' +
                                      ' Всего ' + rizexp + ' + ' + rizprofit + ' = ' + riztotal + '\n' +
                                      'Офсетная печать' + '\n' +
                                      ' ЦП ' + offprint_exp + ' + ' + offprint_profit + ' = ' + offprint + '\n' +
                                      ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
-                                     ' ЦР ' + cut_exp + ' + '  + ' = ' + cut + '\n' +
+                                     ' ЦР ' + cut_exp + ' = ' + cut + '\n' +
                                      ' Всего ' + offexp + ' + ' + offprofit + ' = ' + offtotal + '\n' +
                                      'Цифровая печать' + '\n' +
                                      ' ЦП ' + digprint_exp + ' + ' + digprint_profit + ' = ' + digprint + '\n' +
                                      ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
-                                     ' ЦР ' + cut_exp + ' + ' + ' = ' + cut + '\n' +
+                                     ' ЦР ' + cut_exp + ' = ' + cut + '\n' +
                                      ' Всего ' + digexp + ' + ' + digprofit + ' = ' + digtotal + '\n' ;
 
                            }
@@ -1908,6 +1915,8 @@ var nomer = JSON.parse(JSON.stringify(rows));
              })
 
             })
+            }
+           })
         })
     })
 })
@@ -2464,6 +2473,49 @@ pool.getConnection(function(err, connection) {
     connection.query( sql , [ splited[0], id_jk, splited[1], splited[2], splited[3], splited[4], splited[5], splited[6], splited[7], splited[8], splited[9], splited[10], splited[11], splited[12], splited[13], splited[14], splited[15] ], function(err, rows, fields) {
     if (err) throw err;
 
+    })
+})
+})
+
+
+
+
+bot.onText(/\/cut (.+)/, (msg, [source, match]) => {
+
+var user_id = msg.chat.id;
+var msg_text = msg.text;
+
+var text = msg_text.replace("/cut", "");
+var splited = text.split("#");
+
+console.log('NNtext ', splited)
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+    var sql = ' INSERT INTO cutting (price, n_from, n_to) VALUES (?,?,?) ';
+
+    connection.query( sql , [ splited[0], splited[1], splited[2] ], function(err, rows, fields) {
+    if (err) throw err;
+
+        var sql1 = ' SELECT * FROM tiraj ';
+
+        connection.query( sql1 , function(err, rows, fields) {
+        if (err) throw err;
+        var tiraj = JSON.parse(JSON.stringify(rows));
+        var text = 'Цены по резке: \n';
+        for(var i = 0; i < tiraj.length; i++){
+        text += tiraj[i].n_from  + ' - ' + tiraj[i].n_to + ' цена ' + tiraj[i].price + ' тг' + '\n';
+        }
+        bot.sendMessage(user_id, text)
+        })
     })
 })
 })
