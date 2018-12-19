@@ -1482,7 +1482,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
             text += order[i].product + ' размер ' + order[i].size + ' тиражом ' + order[i].number + '\n';
             }
 
-            var sql31 = ' SELECT size FROM product WHERE size = "non" AND name = (SELECT name FROM ?? WHERE id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1 ) ';
+            var sql31 = ' SELECT size FROM product WHERE size = "non" AND name = (SELECT name FROM ?? WHERE size LIKE "%*%" AND id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1 ) ';
 
             connection.query( sql31 , [order_table, order_table], function(err, rows, fields) {
             if (err) throw err;
@@ -1502,7 +1502,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
 
                           if (counting[i].number % counting[i].ina3 !== 0) {
                           var kolvoa3 = counting[i].number % counting[i].ina3;
-                           var n_paper = counting[i].number/counting[i].ina3 + 1;
+                           var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
              //              var print_exp = counting[i].print_exp*n_paper;
                            var print_exp = parseInt(counting[i].print_exp*n_paper);
 
@@ -1696,7 +1696,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
                                     ' Всего ' + digexp + ' + ' + digprofit + ' = ' + digtotal + '\n' ;
 
                           }
-  console.log('ATEXXXT ',text)
+            console.log('ATEXXXT ',text)
 
              var sql5 = ' SELECT product.name AS name, product.number AS ina3, product.print_exp AS print_exp, product.print_profit AS print_profit, ??.cut_exp AS cut_exp, product.expense AS expense, product.profit AS profit, ' +
                         ' product.offprint_exp AS offprint_exp, product.offprint_profit AS offprint_profit, product.digprint_exp AS digprint_exp, product.digprint_profit AS digprint_profit, ??.size AS size, ??.number AS number, ??.offprice AS offprice, ??.paper_exp AS paper_exp, ??.paper_type AS paper_type, ??.paper_side AS paper_side ' +
@@ -1712,7 +1712,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
 
                            if (counting[i].number % counting[i].ina3 !== 0) {
                            var kolvoa3 = counting[i].number % counting[i].ina3;
-                            var n_paper = counting[i].number/counting[i].ina3 + 1;
+                          var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
               //              var print_exp = counting[i].print_exp*n_paper;
                             var print_exp = parseInt(counting[i].print_exp*n_paper);
 
@@ -1901,8 +1901,9 @@ var nomer = JSON.parse(JSON.stringify(rows));
 
                            }
 
-       console.log('ATEXXXT ',text)
+                     console.log('ATEXXXT non standard',text)
 
+setTimeout(function() {
                       var sql6 = ' SELECT * FROM users WHERE status = "manager" ';
 
                       connection.query( sql6 , [ user_id ], function(err, rows, fields) {
@@ -1912,6 +1913,16 @@ var nomer = JSON.parse(JSON.stringify(rows));
                           bot.sendMessage(manager[i].id_user, text)
                           }
                       })
+}, 2000);
+//                      var sql6 = ' SELECT * FROM users WHERE status = "manager" ';
+//
+//                      connection.query( sql6 , [ user_id ], function(err, rows, fields) {
+//                      if (err) throw err;
+//                      var manager = JSON.parse(JSON.stringify(rows));
+//                          for(var i = 0; i < manager.length; i++){
+//                          bot.sendMessage(manager[i].id_user, text)
+//                          }
+//                      })
              })
 
             })
