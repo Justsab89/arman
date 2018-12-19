@@ -1698,8 +1698,10 @@ var nomer = JSON.parse(JSON.stringify(rows));
                           }
             console.log('ATEXXXT ',text)
 
-             var sql5 = ' SELECT product.name AS name, product.number AS ina3, product.print_exp AS print_exp, product.print_profit AS print_profit, ??.cut_exp AS cut_exp, product.expense AS expense, product.profit AS profit, ' +
-                        ' product.offprint_exp AS offprint_exp, product.offprint_profit AS offprint_profit, product.digprint_exp AS digprint_exp, product.digprint_profit AS digprint_profit, ??.size AS size, ??.number AS number, ??.offprice AS offprice, ??.paper_exp AS paper_exp, ??.paper_type AS paper_type, ??.paper_side AS paper_side ' +
+//             var sql5 = ' SELECT product.name AS name, product.number AS ina3, product.print_exp AS print_exp, product.print_profit AS print_profit, ??.cut_exp AS cut_exp, product.expense AS expense, product.profit AS profit, ' +
+//                        ' product.offprint_exp AS offprint_exp, product.offprint_profit AS offprint_profit, product.digprint_exp AS digprint_exp, product.digprint_profit AS digprint_profit, ??.size AS size, ??.number AS number, ??.offprice AS offprice, ??.paper_exp AS paper_exp, ??.paper_type AS paper_type, ??.paper_side AS paper_side ' +
+            var sql5 = ' SELECT product.name, product.size, product.number AS ina3, product.print_exp, product.print_profit, product.cut_exp, product.cut_profit, product.expense, product.profit, ' +
+                       ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, ??.number AS number, ??.offprice AS offprice, ??.paper_exp AS paper_exp, ??.paper_type, ??.paper_side ' +
                         ' FROM product JOIN ?? WHERE product.name = ??.product AND ??.size LIKE "%*%" AND product.size = "non" AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
 
              connection.query( sql5 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table ], function(err, rows, fields) {
@@ -1903,17 +1905,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
 
                      console.log('ATEXXXT non standard',text)
 
-setTimeout(function() {
-                      var sql6 = ' SELECT * FROM users WHERE status = "manager" ';
-
-                      connection.query( sql6 , [ user_id ], function(err, rows, fields) {
-                      if (err) throw err;
-                      var manager = JSON.parse(JSON.stringify(rows));
-                          for(var i = 0; i < manager.length; i++){
-                          bot.sendMessage(manager[i].id_user, text)
-                          }
-                      })
-}, 2000);
+//setTimeout(function() {
 //                      var sql6 = ' SELECT * FROM users WHERE status = "manager" ';
 //
 //                      connection.query( sql6 , [ user_id ], function(err, rows, fields) {
@@ -1923,6 +1915,17 @@ setTimeout(function() {
 //                          bot.sendMessage(manager[i].id_user, text)
 //                          }
 //                      })
+//}, 2000);
+
+                      var sql6 = ' SELECT * FROM users WHERE status = "manager" ';
+
+                      connection.query( sql6 , [ user_id ], function(err, rows, fields) {
+                      if (err) throw err;
+                      var manager = JSON.parse(JSON.stringify(rows));
+                          for(var i = 0; i < manager.length; i++){
+                          bot.sendMessage(manager[i].id_user, text)
+                          }
+                      })
              })
 
             })
