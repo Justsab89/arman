@@ -1148,18 +1148,6 @@ var nomer = JSON.parse(JSON.stringify(rows));
 
                      console.log('ATEXXXT non standard',text)
 
-//setTimeout(function() {
-//                      var sql6 = ' SELECT * FROM users WHERE status = "manager" ';
-//
-//                      connection.query( sql6 , [ user_id ], function(err, rows, fields) {
-//                      if (err) throw err;
-//                      var manager = JSON.parse(JSON.stringify(rows));
-//                          for(var i = 0; i < manager.length; i++){
-//                          bot.sendMessage(manager[i].id_user, text)
-//                          }
-//                      })
-//}, 2000);
-
                       var sql6 = ' SELECT * FROM users WHERE status = "manager" ';
 
                       connection.query( sql6 , [ user_id ], function(err, rows, fields) {
@@ -1168,6 +1156,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
                           for(var i = 0; i < manager.length; i++){
                           bot.sendMessage(manager[i].id_user, text)
                           }
+                          bot.sendMessage(admin, text)
                       })
              })
 
@@ -1650,17 +1639,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
 
                      console.log('ATEXXXT non standard',text)
 
-//setTimeout(function() {
-//                      var sql6 = ' SELECT * FROM users WHERE status = "manager" ';
-//
-//                      connection.query( sql6 , [ user_id ], function(err, rows, fields) {
-//                      if (err) throw err;
-//                      var manager = JSON.parse(JSON.stringify(rows));
-//                          for(var i = 0; i < manager.length; i++){
-//                          bot.sendMessage(manager[i].id_user, text)
-//                          }
-//                      })
-//}, 2000);
+
 
                       var sql6 = ' SELECT * FROM users WHERE status = "manager" ';
 
@@ -1670,6 +1649,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
                           for(var i = 0; i < manager.length; i++){
                           bot.sendMessage(manager[i].id_user, text)
                           }
+                          bot.sendMessage(admin, text)
                       })
              })
 
