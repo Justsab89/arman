@@ -136,6 +136,8 @@ pool.getConnection(function(err, connection) {
                       else if (msg.text === config.keyboard.kb2.four) {show_managers(msg)}
                       else if (msg.text === config.keyboard.kb2.five) {del_products(msg)}
                       else if (msg.text === config.keyboard.kb2.six) {show_tiraj(msg)}
+                      else if (msg.text === config.keyboard.kb2.seven) {show_cutting(msg)}
+                      else if (msg.text === config.keyboard.kb2.eight) {show_paper(msg)}
 
                       bot.sendMessage(user_id, 'Вы администратор', {
                                      reply_markup: {
@@ -217,6 +219,8 @@ bot.on('callback_query', query => {
   else if (res[0] =='del_manager')  { delete_manager(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='del_product')  { delete_product(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='del_tiraj')  { delete_tiraj(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
+  else if (res[0] =='del_cutting')  { delete_cutting(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
+  else if (res[0] =='del_paper')  { delete_paper(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
 })
 
 
@@ -271,6 +275,64 @@ bot.sendMessage(user_id, text)
 //    })
 //})
 
+}
+
+
+
+function delete_paper(query) {
+
+var user_id = query.message.chat.id;
+  var str = query.data;
+  var res = str.split("#");
+  console.log('appoint manager res is:', res[0]);
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+    var sql = 'DELETE FROM paper WHERE id = ?';
+
+    connection.query( sql , [res[1]], function(err, rows, fields) {
+    if (err) throw err;
+    var deleted = JSON.parse(JSON.stringify(rows));
+    console.log('deleted ', deleted);
+    })
+})
+}
+
+
+
+function delete_cutting(query) {
+
+var user_id = query.message.chat.id;
+  var str = query.data;
+  var res = str.split("#");
+  console.log('appoint manager res is:', res[0]);
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+    var sql = 'DELETE FROM cutting WHERE id = ?';
+
+    connection.query( sql , [res[1]], function(err, rows, fields) {
+    if (err) throw err;
+    var deleted = JSON.parse(JSON.stringify(rows));
+    console.log('deleted ', deleted);
+    })
+})
 }
 
 
@@ -514,6 +576,94 @@ pool.getConnection(function(err, connection) {
                                          [{
                                            text: 'Удалить строку',
                                            callback_data: 'del_tiraj#' + tiraj[i].id
+                                         }]
+                                       ],
+                                       resize_keyboard: true
+                                     }
+                               })
+        }
+    })
+})
+}
+
+
+
+function show_cutting(msg) {
+
+var user_id = msg.chat.id;
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+    var sql = ' SELECT * FROM cutting ';
+
+    connection.query( sql , function(err, rows, fields) {
+    if (err) throw err;
+    var cutting = JSON.parse(JSON.stringify(rows));
+    var keyboard = [];
+    console.log('cutting ', cutting);
+
+        for(var i = 0; i < cutting.length; i++){
+
+         var text = 'Кол-во от ' + cutting[i].n_from+ ' до ' + cutting[i].n_to + ' цена на резку - ' + cutting[i].price ;
+
+         bot.sendMessage(user_id, text, {
+                                     reply_markup: {
+                                       inline_keyboard: [
+                                         [{
+                                           text: 'Удалить строку',
+                                           callback_data: 'del_cutting#' + cutting[i].id
+                                         }]
+                                       ],
+                                       resize_keyboard: true
+                                     }
+                               })
+        }
+    })
+})
+}
+
+
+
+function show_paper(msg) {
+
+var user_id = msg.chat.id;
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+    var sql = ' SELECT * FROM paper ';
+
+    connection.query( sql , function(err, rows, fields) {
+    if (err) throw err;
+    var paper = JSON.parse(JSON.stringify(rows));
+    var keyboard = [];
+    console.log('paper ', paper);
+
+        for(var i = 0; i < paper.length; i++){
+
+         var text = 'Толщина бумаги ' + paper[i].thickness+ ' гр. стоит ' + paper[i].price ;
+
+         bot.sendMessage(user_id, text, {
+                                     reply_markup: {
+                                       inline_keyboard: [
+                                         [{
+                                           text: 'Удалить строку',
+                                           callback_data: 'del_paper#' + paper[i].id
                                          }]
                                        ],
                                        resize_keyboard: true
