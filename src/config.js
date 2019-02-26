@@ -3,6 +3,7 @@ module.exports = {
  user: 'kairbek',
  db_name: 'kairbek',
  db_password: 'kairbek123',
+
  keyboard: {
    kb1: {
       one: '🔴 Сделать заказ',
