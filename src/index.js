@@ -2548,14 +2548,14 @@ var long = splited[0];
 var short = splited[1];
 }
 
-var rem_long = 45%long;
-var rem_short = 22%short;
+var rem_long = 450%long;
+var rem_short = 320%short;
 
-var rem_45short = 45%short;
-var rem_22long = 22%long;
+var rem_45short = 450%short;
+var rem_22long = 320%long;
 
-var llss = (45-rem_long)/long*(22-rem_short)/short;
-var lsls = (45-rem_45short)/short*(22-rem_22long)/long;
+var llss = (450-rem_long)/long*(320-rem_short)/short;
+var lsls = (450-rem_45short)/short*(320-rem_22long)/long;
 
 if(llss>lsls) { var ina3 = llss; var vib = '45 на длинную '; }
 else { var ina3 = lsls; var vib = '45 на короткую ';}
