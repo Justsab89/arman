@@ -1372,6 +1372,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
             connection.query( sql31 , [order_table, order_table], function(err, rows, fields) {
             if (err) throw err;
             var non = JSON.parse(JSON.stringify(rows));
+            console.log('POSLE INSERTA', non.length);
             if (non.length == 1) {
 
             var sql4 = ' SELECT product.name, product.size, product.number AS ina3, product.print_exp, product.print_profit, product.cut_exp, product.cut_profit, product.expense, product.profit, ' +
