@@ -1328,7 +1328,7 @@ function send_order(query) {
 var user_id = query.message.chat.id;
 var n_report = 'n_report'+user_id;
 var order_table = 'order'+user_id;
-var text = 'Выберите продукт:';
+//var text = 'Выберите продукт:';
 
     var mysql  = require('mysql');
     var pool  = mysql.createPool({
@@ -1356,9 +1356,9 @@ var nomer = JSON.parse(JSON.stringify(rows));
     for(var i = 0; i < order.length; i++){
     test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number, order[i].offprice, order[i].paper_type, order[i].paper_exp, order[i].paper_side]);
     }
-
+            console.log('DO INSERTA ');
         var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice, paper_type, paper_exp, paper_side) VALUES ? ';
-
+            console.log('POSLE INSERTA');
         connection.query( sql3 , [test], function(err, rows, fields) {
         if (err) throw err;
             var text = 'Вы сделали заявку на ';
