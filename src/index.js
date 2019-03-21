@@ -914,7 +914,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
             var non = JSON.parse(JSON.stringify(rows));
             if (non.length == 0) {
 
-            var sql4 = ' SELECT product.name, product.size, product.number AS ina3, product.print_exp, product.print_profit, product.cut_exp, product.cut_profit, product.expense, product.profit, ' +
+            var sql4 = ' SELECT product.name, product.size, product.number AS ina3, product.print_exp, product.print_profit, product.cut_exp, product.cut_profit, ' +
                        ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, ??.number AS number, ??.offprice AS offprice, ??.paper_exp AS paper_exp, ??.paper_type, ??.paper_side ' +
                        ' FROM product JOIN ?? WHERE product.name = ??.product AND product.size = ??.size AND ??.size NOT LIKE "%*%" AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
 
@@ -1123,7 +1123,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
                           }
             console.log('ATEXXXT ',text)
 
-             var sql5 = ' SELECT product.name AS name, product.number AS ina3, product.print_exp AS print_exp, product.print_profit AS print_profit, ??.cut_exp AS cut_exp, product.expense AS expense, product.profit AS profit, ' +
+             var sql5 = ' SELECT product.name AS name, product.number AS ina3, product.print_exp AS print_exp, product.print_profit AS print_profit, ??.cut_exp AS cut_exp, ' +
                         ' product.offprint_exp AS offprint_exp, product.offprint_profit AS offprint_profit, product.digprint_exp AS digprint_exp, product.digprint_profit AS digprint_profit, ??.size AS size, ??.number AS number, ??.offprice AS offprice, ??.paper_exp AS paper_exp, ??.paper_type AS paper_type, ??.paper_side AS paper_side ' +
                         ' FROM product JOIN ?? WHERE product.name = ??.product AND ??.size LIKE "%*%" AND product.size = "non" AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
 
@@ -1615,7 +1615,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
                           }
             console.log('ATEXXXT ',text)
 
-             var sql5 = ' SELECT product.name AS name, product.number AS ina3, product.print_exp AS print_exp, product.print_profit AS print_profit, ??.cut_exp AS cut_exp, product.expense AS expense, product.profit AS profit, ' +
+             var sql5 = ' SELECT product.name AS name, product.number AS ina3, product.print_exp AS print_exp, product.print_profit AS print_profit, ??.cut_exp AS cut_exp, ' +
                         ' product.offprint_exp AS offprint_exp, product.offprint_profit AS offprint_profit, product.digprint_exp AS digprint_exp, product.digprint_profit AS digprint_profit, ??.size AS size, ??.number AS number, ??.offprice AS offprice, ??.paper_exp AS paper_exp, ??.paper_type AS paper_type, ??.paper_side AS paper_side ' +
                         ' FROM product JOIN ?? WHERE product.name = ??.product AND ??.size LIKE "%*%" AND product.size = "non" AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
 
