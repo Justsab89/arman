@@ -164,6 +164,14 @@ pool.getConnection(function(err, connection) {
 
                                          [{
                                            text: config.keyboard.kb2.six
+                                         }],
+
+                                         [{
+                                           text: config.keyboard.kb2.seven
+                                         }],
+
+                                         [{
+                                           text: config.keyboard.kb2.eight
                                          }]
                                        ],
                                        resize_keyboard: true
@@ -256,6 +264,11 @@ const text = '☑️ Чтобы ввести новый продукт набе�
              '\nТретье кол-во ДО: 100 ' +
              '\nВ итоге вы вводите следующую команду' +
              '\n/tiraj 50#0#100'
+             '\n\n☑️ Чтобы ввести цену на граммаж бумаги наберите команду /paper затем в этом порядке через # наберите 2 данных' +
+             '\nПервое вид бумаги: толедо' +
+             '\nВторое цену: 0' +
+             '\nВ итоге вы вводите следующую команду' +
+             '\n/paper толедо#100'
 
 bot.sendMessage(user_id, text)
 //    var mysql  = require('mysql');
@@ -726,7 +739,7 @@ pool.getConnection(function(err, connection) {
 //         }
 //         )
         }
-        
+
          bot.sendMessage( user_id, text,
          {
          'reply_markup': JSON.stringify({
