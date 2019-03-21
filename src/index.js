@@ -2239,7 +2239,7 @@ var sql1 = ' SELECT id, paper_exp FROM ??  ORDER BY id DESC LIMIT 1 ';
             var keyboard = [];
 
             for(var i = 0; i < 20; i++){
-            var num = product[0].interval*i;
+            var num = product[0].intervalchik*i;
             keyboard.push([{'text': ( num ) , 'callback_data': ('number#' + num)}]);
             }
             const text = 'Теперь укажите тираж '
