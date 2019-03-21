@@ -299,6 +299,7 @@ var user_id = query.message.chat.id;
   var str = query.data;
   var res = str.split("#");
   console.log('appoint manager res is:', res[0]);
+  console.log('appoint manager res 1 is:', res[1]);
 
     var mysql  = require('mysql');
     var pool  = mysql.createPool({
