@@ -1390,6 +1390,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
             console.log('DO INSERTA ');
         var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice, paper_type, paper_exp, paper_side) VALUES ? ';
             console.log('POSLE INSERTA');
+
         connection.query( sql3 , [test], function(err, rows, fields) {
         if (err) throw err;
             var text = 'Вы сделали заявку на ';
@@ -1398,6 +1399,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
             text += order[i].product + ' размер ' + order[i].size + ' тиражом ' + order[i].number + '\n';
             }
             console.log('POSLE INSERTA', text);
+            
             var sql31 = ' SELECT size FROM product WHERE size = "non" AND name = (SELECT name FROM ?? WHERE size LIKE "%*%" AND id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1 ) ';
 
             connection.query( sql31 , [order_table, order_table], function(err, rows, fields) {
