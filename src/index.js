@@ -1404,7 +1404,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
             if (err) throw err;
             var non = JSON.parse(JSON.stringify(rows));
             console.log('POSLE INSERTA', non.length);
-            if (non.length == 0) {
+            if (non.length == 1) {
 
             var sql4 = ' SELECT product.name, product.size, product.number AS ina3, product.print_exp, product.print_profit, product.cut_exp, product.cut_profit, ' +
                        ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, ??.number AS number, ??.offprice AS offprice, ??.paper_exp AS paper_exp, ??.paper_type, ??.paper_side ' +
@@ -1838,6 +1838,9 @@ var nomer = JSON.parse(JSON.stringify(rows));
             })
             }
            })
+            else {
+
+            }
         })
     })
 })
@@ -2591,7 +2594,7 @@ var sql11 = ' SELECT price FROM cutting WHERE n_from < ? AND n_to >= ? ';
     if (err) throw err;
     var cutting = JSON.parse(JSON.stringify(rows));
 
-var sql2 = ' UPDATE ?? SET size = ?, ina3 = ?, cut_exp = ?  WHERE id = ?';
+var sql2 = ' UPDATE ?? SET size = ?, ina3 = ?, cut_exp = ?  WHERE id = ? ' ;
 
     connection.query( sql2 , [order, size, ina3, cutting[0].price, id[0].id], function(err, rows, fields) {
     if (err) throw err;
@@ -2624,4 +2627,4 @@ var sql2 = ' UPDATE ?? SET size = ?, ina3 = ?, cut_exp = ?  WHERE id = ?';
 })
 })
 
-//dfgdg
+//dfgdgf
