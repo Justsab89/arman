@@ -1399,7 +1399,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
             text += order[i].product + ' размер ' + order[i].size + ' тиражом ' + order[i].number + '\n';
             }
             console.log('POSLE INSERTA', text);
-            
+
             var sql31 = ' SELECT size FROM product WHERE size = "non" AND name = (SELECT name FROM ?? WHERE size LIKE "%*%" AND id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1 ) ';
 
             connection.query( sql31 , [order_table, order_table], function(err, rows, fields) {
