@@ -1443,8 +1443,16 @@ var text = 'Выберите продукт:';
 
 pool.getConnection(function(err, connection) {
 
-            var text = 'Вы сделали заявку на ';
 
+
+    var sql = ' SELECT * FROM paper WHERE thickness = "struyka" ';
+
+    connection.query( sql , function(err, rows, fields) {
+    if (err) throw err;
+    var struyka = JSON.parse(JSON.stringify(rows));
+    var struyka_paper = struyka[0].price;
+
+            var text = 'Вы сделали заявку на ';
 
             var sql31 = ' SELECT size FROM product WHERE size = "non" AND name = (SELECT name FROM ?? WHERE size LIKE "%*%" AND id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1 ) ';
 
@@ -1634,13 +1642,14 @@ pool.getConnection(function(err, connection) {
 
 //' Имя: ' + nomer[0].username + ' номер: ' + nomer[0].tel + '\n' +
 
-                         text +=    '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
+                         text +=    'SRA3' +  '\n' +
+                                    '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
                                     ' кол-во А3 - ' + n_paper + '\n' +
                                     '(себестоимость и наценка)' + '\n' +
                                     side + '\n' +
                                     'Струйная печать' + '\n' +
                                     ' ЦП ' + print_exp + ' + ' + print_profit + ' = ' + print + '\n' +
-                                    ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                    ' ЦБ = ' + struyka_paper + '\n' +
                                     ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                                     ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
                                     'Ризограф печать' + '\n' +
@@ -1845,7 +1854,7 @@ pool.getConnection(function(err, connection) {
                                      side + '\n' +
                                      'Струйная печать' + '\n' +
                                      ' ЦП ' + print_exp + ' + ' + print_profit + ' = ' + print + '\n' +
-                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                     ' ЦБ = ' + struyka_paper + '\n' +
                                      ' ЦР ' + cut_exp + ' = ' + cut + '\n' +
                                      ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
                                      'Ризограф печать' + '\n' +
@@ -1883,6 +1892,7 @@ pool.getConnection(function(err, connection) {
             })
             }
            })
+   })
 })
 }
 
@@ -1905,6 +1915,13 @@ var text = 'Выберите продукт:';
     })
 
 pool.getConnection(function(err, connection) {
+
+    var sql = ' SELECT * FROM paper WHERE thickness = "struyka" ';
+
+    connection.query( sql , function(err, rows, fields) {
+    if (err) throw err;
+    var struyka = JSON.parse(JSON.stringify(rows));
+    var struyka_paper = struyka[0].A3_price;
 
             var text = 'Вы сделали заявку на ';
 
@@ -2097,13 +2114,14 @@ pool.getConnection(function(err, connection) {
 
 //' Имя: ' + nomer[0].username + ' номер: ' + nomer[0].tel + '\n' +
 
-                         text +=    '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
+                         text +=    'A3' + '\n' +
+                                    '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
                                     ' кол-во А3 - ' + n_paper + '\n' +
                                     '(себестоимость и наценка)' + '\n' +
                                     side + '\n' +
                                     'Струйная печать' + '\n' +
                                     ' ЦП ' + print_exp + ' + ' + print_profit + ' = ' + print + '\n' +
-                                    ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                    ' ЦБ = ' + struyka_paper + '\n' +
                                     ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                                     ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
                                     'Ризограф печать' + '\n' +
@@ -2302,13 +2320,14 @@ pool.getConnection(function(err, connection) {
 
 //' Имя: ' + nomer[0].username + ' номер: ' + nomer[0].tel + '\n' +
 
-                             text += '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
+                             text += 'A3' + '\n' +
+                                     '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
                                      ' кол-во А3 - ' + n_paper + '\n' +
                                      '(себестоимость и наценка)' + '\n' +
                                      side + '\n' +
                                      'Струйная печать' + '\n' +
                                      ' ЦП ' + print_exp + ' + ' + print_profit + ' = ' + print + '\n' +
-                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                     ' ЦБ = ' + struyka_paper + '\n' +
                                      ' ЦР ' + cut_exp + ' = ' + cut + '\n' +
                                      ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
                                      'Ризограф печать' + '\n' +
@@ -2347,6 +2366,7 @@ pool.getConnection(function(err, connection) {
             }
            })
 })
+})
 }
 
 
@@ -2368,6 +2388,13 @@ var text = 'Выберите продукт:';
     })
 
 pool.getConnection(function(err, connection) {
+
+    var sql = ' SELECT * FROM paper WHERE thickness = "struyka" ';
+
+    connection.query( sql , function(err, rows, fields) {
+    if (err) throw err;
+    var struyka = JSON.parse(JSON.stringify(rows));
+    var struyka_paper = struyka[0].A4_price;
 
             var text = 'Вы сделали заявку на ';
 
@@ -2560,13 +2587,14 @@ pool.getConnection(function(err, connection) {
 
 //' Имя: ' + nomer[0].username + ' номер: ' + nomer[0].tel + '\n' +
 
-                         text +=    '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
+                         text +=    'A4' + '\n' +
+                                    '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
                                     ' кол-во А3 - ' + n_paper + '\n' +
                                     '(себестоимость и наценка)' + '\n' +
                                     side + '\n' +
                                     'Струйная печать' + '\n' +
                                     ' ЦП ' + print_exp + ' + ' + print_profit + ' = ' + print + '\n' +
-                                    ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                    ' ЦБ = ' + struyka_paper + '\n' +
                                     ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                                     ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
                                     'Ризограф печать' + '\n' +
@@ -2765,13 +2793,14 @@ pool.getConnection(function(err, connection) {
 
 //' Имя: ' + nomer[0].username + ' номер: ' + nomer[0].tel + '\n' +
 
-                             text += '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
+                             text += 'A4' + '\n' +
+                                     '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
                                      ' кол-во А3 - ' + n_paper + '\n' +
                                      '(себестоимость и наценка)' + '\n' +
                                      side + '\n' +
                                      'Струйная печать' + '\n' +
                                      ' ЦП ' + print_exp + ' + ' + print_profit + ' = ' + print + '\n' +
-                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                     ' ЦБ = ' + struyka_paper + '\n' +
                                      ' ЦР ' + cut_exp + ' = ' + cut + '\n' +
                                      ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
                                      'Ризограф печать' + '\n' +
@@ -2809,6 +2838,7 @@ pool.getConnection(function(err, connection) {
             })
             }
            })
+})
 })
 }
 
@@ -3619,7 +3649,7 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
         connection.query( sql2 , [ order, res[1], id[0].id ], function(err, rows, fields) {
         if (err) throw err;
 
-        var sql3 = ' SELECT thickness, price FROM paper ';
+        var sql3 = ' SELECT thickness, price, A3_price, A4_price FROM paper WHERE thickness <> "struyka" ';
 
             connection.query( sql3 , function(err, rows, fields) {
             if (err) throw err;
