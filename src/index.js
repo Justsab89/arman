@@ -46,7 +46,7 @@ pool.getConnection(function(err, connection) {
     connection.query( sql , [ tel, user_id ], function(err, rows, fields) {
     if (err) throw err;
 // После ввода контакта заказчика отправляем заказ менеджеру
-    send_order_msg(msg);
+    send_order_msg1(msg);
     })
 })
 })
@@ -553,7 +553,7 @@ pool.getConnection(function(err, connection) {
     )
     }
     else{
-    send_order(query)
+    send_order1(query)
     }
 
     })
@@ -1394,6 +1394,26 @@ var nomer = JSON.parse(JSON.stringify(rows));
 
         var text = 'Вы сделали заявку на ';
 
+            bot.sendMessage(admin, text, {
+                                 reply_markup: {
+                                   inline_keyboard: [
+                                     [{
+                                       text: 'SRA3',
+                                       callback_data: 'sra3#' + 'sra3'
+                                     }],
+
+                                     [{
+                                       text: 'A3',
+                                       callback_data: 'a3#' + 'a3'
+                                     }],
+
+                                     [{
+                                       text: 'A4',
+                                       callback_data: 'a4#' + 'a4'
+                                     }]
+                                     ]
+                                 }
+                           })
         })
     })
 })
@@ -1894,6 +1914,77 @@ var nomer = JSON.parse(JSON.stringify(rows));
             }
            })
 
+        })
+    })
+})
+})
+}
+
+
+
+
+//когда уже номер зарегистрирован в базе и сразу после нажатия на "отправить заявку" срабатывает эта функция
+function send_order1(query) {
+
+var user_id = query.message.chat.id;
+var n_report = 'n_report'+user_id;
+var order_table = 'order'+user_id;
+//var text = 'Выберите продукт:';
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+var sql1 = ' SELECT * FROM users WHERE id_user = ?';
+
+connection.query( sql1 , [ user_id ], function(err, rows, fields) {
+if (err) throw err;
+var nomer = JSON.parse(JSON.stringify(rows));
+
+    var sql2 = ' SELECT * FROM ?? WHERE id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1)';
+
+    connection.query( sql2 , [order_table, order_table], function(err, rows, fields) {
+    if (err) throw err;
+    var order = JSON.parse(JSON.stringify(rows));
+    var test = [];
+
+    for(var i = 0; i < order.length; i++){
+    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number, order[i].offprice, order[i].paper_type, order[i].paper_exp, order[i].A3_paper_exp, order[i].A4_paper_exp, order[i].paper_side]);
+    }
+
+        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice, paper_type, paper_exp, A3_paper_exp, A4_paper_exp, paper_side) VALUES ? ';
+
+
+        connection.query( sql3 , [test], function(err, rows, fields) {
+        if (err) throw err;
+            var text = 'Вы сделали заявку на ';
+
+            bot.sendMessage(admin, text, {
+                                 reply_markup: {
+                                   inline_keyboard: [
+                                     [{
+                                       text: 'SRA3',
+                                       callback_data: 'sra3#' + 'sra3'
+                                     }],
+
+                                     [{
+                                       text: 'A3',
+                                       callback_data: 'a3#' + 'a3'
+                                     }],
+
+                                     [{
+                                       text: 'A4',
+                                       callback_data: 'a4#' + 'a4'
+                                     }]
+                                     ]
+                                 }
+                           })
         })
     })
 })
