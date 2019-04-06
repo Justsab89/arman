@@ -1480,15 +1480,18 @@ pool.getConnection(function(err, connection) {
                           var kolvoa3 = counting[i].number % counting[i].ina3;
                            var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
 
+                           if(n_paper=>300){var n_paper_off = n_paper;}
+                           else {var n_paper_off = 300;}
+
                            var struyka_paper = n_paper*struyka_price;
              //              var print_exp = counting[i].print_exp*n_paper;
                            var print_exp = parseInt(counting[i].print_exp*n_paper);
 
              //              var print_profit = counting[i].print_profit*n_paper;
-                           var print_profit = parseInt(counting[i].print_profit*n_paper);
+                           var print_profit = parseInt(counting[i].print_profit*n_paper_off);
 
              //              var offprint_exp = counting[i].offprice*n_paper/2;
-                           var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+                           var offprint_exp = parseInt(counting[i].offprice*n_paper_off/2);
 
              //              var offprint_profit = counting[i].offprice*n_paper/2;
                            var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
@@ -1566,6 +1569,9 @@ pool.getConnection(function(err, connection) {
                            var n_paper = counting[i].number/counting[i].ina3;
                            var struyka_paper = n_paper*struyka_price;
 
+                           if(n_paper=>300){var n_paper_off = n_paper;}
+                           else {var n_paper_off = 300;}
+
              //              var print_exp = counting[i].print_exp*n_paper;
                            var print_exp = parseInt(counting[i].print_exp*n_paper);
 
@@ -1573,10 +1579,10 @@ pool.getConnection(function(err, connection) {
                            var print_profit = parseInt(counting[i].print_profit*n_paper);
 
              //              var offprint_exp = counting[i].offprice*n_paper/2;
-                           var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+                           var offprint_exp = parseInt(counting[i].offprice*n_paper_off/2);
 
              //              var offprint_profit = counting[i].offprice*n_paper/2;
-                           var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+                           var offprint_profit = parseInt(counting[i].offprice*n_paper_off/2);
 
              //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
                            var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
@@ -1695,6 +1701,10 @@ pool.getConnection(function(err, connection) {
                            if (counting[i].number % counting[i].ina3 !== 0) {
                            var kolvoa3 = counting[i].number % counting[i].ina3;
                           var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
+
+                           if(n_paper=>300){var n_paper_off = n_paper;}
+                           else {var n_paper_off = 300;}
+
               //              var print_exp = counting[i].print_exp*n_paper;
                            var struyka_paper = n_paper*struyka_price;
 
@@ -1704,10 +1714,10 @@ pool.getConnection(function(err, connection) {
                             var print_profit = parseInt(counting[i].print_profit*n_paper);
 
               //              var offprint_exp = counting[i].offprice*n_paper/2;
-                            var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+                            var offprint_exp = parseInt(counting[i].offprice*n_paper_off/2);
 
               //              var offprint_profit = counting[i].offprice*n_paper/2;
-                            var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+                            var offprint_profit = parseInt(counting[i].offprice*n_paper_off/2);
 
               //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
                             var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
@@ -1778,6 +1788,9 @@ pool.getConnection(function(err, connection) {
                            else {
                             var n_paper = counting[i].number/counting[i].ina3;
 
+                           if(n_paper=>300){var n_paper_off = n_paper;}
+                           else {var n_paper_off = 300;}
+
                            var struyka_paper = n_paper*struyka_price;
               //              var print_exp = counting[i].print_exp*n_paper;
                             var print_exp = parseInt(counting[i].print_exp*n_paper);
@@ -1786,10 +1799,10 @@ pool.getConnection(function(err, connection) {
                             var print_profit = parseInt(counting[i].print_profit*n_paper);
 
               //              var offprint_exp = counting[i].offprice*n_paper/2;
-                            var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+                            var offprint_exp = parseInt(counting[i].offprice*n_paper_off/2);
 
               //              var offprint_profit = counting[i].offprice*n_paper/2;
-                            var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+                            var offprint_profit = parseInt(counting[i].offprice*n_paper_off/2);
 
               //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
                             var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
@@ -1960,6 +1973,9 @@ pool.getConnection(function(err, connection) {
                           var kolvoa3 = counting[i].number % counting[i].ina3;
                            var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
 
+                           if(n_paper=>300){var n_paper_off = n_paper;}
+                           else {var n_paper_off = 300;}
+
                            var struyka_paper = n_paper*struyka_price;
 
              //              var print_exp = counting[i].print_exp*n_paper;
@@ -1969,10 +1985,10 @@ pool.getConnection(function(err, connection) {
                            var print_profit = parseInt(counting[i].print_profit*n_paper);
 
              //              var offprint_exp = counting[i].offprice*n_paper/2;
-                           var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+                           var offprint_exp = parseInt(counting[i].offprice*n_paper_off/2);
 
              //              var offprint_profit = counting[i].offprice*n_paper/2;
-                           var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+                           var offprint_profit = parseInt(counting[i].offprice*n_paper_off/2);
 
              //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
                            var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
@@ -2045,6 +2061,10 @@ pool.getConnection(function(err, connection) {
 
                           else {
                            var n_paper = counting[i].number/counting[i].ina3;
+
+                           if(n_paper=>300){var n_paper_off = n_paper;}
+                           else {var n_paper_off = 300;}
+
              //              var print_exp = counting[i].print_exp*n_paper;
                            var struyka_paper = n_paper*struyka_price;
 
@@ -2054,10 +2074,10 @@ pool.getConnection(function(err, connection) {
                            var print_profit = parseInt(counting[i].print_profit*n_paper);
 
              //              var offprint_exp = counting[i].offprice*n_paper/2;
-                           var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+                           var offprint_exp = parseInt(counting[i].offprice*n_paper_off/2);
 
              //              var offprint_profit = counting[i].offprice*n_paper/2;
-                           var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+                           var offprint_profit = parseInt(counting[i].offprice*n_paper_off/2);
 
              //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
                            var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
@@ -2176,6 +2196,10 @@ pool.getConnection(function(err, connection) {
                            if (counting[i].number % counting[i].ina3 !== 0) {
                            var kolvoa3 = counting[i].number % counting[i].ina3;
                           var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
+
+                           if(n_paper=>300){var n_paper_off = n_paper;}
+                           else {var n_paper_off = 300;}
+
                           var struyka_paper = n_paper*struyka_price;
 
                             var print_exp = parseInt(counting[i].print_exp*n_paper);
@@ -2184,10 +2208,10 @@ pool.getConnection(function(err, connection) {
                             var print_profit = parseInt(counting[i].print_profit*n_paper);
 
               //              var offprint_exp = counting[i].offprice*n_paper/2;
-                            var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+                            var offprint_exp = parseInt(counting[i].offprice*n_paper_off/2);
 
               //              var offprint_profit = counting[i].offprice*n_paper/2;
-                            var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+                            var offprint_profit = parseInt(counting[i].offprice*n_paper_off/2);
 
               //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
                             var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
@@ -2257,6 +2281,10 @@ pool.getConnection(function(err, connection) {
 
                            else {
                             var n_paper = counting[i].number/counting[i].ina3;
+
+                           if(n_paper=>300){var n_paper_off = n_paper;}
+                           else {var n_paper_off = 300;}
+
               //              var print_exp = counting[i].print_exp*n_paper;
                            var struyka_paper = n_paper*struyka_price;
 
@@ -2266,10 +2294,10 @@ pool.getConnection(function(err, connection) {
                             var print_profit = parseInt(counting[i].print_profit*n_paper);
 
               //              var offprint_exp = counting[i].offprice*n_paper/2;
-                            var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+                            var offprint_exp = parseInt(counting[i].offprice*n_paper_off/2);
 
               //              var offprint_profit = counting[i].offprice*n_paper/2;
-                            var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+                            var offprint_profit = parseInt(counting[i].offprice*n_paper_off/2);
 
               //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
                             var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
@@ -2440,6 +2468,10 @@ pool.getConnection(function(err, connection) {
                           if (counting[i].number % counting[i].ina3 !== 0) {
                           var kolvoa3 = counting[i].number % counting[i].ina3;
                            var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
+
+                           if(n_paper=>300){var n_paper_off = n_paper;}
+                           else {var n_paper_off = 300;}
+
              //              var print_exp = counting[i].print_exp*n_paper;
                            var struyka_paper = n_paper*struyka_price;
 
@@ -2449,10 +2481,10 @@ pool.getConnection(function(err, connection) {
                            var print_profit = parseInt(counting[i].print_profit*n_paper);
 
              //              var offprint_exp = counting[i].offprice*n_paper/2;
-                           var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+                           var offprint_exp = parseInt(counting[i].offprice*n_paper_off/2);
 
              //              var offprint_profit = counting[i].offprice*n_paper/2;
-                           var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+                           var offprint_profit = parseInt(counting[i].offprice*n_paper_off/2);
 
              //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
                            var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
@@ -2525,6 +2557,10 @@ pool.getConnection(function(err, connection) {
 
                           else {
                            var n_paper = counting[i].number/counting[i].ina3;
+
+                           if(n_paper=>300){var n_paper_off = n_paper;}
+                           else {var n_paper_off = 300;}
+
              //              var print_exp = counting[i].print_exp*n_paper;
                            var struyka_paper = n_paper*struyka_price;
 
@@ -2534,10 +2570,10 @@ pool.getConnection(function(err, connection) {
                            var print_profit = parseInt(counting[i].print_profit*n_paper);
 
              //              var offprint_exp = counting[i].offprice*n_paper/2;
-                           var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+                           var offprint_exp = parseInt(counting[i].offprice*n_paper_off/2);
 
              //              var offprint_profit = counting[i].offprice*n_paper/2;
-                           var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+                           var offprint_profit = parseInt(counting[i].offprice*n_paper_off/2);
 
              //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
                            var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
@@ -2656,6 +2692,10 @@ pool.getConnection(function(err, connection) {
                            if (counting[i].number % counting[i].ina3 !== 0) {
                            var kolvoa3 = counting[i].number % counting[i].ina3;
                           var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
+
+                           if(n_paper=>300){var n_paper_off = n_paper;}
+                           else {var n_paper_off = 300;}
+
               //              var print_exp = counting[i].print_exp*n_paper;
                            var struyka_paper = n_paper*struyka_price;
 
@@ -2665,10 +2705,10 @@ pool.getConnection(function(err, connection) {
                             var print_profit = parseInt(counting[i].print_profit*n_paper);
 
               //              var offprint_exp = counting[i].offprice*n_paper/2;
-                            var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+                            var offprint_exp = parseInt(counting[i].offprice*n_paper_off/2);
 
               //              var offprint_profit = counting[i].offprice*n_paper/2;
-                            var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+                            var offprint_profit = parseInt(counting[i].offprice*n_paper_off/2);
 
               //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
                             var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
@@ -2738,6 +2778,10 @@ pool.getConnection(function(err, connection) {
 
                            else {
                             var n_paper = counting[i].number/counting[i].ina3;
+
+                           if(n_paper=>300){var n_paper_off = n_paper;}
+                           else {var n_paper_off = 300;}
+
               //              var print_exp = counting[i].print_exp*n_paper;
                            var struyka_paper = n_paper*struyka_price;
 
@@ -2747,10 +2791,10 @@ pool.getConnection(function(err, connection) {
                             var print_profit = parseInt(counting[i].print_profit*n_paper);
 
               //              var offprint_exp = counting[i].offprice*n_paper/2;
-                            var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+                            var offprint_exp = parseInt(counting[i].offprice*n_paper_off/2);
 
               //              var offprint_profit = counting[i].offprice*n_paper/2;
-                            var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+                            var offprint_profit = parseInt(counting[i].offprice*n_paper_off/2);
 
               //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
                             var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
