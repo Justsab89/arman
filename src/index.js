@@ -3996,7 +3996,7 @@ var sql1 = ' SELECT * FROM ??  ORDER BY id DESC LIMIT 1 ';
     if (err) throw err;
     var last = JSON.parse(JSON.stringify(rows));
 
-var sql = ' SELECT ? FROM product WHERE name = ? AND size = ?';
+var sql = ' SELECT "?" FROM product WHERE name = ? AND size = ?';
 
     connection.query( sql , [ qwer, last[0].name, last[0].size ], function(err, rows, fields) {
     if (err) throw err;
