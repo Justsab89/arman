@@ -118,7 +118,7 @@ pool.getConnection(function(err, connection) {
                     [n_report] ,function(err, rows, fields) {
                     if (err) throw err;
 
-                        connection.query(' CREATE TABLE ?? (id INT(100) NOT NULL AUTO_INCREMENT, id_report INT(11), id_user INT(11), date_entry DATETIME, product VARCHAR(100), size VARCHAR(100), ina3 INT(11), number INT(11), offprice INT(11), paper_type VARCHAR(100), paper_exp INT(11), paper_side VARCHAR(10), cut_exp INT(11), PRIMARY KEY(id)) ',
+                        connection.query(' CREATE TABLE ?? (id INT(100) NOT NULL AUTO_INCREMENT, id_report INT(11), id_user INT(11), date_entry DATETIME, product VARCHAR(100), size VARCHAR(100), ina3 INT(11), number INT(11), offprice INT(11), paper_type VARCHAR(100), paper_exp INT(11), A3_paper_exp INT(11), A4_paper_exp INT(11), paper_side VARCHAR(10), cut_exp INT(11), PRIMARY KEY(id)) ',
                         [order] ,function(err, rows, fields) {
                         if (err) throw err;
                         })
@@ -894,10 +894,10 @@ var nomer = JSON.parse(JSON.stringify(rows));
     var test = [];
 
     for(var i = 0; i < order.length; i++){
-    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number, order[i].offprice, order[i].paper_type, order[i].paper_exp, order[i].paper_side]);
+    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number, order[i].offprice, order[i].paper_type, order[i].paper_exp, order[i].A3_paper_exp, order[i].A4_paper_exp, order[i].paper_side]);
     }
 
-        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice, paper_type, paper_exp, paper_side) VALUES ? ';
+        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice, paper_type, paper_exp, A3_paper_exp, A4_paper_exp, paper_side) VALUES ? ';
 
         connection.query( sql3 , [test], function(err, rows, fields) {
         if (err) throw err;
@@ -1353,6 +1353,55 @@ var nomer = JSON.parse(JSON.stringify(rows));
 
 
 
+function send_order_msg1(msg) {
+
+var user_id = msg.chat.id;
+var n_report = 'n_report'+user_id;
+var order_table = 'order'+user_id;
+var text = 'Выберите продукт:';
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+var sql1 = ' SELECT * FROM users WHERE id_user = ?';
+
+connection.query( sql1 , [ user_id ], function(err, rows, fields) {
+if (err) throw err;
+var nomer = JSON.parse(JSON.stringify(rows));
+
+    var sql2 = ' SELECT * FROM ?? WHERE id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1)';
+
+    connection.query( sql2 , [order_table, order_table], function(err, rows, fields) {
+    if (err) throw err;
+    var order = JSON.parse(JSON.stringify(rows));
+    var test = [];
+
+    for(var i = 0; i < order.length; i++){
+    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number, order[i].offprice, order[i].paper_type, order[i].paper_exp, order[i].A3_paper_exp, order[i].A4_paper_exp, order[i].paper_side]);
+    }
+
+        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice, paper_type, paper_exp, A3_paper_exp, A4_paper_exp, paper_side) VALUES ? ';
+
+        connection.query( sql3 , [test], function(err, rows, fields) {
+        if (err) throw err;
+
+        var text = 'Вы сделали заявку на ';
+
+        })
+    })
+})
+})
+}
+
+
+
 //когда уже номер зарегистрирован в базе и сразу после нажатия на "отправить заявку" срабатывает эта функция
 function send_order(query) {
 
@@ -1385,10 +1434,10 @@ var nomer = JSON.parse(JSON.stringify(rows));
     var test = [];
 
     for(var i = 0; i < order.length; i++){
-    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number, order[i].offprice, order[i].paper_type, order[i].paper_exp, order[i].paper_side]);
+    test.push([ order[i].id_report, order[i].id_user, order[i].date_entry, order[i].product, order[i].size, order[i].number, order[i].offprice, order[i].paper_type, order[i].paper_exp, order[i].A3_paper_exp, order[i].A4_paper_exp, order[i].paper_side]);
     }
             console.log('DO INSERTA ');
-        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice, paper_type, paper_exp, paper_side) VALUES ? ';
+        var sql3 = ' INSERT INTO zakaz (id_report, id_user, date_entry, product, size, number, offprice, paper_type, paper_exp, A3_paper_exp, A4_paper_exp, paper_side) VALUES ? ';
             console.log('POSLE INSERTA');
 
         connection.query( sql3 , [test], function(err, rows, fields) {
@@ -2095,7 +2144,7 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
 
             keyboard.push([{'text': ( 'Вы сами выберите мне оптимальную толщину бумаги' ) , 'callback_data': ('paper_pofig#')}]);
             for(var i = 0; i < product.length; i++){
-            keyboard.push([{'text': ( product[i].thickness ) , 'callback_data': ('paper#'  + product[i].thickness + '#' +  product[i].price  + '#' + res[1] + '#' + res[3]  )}]);
+            keyboard.push([{'text': ( product[i].thickness ) , 'callback_data': ('paper#'  + product[i].thickness + '#' +  product[i].price  + '#' +  +  product[i].A3_price  + '#' +  +  product[i].A4_price  + '#' + res[1] + '#' + res[3]  )}]);
             }
 
             const text = 'Теперь выберите толщину бумаги '
@@ -2165,9 +2214,9 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
     if (err) throw err;
     var id = JSON.parse(JSON.stringify(rows));
 
-    var sql2 = ' UPDATE ?? SET paper_type = ?, paper_exp = ?   WHERE id = ? ';
+    var sql2 = ' UPDATE ?? SET paper_type = ?, paper_exp = ?, A3_paper_exp = ?, A4_paper_exp = ?    WHERE id = ? ';
 
-        connection.query( sql2 , [ order, res[1], res[2], id[0].id ], function(err, rows, fields) {
+        connection.query( sql2 , [ order, res[1], res[2], res[3], res[4], id[0].id ], function(err, rows, fields) {
         if (err) throw err;
 
             const text = 'Одностороннее или двухсторонняя печать?'
@@ -2512,7 +2561,7 @@ console.log('NNtext ', splited)
 
 pool.getConnection(function(err, connection) {
 
-    var sql = ' INSERT INTO paper (thickness, price) VALUES (?,?) ';
+    var sql = ' INSERT INTO paper (thickness, price, A3_price, A4_price ) VALUES (?,?) ';
 
     connection.query( sql , [ splited[0], splited[1] ], function(err, rows, fields) {
     if (err) throw err;
