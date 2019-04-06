@@ -1638,9 +1638,9 @@ pool.getConnection(function(err, connection) {
                              else {var size_type = counting[i].size ;}
                           }
 
+//' Имя: ' + nomer[0].username + ' номер: ' + nomer[0].tel + '\n' +
 
-                            text += ' Имя: ' + nomer[0].username + ' номер: ' + nomer[0].tel + '\n' +
-                                    '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
+                         text +=    '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
                                     ' кол-во А3 - ' + n_paper + '\n' +
                                     '(себестоимость и наценка)' + '\n' +
                                     side + '\n' +
