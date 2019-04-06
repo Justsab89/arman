@@ -3940,7 +3940,7 @@ var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
             if (err) throw err;
             console.log('update offprice: ', rows);
 
-                bot.sendMessage(admin, text, {
+                bot.sendMessage(admin, 'Выберите на какой бумаге будете печатать', {
                                      reply_markup: {
                                        inline_keyboard: [
                                          [{
