@@ -1443,12 +1443,6 @@ var text = 'Выберите продукт:';
 
 pool.getConnection(function(err, connection) {
 
-//    var sql2 = ' SELECT * FROM ?? WHERE id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1)';
-//
-//    connection.query( sql2 , [order_table, order_table], function(err, rows, fields) {
-//    if (err) throw err;
-//    var order = JSON.parse(JSON.stringify(rows));
-
             var text = 'Вы сделали заявку на ';
 
 
@@ -1843,9 +1837,9 @@ pool.getConnection(function(err, connection) {
                               else {var size_type = counting[i].size ;}
                            }
 
+//' Имя: ' + nomer[0].username + ' номер: ' + nomer[0].tel + '\n' +
 
-                             text += ' Имя: ' + nomer[0].username + ' номер: ' + nomer[0].tel + '\n' +
-                                     '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
+                            text +=  '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
                                      ' кол-во А3 - ' + n_paper + '\n' +
                                      '(себестоимость и наценка)' + '\n' +
                                      side + '\n' +
@@ -1889,10 +1883,934 @@ pool.getConnection(function(err, connection) {
             })
             }
            })
-//    })
 })
 }
 
+
+
+
+function show_result_a3(query) {
+
+var user_id = query.message.chat.id;
+var n_report = 'n_report'+user_id;
+var order_table = 'order'+user_id;
+var text = 'Выберите продукт:';
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+            var text = 'Вы сделали заявку на ';
+
+
+            var sql31 = ' SELECT size FROM product WHERE size = "non" AND name = (SELECT name FROM ?? WHERE size LIKE "%*%" AND id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1 ) ';
+
+            connection.query( sql31 , [order_table, order_table], function(err, rows, fields) {
+            if (err) throw err;
+            var non = JSON.parse(JSON.stringify(rows));
+            if (non.length == 0) {
+
+            var sql4 = ' SELECT product.name, product.size, product.A3_number AS ina3, product.print_exp, product.print_profit, product.cut_exp, product.cut_profit, ' +
+                       ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, ??.number AS number, ??.offprice AS offprice, ??.A3_paper_exp AS paper_exp, ??.paper_type, ??.paper_side ' +
+                       ' FROM product JOIN ?? WHERE product.name = ??.product AND product.size = ??.size AND ??.size NOT LIKE "%*%" AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
+
+            connection.query( sql4 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table], function(err, rows, fields) {
+            if (err) throw err;
+            var counting = JSON.parse(JSON.stringify(rows));
+            console.log('joining result ', counting);
+
+             for(var i = 0; i < counting.length; i++){
+
+                          if (counting[i].number % counting[i].ina3 !== 0) {
+                          var kolvoa3 = counting[i].number % counting[i].ina3;
+                           var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
+             //              var print_exp = counting[i].print_exp*n_paper;
+                           var print_exp = parseInt(counting[i].print_exp*n_paper);
+
+             //              var print_profit = counting[i].print_profit*n_paper;
+                           var print_profit = parseInt(counting[i].print_profit*n_paper);
+
+             //              var offprint_exp = counting[i].offprice*n_paper/2;
+                           var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+
+             //              var offprint_profit = counting[i].offprice*n_paper/2;
+                           var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+
+             //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
+                           var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
+
+             //              var rizprint_profit = counting[i].rizprint_profit*n_paper;
+                           var rizprint_profit = parseInt(counting[i].rizprint_profit*n_paper);
+
+             //              var digprint_exp = counting[i].digprint_exp*n_paper;
+                           var digprint_exp = parseInt(counting[i].digprint_exp*n_paper);
+
+             //              var digprint_profit = counting[i].digprint_profit*n_paper;
+                           var digprint_profit = parseInt(counting[i].digprint_profit*n_paper);
+
+             //              var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
+                           var print = parseInt(counting[i].print_exp*n_paper + counting[i].print_profit*n_paper);
+
+             //              var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
+                           var offprint = parseInt(counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper);
+
+             //              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
+                           var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
+
+             //              var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
+                           var digprint = parseInt(counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper);
+
+             //              var paper_exp = counting[i].paper_exp*n_paper;
+                           var paper_exp = parseInt(counting[i].paper_exp*n_paper);
+
+             //              var cut_exp = counting[i].cut_exp*n_paper;
+                           var cut_exp = parseInt(counting[i].cut_exp*n_paper);
+
+             //              var cut_profit = counting[i].cut_profit*n_paper;
+                           var cut_profit = parseInt(counting[i].cut_profit*n_paper);
+
+             //              var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
+                           var cut = parseInt(counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper);
+
+                           var exp = print_exp + paper_exp + cut_exp;
+                           var profit = print_profit + cut_profit;
+                           var total = profit + exp;
+                           var offexp = offprint_exp + paper_exp + cut_exp;
+                           var offprofit = offprint_profit + cut_profit;
+                           var offtotal = offexp + offprofit;
+                           var digexp = digprint_exp + paper_exp + cut_exp;
+             //              var digexp2 = parseInt(digexp);
+
+                           var digprofit = digprint_profit + cut_profit;
+             //              var digprofit2 = parseInt(digprofit);
+
+                           var digtotal = digexp + digprofit;
+             //              var digtotal2 = parseInt(digtotal);
+
+                           var rizexp = rizprint_exp + paper_exp + cut_exp;
+                           var rizprofit = rizprint_profit + cut_profit;
+                           var riztotal = rizexp + rizprofit;
+
+                           var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+
+                           var paper_type = counting[i].paper_type;
+                           var paper_side = counting[i].paper_side;
+                             if(counting[i].paper_side === 'one') {var side = 'Односторонняя печать';}
+                             else if(counting[i].paper_side === 'two') {var side = 'Двухсторонняя печать';}
+
+                             var str = counting[i].size;
+                             var res = str.split("*");
+
+                             if(res.length == 2) {var size_type = 'с нестандартным размером' + counting[i].size ;}
+                             else {var size_type = counting[i].size ;}
+                          }
+
+                          else {
+                           var n_paper = counting[i].number/counting[i].ina3;
+             //              var print_exp = counting[i].print_exp*n_paper;
+                           var print_exp = parseInt(counting[i].print_exp*n_paper);
+
+             //              var print_profit = counting[i].print_profit*n_paper;
+                           var print_profit = parseInt(counting[i].print_profit*n_paper);
+
+             //              var offprint_exp = counting[i].offprice*n_paper/2;
+                           var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+
+             //              var offprint_profit = counting[i].offprice*n_paper/2;
+                           var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+
+             //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
+                           var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
+
+             //              var rizprint_profit = counting[i].rizprint_profit*n_paper;
+                           var rizprint_profit = parseInt(counting[i].rizprint_profit*n_paper);
+
+             //              var digprint_exp = counting[i].digprint_exp*n_paper;
+                           var digprint_exp = parseInt(counting[i].digprint_exp*n_paper);
+
+             //              var digprint_profit = counting[i].digprint_profit*n_paper;
+                           var digprint_profit = parseInt(counting[i].digprint_profit*n_paper);
+
+             //              var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
+                           var print = parseInt(counting[i].print_exp*n_paper + counting[i].print_profit*n_paper);
+
+             //              var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
+                           var offprint = parseInt(counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper);
+
+             //              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
+                           var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
+
+             //              var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
+                           var digprint = parseInt(counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper);
+
+             //              var paper_exp = counting[i].paper_exp*n_paper;
+                           var paper_exp = parseInt(counting[i].paper_exp*n_paper);
+
+             //              var cut_exp = counting[i].cut_exp*n_paper;
+                           var cut_exp = parseInt(counting[i].cut_exp*n_paper);
+
+             //              var cut_profit = counting[i].cut_profit*n_paper;
+                           var cut_profit = parseInt(counting[i].cut_profit*n_paper);
+
+             //              var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
+                           var cut = parseInt(counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper);
+
+                           var exp = print_exp + paper_exp + cut_exp;
+                           var profit = print_profit + cut_profit;
+                           var total = profit + exp;
+                           var offexp = offprint_exp + paper_exp + cut_exp;
+                           var offprofit = offprint_profit + cut_profit;
+                           var offtotal = offexp + offprofit;
+                           var digexp = digprint_exp + paper_exp + cut_exp;
+             //              var digexp2 = parseInt(digexp);
+
+                           var digprofit = digprint_profit + cut_profit;
+             //              var digprofit2 = parseInt(digprofit);
+
+                           var digtotal = digexp + digprofit;
+             //              var digtotal2 = parseInt(digtotal);
+
+                           var rizexp = rizprint_exp + paper_exp + cut_exp;
+                           var rizprofit = rizprint_profit + cut_profit;
+                           var riztotal = rizexp + rizprofit;
+
+                           var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+
+                           var paper_type = counting[i].paper_type;
+                           var paper_side = counting[i].paper_side;
+
+                             if(counting[i].paper_side === 'one') {var side = 'Односторонняя печать';}
+                             else if(counting[i].paper_side === 'two') {var side = 'Двухсторонняя печать';}
+
+                             var str = counting[i].size;
+                             var res = str.split("*");
+
+                             if(res.length == 2) {var size_type = 'с нестандартным размером' + counting[i].size ;}
+                             else {var size_type = counting[i].size ;}
+                          }
+
+//' Имя: ' + nomer[0].username + ' номер: ' + nomer[0].tel + '\n' +
+
+                         text +=    '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
+                                    ' кол-во А3 - ' + n_paper + '\n' +
+                                    '(себестоимость и наценка)' + '\n' +
+                                    side + '\n' +
+                                    'Струйная печать' + '\n' +
+                                    ' ЦП ' + print_exp + ' + ' + print_profit + ' = ' + print + '\n' +
+                                    ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                    ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
+                                    ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
+                                    'Ризограф печать' + '\n' +
+                                    ' ЦП ' + rizprint_exp + ' + ' + rizprint_profit + ' = ' + rizprint + '\n' +
+                                    ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                    ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
+                                    ' Всего ' + rizexp + ' + ' + rizprofit + ' = ' + riztotal + '\n' +
+                                    'Офсетная печать' + '\n' +
+                                    ' ЦП ' + offprint_exp + ' + ' + offprint_profit + ' = ' + offprint + '\n' +
+                                    ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                    ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
+                                    ' Всего ' + offexp + ' + ' + offprofit + ' = ' + offtotal + '\n' +
+                                    'Цифровая печать' + '\n' +
+                                    ' ЦП ' + digprint_exp + ' + ' + digprint_profit + ' = ' + digprint + '\n' +
+                                    ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                    ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
+                                    ' Всего ' + digexp + ' + ' + digprofit + ' = ' + digtotal + '\n' ;
+
+                          }
+            console.log('ATEXXXT ',text)
+
+             var sql5 = ' SELECT product.name AS name, product.A3_number AS ina3, product.print_exp AS print_exp, product.print_profit AS print_profit, ??.cut_exp AS cut_exp, ' +
+                        ' product.offprint_exp AS offprint_exp, product.offprint_profit AS offprint_profit, product.digprint_exp AS digprint_exp, product.digprint_profit AS digprint_profit, ??.size AS size, ??.number AS number, ??.offprice AS offprice, ??.A3_paper_exp AS paper_exp, ??.paper_type AS paper_type, ??.paper_side AS paper_side ' +
+                        ' FROM product JOIN ?? WHERE product.name = ??.product AND ??.size LIKE "%*%" AND product.size = "non" AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
+
+             connection.query( sql5 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table ], function(err, rows, fields) {
+             if (err) throw err;
+             var counting = JSON.parse(JSON.stringify(rows));
+             console.log('НЕСТАНДАРт ', counting);
+
+
+
+              for(var i = 0; i < counting.length; i++){
+
+                           if (counting[i].number % counting[i].ina3 !== 0) {
+                           var kolvoa3 = counting[i].number % counting[i].ina3;
+                          var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
+              //              var print_exp = counting[i].print_exp*n_paper;
+                            var print_exp = parseInt(counting[i].print_exp*n_paper);
+
+              //              var print_profit = counting[i].print_profit*n_paper;
+                            var print_profit = parseInt(counting[i].print_profit*n_paper);
+
+              //              var offprint_exp = counting[i].offprice*n_paper/2;
+                            var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+
+              //              var offprint_profit = counting[i].offprice*n_paper/2;
+                            var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+
+              //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
+                            var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
+
+              //              var rizprint_profit = counting[i].rizprint_profit*n_paper;
+                            var rizprint_profit = parseInt(counting[i].rizprint_profit*n_paper);
+
+              //              var digprint_exp = counting[i].digprint_exp*n_paper;
+                            var digprint_exp = parseInt(counting[i].digprint_exp*n_paper);
+
+              //              var digprint_profit = counting[i].digprint_profit*n_paper;
+                            var digprint_profit = parseInt(counting[i].digprint_profit*n_paper);
+
+              //              var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
+                            var print = parseInt(counting[i].print_exp*n_paper + counting[i].print_profit*n_paper);
+
+              //              var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
+                            var offprint = parseInt(counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper);
+
+              //              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
+                            var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
+
+              //              var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
+                            var digprint = parseInt(counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper);
+
+              //              var paper_exp = counting[i].paper_exp*n_paper;
+                            var paper_exp = parseInt(counting[i].paper_exp*n_paper);
+
+              //              var cut_exp = counting[i].cut_exp*n_paper;
+                            var cut_exp = parseInt(counting[i].cut_exp*n_paper);
+
+              //              var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
+                            var cut = parseInt(counting[i].cut_exp*n_paper);
+
+                            var exp = print_exp + paper_exp + cut_exp;
+                            var profit = print_profit ;
+                            var total = profit + exp;
+                            var offexp = offprint_exp + paper_exp + cut_exp;
+                            var offprofit = offprint_profit ;
+                            var offtotal = offexp + offprofit;
+                            var digexp = digprint_exp + paper_exp + cut_exp;
+              //              var digexp2 = parseInt(digexp);
+
+                            var digprofit = digprint_profit;
+              //              var digprofit2 = parseInt(digprofit);
+
+                            var digtotal = digexp + digprofit;
+              //              var digtotal2 = parseInt(digtotal);
+
+                            var rizexp = rizprint_exp + paper_exp + cut_exp;
+                            var rizprofit = rizprint_profit ;
+                            var riztotal = rizexp + rizprofit;
+
+                            var sum = print_exp+print_profit+paper_exp+cut_exp;
+
+                            var paper_type = counting[i].paper_type;
+                            var paper_side = counting[i].paper_side;
+                              if(counting[i].paper_side === 'one') {var side = 'Односторонняя печать';}
+                              else if(counting[i].paper_side === 'two') {var side = 'Двухсторонняя печать';}
+
+                              var str = counting[i].size;
+                              var res = str.split("*");
+
+                              if(res.length == 2) {var size_type = 'с нестандартным размером' + counting[i].size ;}
+                              else {var size_type = counting[i].size ;}
+                           }
+
+                           else {
+                            var n_paper = counting[i].number/counting[i].ina3;
+              //              var print_exp = counting[i].print_exp*n_paper;
+                            var print_exp = parseInt(counting[i].print_exp*n_paper);
+
+              //              var print_profit = counting[i].print_profit*n_paper;
+                            var print_profit = parseInt(counting[i].print_profit*n_paper);
+
+              //              var offprint_exp = counting[i].offprice*n_paper/2;
+                            var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+
+              //              var offprint_profit = counting[i].offprice*n_paper/2;
+                            var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+
+              //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
+                            var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
+
+              //              var rizprint_profit = counting[i].rizprint_profit*n_paper;
+                            var rizprint_profit = parseInt(counting[i].rizprint_profit*n_paper);
+
+              //              var digprint_exp = counting[i].digprint_exp*n_paper;
+                            var digprint_exp = parseInt(counting[i].digprint_exp*n_paper);
+
+              //              var digprint_profit = counting[i].digprint_profit*n_paper;
+                            var digprint_profit = parseInt(counting[i].digprint_profit*n_paper);
+
+              //              var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
+                            var print = parseInt(counting[i].print_exp*n_paper + counting[i].print_profit*n_paper);
+
+              //              var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
+                            var offprint = parseInt(counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper);
+
+              //              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
+                            var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
+
+              //              var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
+                            var digprint = parseInt(counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper);
+
+              //              var paper_exp = counting[i].paper_exp*n_paper;
+                            var paper_exp = parseInt(counting[i].paper_exp*n_paper);
+
+              //              var cut_exp = counting[i].cut_exp*n_paper;
+                            var cut_exp = parseInt(counting[i].cut_exp*n_paper);
+
+              //              var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
+                            var cut = parseInt(counting[i].cut_exp*n_paper);
+
+                            var exp = print_exp + paper_exp + cut_exp;
+                            var profit = print_profit ;
+                            var total = profit + exp;
+                            var offexp = offprint_exp + paper_exp + cut_exp;
+                            var offprofit = offprint_profit ;
+                            var offtotal = offexp + offprofit;
+                            var digexp = digprint_exp + paper_exp + cut_exp;
+              //              var digexp2 = parseInt(digexp);
+
+                            var digprofit = digprint_profit;
+              //              var digprofit2 = parseInt(digprofit);
+
+                            var digtotal = digexp + digprofit;
+              //              var digtotal2 = parseInt(digtotal);
+
+                            var rizexp = rizprint_exp + paper_exp + cut_exp;
+                            var rizprofit = rizprint_profit;
+                            var riztotal = rizexp + rizprofit;
+
+                            var sum = print_exp+print_profit+paper_exp+cut_exp;
+
+                            var paper_type = counting[i].paper_type;
+                            var paper_side = counting[i].paper_side;
+
+                              if(counting[i].paper_side === 'one') {var side = 'Односторонняя печать';}
+                              else if(counting[i].paper_side === 'two') {var side = 'Двухсторонняя печать';}
+
+                              var str = counting[i].size;
+                              var res = str.split("*");
+
+                              if(res.length == 2) {var size_type = 'с нестандартным размером ' + counting[i].size ;}
+                              else {var size_type = counting[i].size ;}
+                           }
+
+//' Имя: ' + nomer[0].username + ' номер: ' + nomer[0].tel + '\n' +
+
+                             text += '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
+                                     ' кол-во А3 - ' + n_paper + '\n' +
+                                     '(себестоимость и наценка)' + '\n' +
+                                     side + '\n' +
+                                     'Струйная печать' + '\n' +
+                                     ' ЦП ' + print_exp + ' + ' + print_profit + ' = ' + print + '\n' +
+                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                     ' ЦР ' + cut_exp + ' = ' + cut + '\n' +
+                                     ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
+                                     'Ризограф печать' + '\n' +
+                                     ' ЦП ' + rizprint_exp + ' + ' + rizprint_profit + ' = ' + rizprint + '\n' +
+                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                     ' ЦР ' + cut_exp + ' = ' + cut + '\n' +
+                                     ' Всего ' + rizexp + ' + ' + rizprofit + ' = ' + riztotal + '\n' +
+                                     'Офсетная печать' + '\n' +
+                                     ' ЦП ' + offprint_exp + ' + ' + offprint_profit + ' = ' + offprint + '\n' +
+                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                     ' ЦР ' + cut_exp + ' = ' + cut + '\n' +
+                                     ' Всего ' + offexp + ' + ' + offprofit + ' = ' + offtotal + '\n' +
+                                     'Цифровая печать' + '\n' +
+                                     ' ЦП ' + digprint_exp + ' + ' + digprint_profit + ' = ' + digprint + '\n' +
+                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                     ' ЦР ' + cut_exp + ' = ' + cut + '\n' +
+                                     ' Всего ' + digexp + ' + ' + digprofit + ' = ' + digtotal + '\n' ;
+
+                           }
+
+                     console.log('ATEXXXT non standard',text)
+
+                      var sql6 = ' SELECT * FROM users WHERE status = "manager" ';
+
+                      connection.query( sql6 , [ user_id ], function(err, rows, fields) {
+                      if (err) throw err;
+                      var manager = JSON.parse(JSON.stringify(rows));
+                          for(var i = 0; i < manager.length; i++){
+                          bot.sendMessage(manager[i].id_user, text)
+                          }
+                          bot.sendMessage(admin, text)
+                      })
+             })
+
+            })
+            }
+           })
+})
+}
+
+
+
+
+function show_result_a4(query) {
+
+var user_id = query.message.chat.id;
+var n_report = 'n_report'+user_id;
+var order_table = 'order'+user_id;
+var text = 'Выберите продукт:';
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+            var text = 'Вы сделали заявку на ';
+
+
+            var sql31 = ' SELECT size FROM product WHERE size = "non" AND name = (SELECT name FROM ?? WHERE size LIKE "%*%" AND id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1 ) ';
+
+            connection.query( sql31 , [order_table, order_table], function(err, rows, fields) {
+            if (err) throw err;
+            var non = JSON.parse(JSON.stringify(rows));
+            if (non.length == 0) {
+
+            var sql4 = ' SELECT product.name, product.size, product.A4_number AS ina3, product.print_exp, product.print_profit, product.cut_exp, product.cut_profit, ' +
+                       ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, ??.number AS number, ??.offprice AS offprice, ??.A4_paper_exp AS paper_exp, ??.paper_type, ??.paper_side ' +
+                       ' FROM product JOIN ?? WHERE product.name = ??.product AND product.size = ??.size AND ??.size NOT LIKE "%*%" AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
+
+            connection.query( sql4 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table], function(err, rows, fields) {
+            if (err) throw err;
+            var counting = JSON.parse(JSON.stringify(rows));
+            console.log('joining result ', counting);
+
+             for(var i = 0; i < counting.length; i++){
+
+                          if (counting[i].number % counting[i].ina3 !== 0) {
+                          var kolvoa3 = counting[i].number % counting[i].ina3;
+                           var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
+             //              var print_exp = counting[i].print_exp*n_paper;
+                           var print_exp = parseInt(counting[i].print_exp*n_paper);
+
+             //              var print_profit = counting[i].print_profit*n_paper;
+                           var print_profit = parseInt(counting[i].print_profit*n_paper);
+
+             //              var offprint_exp = counting[i].offprice*n_paper/2;
+                           var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+
+             //              var offprint_profit = counting[i].offprice*n_paper/2;
+                           var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+
+             //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
+                           var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
+
+             //              var rizprint_profit = counting[i].rizprint_profit*n_paper;
+                           var rizprint_profit = parseInt(counting[i].rizprint_profit*n_paper);
+
+             //              var digprint_exp = counting[i].digprint_exp*n_paper;
+                           var digprint_exp = parseInt(counting[i].digprint_exp*n_paper);
+
+             //              var digprint_profit = counting[i].digprint_profit*n_paper;
+                           var digprint_profit = parseInt(counting[i].digprint_profit*n_paper);
+
+             //              var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
+                           var print = parseInt(counting[i].print_exp*n_paper + counting[i].print_profit*n_paper);
+
+             //              var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
+                           var offprint = parseInt(counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper);
+
+             //              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
+                           var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
+
+             //              var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
+                           var digprint = parseInt(counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper);
+
+             //              var paper_exp = counting[i].paper_exp*n_paper;
+                           var paper_exp = parseInt(counting[i].paper_exp*n_paper);
+
+             //              var cut_exp = counting[i].cut_exp*n_paper;
+                           var cut_exp = parseInt(counting[i].cut_exp*n_paper);
+
+             //              var cut_profit = counting[i].cut_profit*n_paper;
+                           var cut_profit = parseInt(counting[i].cut_profit*n_paper);
+
+             //              var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
+                           var cut = parseInt(counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper);
+
+                           var exp = print_exp + paper_exp + cut_exp;
+                           var profit = print_profit + cut_profit;
+                           var total = profit + exp;
+                           var offexp = offprint_exp + paper_exp + cut_exp;
+                           var offprofit = offprint_profit + cut_profit;
+                           var offtotal = offexp + offprofit;
+                           var digexp = digprint_exp + paper_exp + cut_exp;
+             //              var digexp2 = parseInt(digexp);
+
+                           var digprofit = digprint_profit + cut_profit;
+             //              var digprofit2 = parseInt(digprofit);
+
+                           var digtotal = digexp + digprofit;
+             //              var digtotal2 = parseInt(digtotal);
+
+                           var rizexp = rizprint_exp + paper_exp + cut_exp;
+                           var rizprofit = rizprint_profit + cut_profit;
+                           var riztotal = rizexp + rizprofit;
+
+                           var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+
+                           var paper_type = counting[i].paper_type;
+                           var paper_side = counting[i].paper_side;
+                             if(counting[i].paper_side === 'one') {var side = 'Односторонняя печать';}
+                             else if(counting[i].paper_side === 'two') {var side = 'Двухсторонняя печать';}
+
+                             var str = counting[i].size;
+                             var res = str.split("*");
+
+                             if(res.length == 2) {var size_type = 'с нестандартным размером' + counting[i].size ;}
+                             else {var size_type = counting[i].size ;}
+                          }
+
+                          else {
+                           var n_paper = counting[i].number/counting[i].ina3;
+             //              var print_exp = counting[i].print_exp*n_paper;
+                           var print_exp = parseInt(counting[i].print_exp*n_paper);
+
+             //              var print_profit = counting[i].print_profit*n_paper;
+                           var print_profit = parseInt(counting[i].print_profit*n_paper);
+
+             //              var offprint_exp = counting[i].offprice*n_paper/2;
+                           var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+
+             //              var offprint_profit = counting[i].offprice*n_paper/2;
+                           var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+
+             //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
+                           var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
+
+             //              var rizprint_profit = counting[i].rizprint_profit*n_paper;
+                           var rizprint_profit = parseInt(counting[i].rizprint_profit*n_paper);
+
+             //              var digprint_exp = counting[i].digprint_exp*n_paper;
+                           var digprint_exp = parseInt(counting[i].digprint_exp*n_paper);
+
+             //              var digprint_profit = counting[i].digprint_profit*n_paper;
+                           var digprint_profit = parseInt(counting[i].digprint_profit*n_paper);
+
+             //              var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
+                           var print = parseInt(counting[i].print_exp*n_paper + counting[i].print_profit*n_paper);
+
+             //              var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
+                           var offprint = parseInt(counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper);
+
+             //              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
+                           var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
+
+             //              var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
+                           var digprint = parseInt(counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper);
+
+             //              var paper_exp = counting[i].paper_exp*n_paper;
+                           var paper_exp = parseInt(counting[i].paper_exp*n_paper);
+
+             //              var cut_exp = counting[i].cut_exp*n_paper;
+                           var cut_exp = parseInt(counting[i].cut_exp*n_paper);
+
+             //              var cut_profit = counting[i].cut_profit*n_paper;
+                           var cut_profit = parseInt(counting[i].cut_profit*n_paper);
+
+             //              var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
+                           var cut = parseInt(counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper);
+
+                           var exp = print_exp + paper_exp + cut_exp;
+                           var profit = print_profit + cut_profit;
+                           var total = profit + exp;
+                           var offexp = offprint_exp + paper_exp + cut_exp;
+                           var offprofit = offprint_profit + cut_profit;
+                           var offtotal = offexp + offprofit;
+                           var digexp = digprint_exp + paper_exp + cut_exp;
+             //              var digexp2 = parseInt(digexp);
+
+                           var digprofit = digprint_profit + cut_profit;
+             //              var digprofit2 = parseInt(digprofit);
+
+                           var digtotal = digexp + digprofit;
+             //              var digtotal2 = parseInt(digtotal);
+
+                           var rizexp = rizprint_exp + paper_exp + cut_exp;
+                           var rizprofit = rizprint_profit + cut_profit;
+                           var riztotal = rizexp + rizprofit;
+
+                           var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+
+                           var paper_type = counting[i].paper_type;
+                           var paper_side = counting[i].paper_side;
+
+                             if(counting[i].paper_side === 'one') {var side = 'Односторонняя печать';}
+                             else if(counting[i].paper_side === 'two') {var side = 'Двухсторонняя печать';}
+
+                             var str = counting[i].size;
+                             var res = str.split("*");
+
+                             if(res.length == 2) {var size_type = 'с нестандартным размером' + counting[i].size ;}
+                             else {var size_type = counting[i].size ;}
+                          }
+
+//' Имя: ' + nomer[0].username + ' номер: ' + nomer[0].tel + '\n' +
+
+                         text +=    '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
+                                    ' кол-во А3 - ' + n_paper + '\n' +
+                                    '(себестоимость и наценка)' + '\n' +
+                                    side + '\n' +
+                                    'Струйная печать' + '\n' +
+                                    ' ЦП ' + print_exp + ' + ' + print_profit + ' = ' + print + '\n' +
+                                    ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                    ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
+                                    ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
+                                    'Ризограф печать' + '\n' +
+                                    ' ЦП ' + rizprint_exp + ' + ' + rizprint_profit + ' = ' + rizprint + '\n' +
+                                    ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                    ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
+                                    ' Всего ' + rizexp + ' + ' + rizprofit + ' = ' + riztotal + '\n' +
+                                    'Офсетная печать' + '\n' +
+                                    ' ЦП ' + offprint_exp + ' + ' + offprint_profit + ' = ' + offprint + '\n' +
+                                    ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                    ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
+                                    ' Всего ' + offexp + ' + ' + offprofit + ' = ' + offtotal + '\n' +
+                                    'Цифровая печать' + '\n' +
+                                    ' ЦП ' + digprint_exp + ' + ' + digprint_profit + ' = ' + digprint + '\n' +
+                                    ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                    ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
+                                    ' Всего ' + digexp + ' + ' + digprofit + ' = ' + digtotal + '\n' ;
+
+                          }
+            console.log('ATEXXXT ',text)
+
+             var sql5 = ' SELECT product.name AS name, product.A4_number AS ina3, product.print_exp AS print_exp, product.print_profit AS print_profit, ??.cut_exp AS cut_exp, ' +
+                        ' product.offprint_exp AS offprint_exp, product.offprint_profit AS offprint_profit, product.digprint_exp AS digprint_exp, product.digprint_profit AS digprint_profit, ??.size AS size, ??.number AS number, ??.offprice AS offprice, ??.A4_paper_exp AS paper_exp, ??.paper_type AS paper_type, ??.paper_side AS paper_side ' +
+                        ' FROM product JOIN ?? WHERE product.name = ??.product AND ??.size LIKE "%*%" AND product.size = "non" AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
+
+             connection.query( sql5 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table ], function(err, rows, fields) {
+             if (err) throw err;
+             var counting = JSON.parse(JSON.stringify(rows));
+             console.log('НЕСТАНДАРт ', counting);
+
+
+
+              for(var i = 0; i < counting.length; i++){
+
+                           if (counting[i].number % counting[i].ina3 !== 0) {
+                           var kolvoa3 = counting[i].number % counting[i].ina3;
+                          var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
+              //              var print_exp = counting[i].print_exp*n_paper;
+                            var print_exp = parseInt(counting[i].print_exp*n_paper);
+
+              //              var print_profit = counting[i].print_profit*n_paper;
+                            var print_profit = parseInt(counting[i].print_profit*n_paper);
+
+              //              var offprint_exp = counting[i].offprice*n_paper/2;
+                            var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+
+              //              var offprint_profit = counting[i].offprice*n_paper/2;
+                            var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+
+              //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
+                            var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
+
+              //              var rizprint_profit = counting[i].rizprint_profit*n_paper;
+                            var rizprint_profit = parseInt(counting[i].rizprint_profit*n_paper);
+
+              //              var digprint_exp = counting[i].digprint_exp*n_paper;
+                            var digprint_exp = parseInt(counting[i].digprint_exp*n_paper);
+
+              //              var digprint_profit = counting[i].digprint_profit*n_paper;
+                            var digprint_profit = parseInt(counting[i].digprint_profit*n_paper);
+
+              //              var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
+                            var print = parseInt(counting[i].print_exp*n_paper + counting[i].print_profit*n_paper);
+
+              //              var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
+                            var offprint = parseInt(counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper);
+
+              //              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
+                            var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
+
+              //              var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
+                            var digprint = parseInt(counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper);
+
+              //              var paper_exp = counting[i].paper_exp*n_paper;
+                            var paper_exp = parseInt(counting[i].paper_exp*n_paper);
+
+              //              var cut_exp = counting[i].cut_exp*n_paper;
+                            var cut_exp = parseInt(counting[i].cut_exp*n_paper);
+
+              //              var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
+                            var cut = parseInt(counting[i].cut_exp*n_paper);
+
+                            var exp = print_exp + paper_exp + cut_exp;
+                            var profit = print_profit ;
+                            var total = profit + exp;
+                            var offexp = offprint_exp + paper_exp + cut_exp;
+                            var offprofit = offprint_profit ;
+                            var offtotal = offexp + offprofit;
+                            var digexp = digprint_exp + paper_exp + cut_exp;
+              //              var digexp2 = parseInt(digexp);
+
+                            var digprofit = digprint_profit;
+              //              var digprofit2 = parseInt(digprofit);
+
+                            var digtotal = digexp + digprofit;
+              //              var digtotal2 = parseInt(digtotal);
+
+                            var rizexp = rizprint_exp + paper_exp + cut_exp;
+                            var rizprofit = rizprint_profit ;
+                            var riztotal = rizexp + rizprofit;
+
+                            var sum = print_exp+print_profit+paper_exp+cut_exp;
+
+                            var paper_type = counting[i].paper_type;
+                            var paper_side = counting[i].paper_side;
+                              if(counting[i].paper_side === 'one') {var side = 'Односторонняя печать';}
+                              else if(counting[i].paper_side === 'two') {var side = 'Двухсторонняя печать';}
+
+                              var str = counting[i].size;
+                              var res = str.split("*");
+
+                              if(res.length == 2) {var size_type = 'с нестандартным размером' + counting[i].size ;}
+                              else {var size_type = counting[i].size ;}
+                           }
+
+                           else {
+                            var n_paper = counting[i].number/counting[i].ina3;
+              //              var print_exp = counting[i].print_exp*n_paper;
+                            var print_exp = parseInt(counting[i].print_exp*n_paper);
+
+              //              var print_profit = counting[i].print_profit*n_paper;
+                            var print_profit = parseInt(counting[i].print_profit*n_paper);
+
+              //              var offprint_exp = counting[i].offprice*n_paper/2;
+                            var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+
+              //              var offprint_profit = counting[i].offprice*n_paper/2;
+                            var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+
+              //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
+                            var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
+
+              //              var rizprint_profit = counting[i].rizprint_profit*n_paper;
+                            var rizprint_profit = parseInt(counting[i].rizprint_profit*n_paper);
+
+              //              var digprint_exp = counting[i].digprint_exp*n_paper;
+                            var digprint_exp = parseInt(counting[i].digprint_exp*n_paper);
+
+              //              var digprint_profit = counting[i].digprint_profit*n_paper;
+                            var digprint_profit = parseInt(counting[i].digprint_profit*n_paper);
+
+              //              var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
+                            var print = parseInt(counting[i].print_exp*n_paper + counting[i].print_profit*n_paper);
+
+              //              var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
+                            var offprint = parseInt(counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper);
+
+              //              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
+                            var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
+
+              //              var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
+                            var digprint = parseInt(counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper);
+
+              //              var paper_exp = counting[i].paper_exp*n_paper;
+                            var paper_exp = parseInt(counting[i].paper_exp*n_paper);
+
+              //              var cut_exp = counting[i].cut_exp*n_paper;
+                            var cut_exp = parseInt(counting[i].cut_exp*n_paper);
+
+              //              var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
+                            var cut = parseInt(counting[i].cut_exp*n_paper);
+
+                            var exp = print_exp + paper_exp + cut_exp;
+                            var profit = print_profit ;
+                            var total = profit + exp;
+                            var offexp = offprint_exp + paper_exp + cut_exp;
+                            var offprofit = offprint_profit ;
+                            var offtotal = offexp + offprofit;
+                            var digexp = digprint_exp + paper_exp + cut_exp;
+              //              var digexp2 = parseInt(digexp);
+
+                            var digprofit = digprint_profit;
+              //              var digprofit2 = parseInt(digprofit);
+
+                            var digtotal = digexp + digprofit;
+              //              var digtotal2 = parseInt(digtotal);
+
+                            var rizexp = rizprint_exp + paper_exp + cut_exp;
+                            var rizprofit = rizprint_profit;
+                            var riztotal = rizexp + rizprofit;
+
+                            var sum = print_exp+print_profit+paper_exp+cut_exp;
+
+                            var paper_type = counting[i].paper_type;
+                            var paper_side = counting[i].paper_side;
+
+                              if(counting[i].paper_side === 'one') {var side = 'Односторонняя печать';}
+                              else if(counting[i].paper_side === 'two') {var side = 'Двухсторонняя печать';}
+
+                              var str = counting[i].size;
+                              var res = str.split("*");
+
+                              if(res.length == 2) {var size_type = 'с нестандартным размером ' + counting[i].size ;}
+                              else {var size_type = counting[i].size ;}
+                           }
+
+//' Имя: ' + nomer[0].username + ' номер: ' + nomer[0].tel + '\n' +
+
+                             text += '🔹 ' + counting[i].name + ' ' +  size_type + ' на сумму ' + sum + '\n' +
+                                     ' кол-во А3 - ' + n_paper + '\n' +
+                                     '(себестоимость и наценка)' + '\n' +
+                                     side + '\n' +
+                                     'Струйная печать' + '\n' +
+                                     ' ЦП ' + print_exp + ' + ' + print_profit + ' = ' + print + '\n' +
+                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                     ' ЦР ' + cut_exp + ' = ' + cut + '\n' +
+                                     ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
+                                     'Ризограф печать' + '\n' +
+                                     ' ЦП ' + rizprint_exp + ' + ' + rizprint_profit + ' = ' + rizprint + '\n' +
+                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                     ' ЦР ' + cut_exp + ' = ' + cut + '\n' +
+                                     ' Всего ' + rizexp + ' + ' + rizprofit + ' = ' + riztotal + '\n' +
+                                     'Офсетная печать' + '\n' +
+                                     ' ЦП ' + offprint_exp + ' + ' + offprint_profit + ' = ' + offprint + '\n' +
+                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                     ' ЦР ' + cut_exp + ' = ' + cut + '\n' +
+                                     ' Всего ' + offexp + ' + ' + offprofit + ' = ' + offtotal + '\n' +
+                                     'Цифровая печать' + '\n' +
+                                     ' ЦП ' + digprint_exp + ' + ' + digprint_profit + ' = ' + digprint + '\n' +
+                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
+                                     ' ЦР ' + cut_exp + ' = ' + cut + '\n' +
+                                     ' Всего ' + digexp + ' + ' + digprofit + ' = ' + digtotal + '\n' ;
+
+                           }
+
+                     console.log('ATEXXXT non standard',text)
+
+                      var sql6 = ' SELECT * FROM users WHERE status = "manager" ';
+
+                      connection.query( sql6 , [ user_id ], function(err, rows, fields) {
+                      if (err) throw err;
+                      var manager = JSON.parse(JSON.stringify(rows));
+                          for(var i = 0; i < manager.length; i++){
+                          bot.sendMessage(manager[i].id_user, text)
+                          }
+                          bot.sendMessage(admin, text)
+                      })
+             })
+
+            })
+            }
+           })
+})
+}
 
 
 
