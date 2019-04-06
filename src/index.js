@@ -1443,11 +1443,11 @@ var text = 'Выберите продукт:';
 
 pool.getConnection(function(err, connection) {
 
-    var sql2 = ' SELECT * FROM ?? WHERE id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1)';
-
-    connection.query( sql2 , [order_table, order_table], function(err, rows, fields) {
-    if (err) throw err;
-    var order = JSON.parse(JSON.stringify(rows));
+//    var sql2 = ' SELECT * FROM ?? WHERE id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1)';
+//
+//    connection.query( sql2 , [order_table, order_table], function(err, rows, fields) {
+//    if (err) throw err;
+//    var order = JSON.parse(JSON.stringify(rows));
 
             var text = 'Вы сделали заявку на ';
 
@@ -1889,7 +1889,7 @@ pool.getConnection(function(err, connection) {
             })
             }
            })
-    })
+//    })
 })
 }
 
