@@ -3974,11 +3974,6 @@ function insert_n_paper (query) {
 var str = query.data;
 var res = str.split("#");
 
-if(res[0]==='sra3') {var qwer = 'number';}
-else if(res[0]==='a3') {var qwer = 'A3_number';}
-else if(res[0]==='a4') {var qwer = 'A4_number';}
-
-
 var user_id = query.message.chat.id;
 var n_report = 'n_report'+user_id;
 var order = 'order'+user_id;
@@ -3993,14 +3988,23 @@ var order = 'order'+user_id;
 
 pool.getConnection(function(err, connection) {
 
+if(res[0]==='sra3') {var qwer = 'number';
+
 var sql1 = ' SELECT * FROM ??  ORDER BY id DESC LIMIT 1 ';
 
     connection.query( sql1 , [ order ], function(err, rows, fields) {
     if (err) throw err;
     var last = JSON.parse(JSON.stringify(rows));
 
-    if(last[0].number%qwer == 0){var n_paper = last[0].number/qwer;}
-    else if(last[0].number%qwer !== 0){var n_paper = ((last[0].number-(last[0].number%qwer))/qwer)+1;}
+var sql = ' SELECT ? FROM product WHERE name = ? AND size = ?';
+
+    connection.query( sql , [ qwer, last[0].name, last[0].size ], function(err, rows, fields) {
+    if (err) throw err;
+    var num = JSON.parse(JSON.stringify(rows));
+    var numm = num[0].number;
+
+    if(last[0].number%numm == 0){var n_paper = last[0].number/numm;}
+    else if(last[0].number%numm !== 0){var n_paper = ((last[0].number-(last[0].number%numm))/numm)+1;}
 
     var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to >= ? ';
 
@@ -4033,7 +4037,114 @@ var sql1 = ' SELECT * FROM ??  ORDER BY id DESC LIMIT 1 ';
                  })
         })
       })
+      })
 
+}
+
+else if(res[0]==='a3') {var qwer = 'A3_number';
+
+var sql1 = ' SELECT * FROM ??  ORDER BY id DESC LIMIT 1 ';
+
+    connection.query( sql1 , [ order ], function(err, rows, fields) {
+    if (err) throw err;
+    var last = JSON.parse(JSON.stringify(rows));
+
+var sql = ' SELECT ? FROM product WHERE name = ? AND size = ?';
+
+    connection.query( sql , [ qwer, last[0].name, last[0].size ], function(err, rows, fields) {
+    if (err) throw err;
+    var num = JSON.parse(JSON.stringify(rows));
+    var numm = num[0].number;
+
+    if(last[0].number%numm == 0){var n_paper = last[0].number/numm;}
+    else if(last[0].number%numm !== 0){var n_paper = ((last[0].number-(last[0].number%numm))/numm)+1;}
+
+    var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to >= ? ';
+
+        connection.query( sql11 , [ n_paper, n_paper ], function(err, rows, fields) {
+        if (err) throw err;
+        var price = JSON.parse(JSON.stringify(rows));
+        console.log(' offprice: ', price);
+
+        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
+
+            connection.query( sql2 , [ order, last[0].number, price[0].price, last[0].id ], function(err, rows, fields) {
+            if (err) throw err;
+            console.log('update offprice: ', rows);
+
+                bot.sendMessage(user_id, text, {
+                                             reply_markup: {
+                                               inline_keyboard: [
+                                                 [{
+                                                   text: 'Сделать заказ еще одних вещей',
+                                                   callback_data: 'more'
+                                                 }],
+
+                                                 [{
+                                                   text: 'Отправить заявку',
+                                                   callback_data: 'send'
+                                                 }]
+                                               ]
+                                             }
+                                       })
+                 })
+        })
+      })
+      })
+
+}
+
+else if(res[0]==='a4') {var qwer = 'A4_number';
+var sql1 = ' SELECT * FROM ??  ORDER BY id DESC LIMIT 1 ';
+
+    connection.query( sql1 , [ order ], function(err, rows, fields) {
+    if (err) throw err;
+    var last = JSON.parse(JSON.stringify(rows));
+
+var sql = ' SELECT ? FROM product WHERE name = ? AND size = ?';
+
+    connection.query( sql , [ qwer, last[0].name, last[0].size ], function(err, rows, fields) {
+    if (err) throw err;
+    var num = JSON.parse(JSON.stringify(rows));
+    var numm = num[0].number;
+
+    if(last[0].number%numm == 0){var n_paper = last[0].number/numm;}
+    else if(last[0].number%numm !== 0){var n_paper = ((last[0].number-(last[0].number%numm))/numm)+1;}
+
+    var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to >= ? ';
+
+        connection.query( sql11 , [ n_paper, n_paper ], function(err, rows, fields) {
+        if (err) throw err;
+        var price = JSON.parse(JSON.stringify(rows));
+        console.log(' offprice: ', price);
+
+        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
+
+            connection.query( sql2 , [ order, last[0].number, price[0].price, last[0].id ], function(err, rows, fields) {
+            if (err) throw err;
+            console.log('update offprice: ', rows);
+
+                bot.sendMessage(user_id, text, {
+                                             reply_markup: {
+                                               inline_keyboard: [
+                                                 [{
+                                                   text: 'Сделать заказ еще одних вещей',
+                                                   callback_data: 'more'
+                                                 }],
+
+                                                 [{
+                                                   text: 'Отправить заявку',
+                                                   callback_data: 'send'
+                                                 }]
+                                               ]
+                                             }
+                                       })
+                 })
+        })
+      })
+      })
+
+}
 })
 }
 
