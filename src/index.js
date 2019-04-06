@@ -3988,7 +3988,7 @@ var order = 'order'+user_id;
 
 pool.getConnection(function(err, connection) {
 
-if(res[0]==='sra3') {var qwer = 'number';
+if(res[0]==='sra3') {
 
 var sql1 = ' SELECT * FROM ??  ORDER BY id DESC LIMIT 1 ';
 
@@ -3996,9 +3996,9 @@ var sql1 = ' SELECT * FROM ??  ORDER BY id DESC LIMIT 1 ';
     if (err) throw err;
     var last = JSON.parse(JSON.stringify(rows));
 
-var sql = ' SELECT "?" FROM product WHERE name = ? AND size = ?';
+var sql = ' SELECT number FROM product WHERE name = ? AND size = ?';
 
-    connection.query( sql , [ qwer, last[0].name, last[0].size ], function(err, rows, fields) {
+    connection.query( sql , [ last[0].name, last[0].size ], function(err, rows, fields) {
     if (err) throw err;
     var num = JSON.parse(JSON.stringify(rows));
     var numm = num[0].number;
@@ -4049,9 +4049,9 @@ var sql1 = ' SELECT * FROM ??  ORDER BY id DESC LIMIT 1 ';
     if (err) throw err;
     var last = JSON.parse(JSON.stringify(rows));
 
-var sql = ' SELECT ? FROM product WHERE name = ? AND size = ?';
+var sql = ' SELECT A3_number FROM product WHERE name = ? AND size = ?';
 
-    connection.query( sql , [ qwer, last[0].name, last[0].size ], function(err, rows, fields) {
+    connection.query( sql , [ last[0].name, last[0].size ], function(err, rows, fields) {
     if (err) throw err;
     var num = JSON.parse(JSON.stringify(rows));
     var numm = num[0].number;
@@ -4101,9 +4101,9 @@ var sql1 = ' SELECT * FROM ??  ORDER BY id DESC LIMIT 1 ';
     if (err) throw err;
     var last = JSON.parse(JSON.stringify(rows));
 
-var sql = ' SELECT ? FROM product WHERE name = ? AND size = ?';
+var sql = ' SELECT A4_number FROM product WHERE name = ? AND size = ?';
 
-    connection.query( sql , [ qwer, last[0].name, last[0].size ], function(err, rows, fields) {
+    connection.query( sql , [ last[0].name, last[0].size ], function(err, rows, fields) {
     if (err) throw err;
     var num = JSON.parse(JSON.stringify(rows));
     var numm = num[0].number;
