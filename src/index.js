@@ -1450,7 +1450,7 @@ pool.getConnection(function(err, connection) {
     connection.query( sql , function(err, rows, fields) {
     if (err) throw err;
     var struyka = JSON.parse(JSON.stringify(rows));
-    var struyka_paper = struyka[0].price;
+    var struyka_price = struyka[0].price;
 
             var text = 'Вы сделали заявку на ';
 
@@ -1475,6 +1475,8 @@ pool.getConnection(function(err, connection) {
                           if (counting[i].number % counting[i].ina3 !== 0) {
                           var kolvoa3 = counting[i].number % counting[i].ina3;
                            var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
+
+                           var struyka_paper = n_paper*struyka_price;
              //              var print_exp = counting[i].print_exp*n_paper;
                            var print_exp = parseInt(counting[i].print_exp*n_paper);
 
@@ -1558,6 +1560,8 @@ pool.getConnection(function(err, connection) {
 
                           else {
                            var n_paper = counting[i].number/counting[i].ina3;
+                           var struyka_paper = n_paper*struyka_price;
+
              //              var print_exp = counting[i].print_exp*n_paper;
                            var print_exp = parseInt(counting[i].print_exp*n_paper);
 
@@ -1688,6 +1692,8 @@ pool.getConnection(function(err, connection) {
                            var kolvoa3 = counting[i].number % counting[i].ina3;
                           var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
               //              var print_exp = counting[i].print_exp*n_paper;
+                           var struyka_paper = n_paper*struyka_price;
+
                             var print_exp = parseInt(counting[i].print_exp*n_paper);
 
               //              var print_profit = counting[i].print_profit*n_paper;
@@ -1767,6 +1773,8 @@ pool.getConnection(function(err, connection) {
 
                            else {
                             var n_paper = counting[i].number/counting[i].ina3;
+
+                           var struyka_paper = n_paper*struyka_price;
               //              var print_exp = counting[i].print_exp*n_paper;
                             var print_exp = parseInt(counting[i].print_exp*n_paper);
 
@@ -1921,7 +1929,7 @@ pool.getConnection(function(err, connection) {
     connection.query( sql , function(err, rows, fields) {
     if (err) throw err;
     var struyka = JSON.parse(JSON.stringify(rows));
-    var struyka_paper = struyka[0].A3_price;
+    var struyka_price = struyka[0].A3_price;
 
             var text = 'Вы сделали заявку на ';
 
@@ -1947,6 +1955,9 @@ pool.getConnection(function(err, connection) {
                           if (counting[i].number % counting[i].ina3 !== 0) {
                           var kolvoa3 = counting[i].number % counting[i].ina3;
                            var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
+
+                           var struyka_paper = n_paper*struyka_price;
+
              //              var print_exp = counting[i].print_exp*n_paper;
                            var print_exp = parseInt(counting[i].print_exp*n_paper);
 
@@ -2031,6 +2042,8 @@ pool.getConnection(function(err, connection) {
                           else {
                            var n_paper = counting[i].number/counting[i].ina3;
              //              var print_exp = counting[i].print_exp*n_paper;
+                           var struyka_paper = n_paper*struyka_price;
+
                            var print_exp = parseInt(counting[i].print_exp*n_paper);
 
              //              var print_profit = counting[i].print_profit*n_paper;
@@ -2159,7 +2172,8 @@ pool.getConnection(function(err, connection) {
                            if (counting[i].number % counting[i].ina3 !== 0) {
                            var kolvoa3 = counting[i].number % counting[i].ina3;
                           var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
-              //              var print_exp = counting[i].print_exp*n_paper;
+                          var struyka_paper = n_paper*struyka_price;
+
                             var print_exp = parseInt(counting[i].print_exp*n_paper);
 
               //              var print_profit = counting[i].print_profit*n_paper;
@@ -2240,6 +2254,8 @@ pool.getConnection(function(err, connection) {
                            else {
                             var n_paper = counting[i].number/counting[i].ina3;
               //              var print_exp = counting[i].print_exp*n_paper;
+                           var struyka_paper = n_paper*struyka_price;
+
                             var print_exp = parseInt(counting[i].print_exp*n_paper);
 
               //              var print_profit = counting[i].print_profit*n_paper;
@@ -2394,7 +2410,7 @@ pool.getConnection(function(err, connection) {
     connection.query( sql , function(err, rows, fields) {
     if (err) throw err;
     var struyka = JSON.parse(JSON.stringify(rows));
-    var struyka_paper = struyka[0].A4_price;
+    var struyka_price = struyka[0].A4_price;
 
             var text = 'Вы сделали заявку на ';
 
@@ -2421,6 +2437,8 @@ pool.getConnection(function(err, connection) {
                           var kolvoa3 = counting[i].number % counting[i].ina3;
                            var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
              //              var print_exp = counting[i].print_exp*n_paper;
+                           var struyka_paper = n_paper*struyka_price;
+
                            var print_exp = parseInt(counting[i].print_exp*n_paper);
 
              //              var print_profit = counting[i].print_profit*n_paper;
@@ -2504,6 +2522,8 @@ pool.getConnection(function(err, connection) {
                           else {
                            var n_paper = counting[i].number/counting[i].ina3;
              //              var print_exp = counting[i].print_exp*n_paper;
+                           var struyka_paper = n_paper*struyka_price;
+
                            var print_exp = parseInt(counting[i].print_exp*n_paper);
 
              //              var print_profit = counting[i].print_profit*n_paper;
@@ -2633,6 +2653,8 @@ pool.getConnection(function(err, connection) {
                            var kolvoa3 = counting[i].number % counting[i].ina3;
                           var n_paper = (counting[i].number - kolvoa3)/counting[i].ina3  + 1;
               //              var print_exp = counting[i].print_exp*n_paper;
+                           var struyka_paper = n_paper*struyka_price;
+
                             var print_exp = parseInt(counting[i].print_exp*n_paper);
 
               //              var print_profit = counting[i].print_profit*n_paper;
@@ -2713,6 +2735,8 @@ pool.getConnection(function(err, connection) {
                            else {
                             var n_paper = counting[i].number/counting[i].ina3;
               //              var print_exp = counting[i].print_exp*n_paper;
+                           var struyka_paper = n_paper*struyka_price;
+
                             var print_exp = parseInt(counting[i].print_exp*n_paper);
 
               //              var print_profit = counting[i].print_profit*n_paper;
