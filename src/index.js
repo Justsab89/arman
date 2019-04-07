@@ -3999,15 +3999,17 @@ if(res[0]==='sra3') {
     connection.query( sql1 , [ order ], function(err, rows, fields) {
     if (err) throw err;
     var last = JSON.parse(JSON.stringify(rows));
-    console.log('num', last);
+    console.log('last', last);
 
     var sql = ' SELECT number FROM product WHERE name = ? AND size = ?';
 
     connection.query( sql , [ last[0].name, last[0].size ], function(err, rows, fields) {
     if (err) throw err;
     var num = JSON.parse(JSON.stringify(rows));
-    var numm = num[0].number;
     console.log('num', num);
+    
+    var numm = num[0].number;
+
 //    console.log('numm', num);
 
     if(last[0].number%numm == 0){var n_paper = last[0].number/numm;}
