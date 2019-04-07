@@ -3461,26 +3461,30 @@ var nomer = JSON.parse(JSON.stringify(rows));
         if (err) throw err;
             var text = 'Вы сделали заявку на ';
 
-            bot.sendMessage(admin, text, {
-                                 reply_markup: {
-                                   inline_keyboard: [
-                                     [{
-                                       text: 'SRA3',
-                                       callback_data: 'sra3#' + 'sra3'
-                                     }],
+        if(order[0].paper_exp !== null & order[0].A3_paper_exp === null & order[0].A4_paper_exp === null)      {show_result_sra3(query)}
+        else if(order[0].paper_exp === null & order[0].A3_paper_exp !== null & order[0].A4_paper_exp === null) {show_result_a3(query)}
+        else if(order[0].paper_exp === null & order[0].A3_paper_exp === null & order[0].A4_paper_exp !== null) {show_result_a4(query)}
 
-                                     [{
-                                       text: 'A3',
-                                       callback_data: 'a3#' + 'a3'
-                                     }],
-
-                                     [{
-                                       text: 'A4',
-                                       callback_data: 'a4#' + 'a4'
-                                     }]
-                                     ]
-                                 }
-                           })
+//            bot.sendMessage(admin, text, {
+//                                 reply_markup: {
+//                                   inline_keyboard: [
+//                                     [{
+//                                       text: 'SRA3',
+//                                       callback_data: 'sra3#' + 'sra3'
+//                                     }],
+//
+//                                     [{
+//                                       text: 'A3',
+//                                       callback_data: 'a3#' + 'a3'
+//                                     }],
+//
+//                                     [{
+//                                       text: 'A4',
+//                                       callback_data: 'a4#' + 'a4'
+//                                     }]
+//                                     ]
+//                                 }
+//                           })
         })
     })
 })
@@ -4022,7 +4026,7 @@ if(res[0]==='sra3') {
         var price = JSON.parse(JSON.stringify(rows));
         console.log(' offprice: ', price);
 
-        var sql2 = ' UPDATE ?? SET number = ?, offprice = ?, n_paper = ? WHERE id = ? ';
+        var sql2 = ' UPDATE ?? SET number = ?, offprice = ?, n_paper = ?, A3_paper_exp = NULL, A4_paper_exp = NULL  WHERE id = ? ';
 
             connection.query( sql2 , [ order, last[0].number, price[0].price, n_paper, last[0].id ], function(err, rows, fields) {
             if (err) throw err;
@@ -4077,7 +4081,7 @@ else if(res[0]==='a3') {
         var price = JSON.parse(JSON.stringify(rows));
         console.log(' offprice: ', price);
 
-        var sql2 = ' UPDATE ?? SET number = ?, offprice = ?, n_paper = ? WHERE id = ? ';
+        var sql2 = ' UPDATE ?? SET number = ?, offprice = ?, n_paper = ?, paper_exp = NULL, A4_paper_exp = NULL  WHERE id = ? ';
 
             connection.query( sql2 , [ order, last[0].number, price[0].price, n_paper, last[0].id ], function(err, rows, fields) {
             if (err) throw err;
@@ -4131,7 +4135,7 @@ else if (res[0]==='a4') {
         var price = JSON.parse(JSON.stringify(rows));
         console.log(' offprice: ', price);
 
-        var sql2 = ' UPDATE ?? SET number = ?, offprice = ?, n_paper = ? WHERE id = ? ';
+        var sql2 = ' UPDATE ?? SET number = ?, offprice = ?, n_paper = ?, A3_paper_exp = NULL, paper_exp = NULL WHERE id = ? ';
 
             connection.query( sql2 , [ order, last[0].number, price[0].price, n_paper, last[0].id ], function(err, rows, fields) {
             if (err) throw err;
