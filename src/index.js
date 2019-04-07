@@ -7,7 +7,7 @@ const helper = require('./helper')
 const fs = require('fs')
 //const TaskTimer = require('tasktimer')
 //const database = require('./database')
-const admin = 110638690
+const admin = 336243307
 
 //SABYR  336243307
 //ARMAN  110638690
@@ -229,9 +229,10 @@ bot.on('callback_query', query => {
   else if (res[0] =='del_tiraj')  { delete_tiraj(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='del_cutting')  { delete_cutting(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
   else if (res[0] =='del_paper')  { delete_paper(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
-  else if (res[0] =='sra3')  { show_result_sra3(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
-  else if (res[0] =='a3')  { show_result_a3(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
-  else if (res[0] =='a4')  { show_result_a4(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
+  else if (res[0] =='sra3' || res[0] =='a3' || res[0] =='a4')  { insert_n_paper(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
+//  else if (res[0] =='sra3')  { show_result_sra3(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
+//  else if (res[0] =='a3')  { show_result_a3(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
+//  else if (res[0] =='a4')  { show_result_a4(query); bot.deleteMessage(query.message.chat.id, query.message.message_id) }
 })
 
 
@@ -3972,184 +3973,188 @@ var sql1 = ' SELECT id, paper_exp FROM ??  ORDER BY id DESC LIMIT 1 ';
 
 
 
-//function insert_n_paper (query) {
-//
-//var str = query.data;
-//var res = str.split("#");
-//
-//var user_id = query.message.chat.id;
-//var n_report = 'n_report'+user_id;
-//var order = 'order'+user_id;
-//
-//    var mysql  = require('mysql');
-//    var pool  = mysql.createPool({
-//    host     : 'localhost',
-//    user     :  config.user,
-//    password :  config.db_password,
-//    database :  config.db_name
-//    })
-//
-//pool.getConnection(function(err, connection) {
-//
-//if(res[0]==='sra3') {
-//
-//var sql1 = ' SELECT * FROM ??  ORDER BY id DESC LIMIT 1 ';
-//
-//    connection.query( sql1 , [ order ], function(err, rows, fields) {
-//    if (err) throw err;
-//    var last = JSON.parse(JSON.stringify(rows));
-//
-//var sql = ' SELECT number FROM product WHERE name = ? AND size = ?';
-//
-//    connection.query( sql , [ last[0].name, last[0].size ], function(err, rows, fields) {
-//    if (err) throw err;
-//    var num = JSON.parse(JSON.stringify(rows));
-//    var numm = num[0].number;
-//
-//    if(last[0].number%numm == 0){var n_paper = last[0].number/numm;}
-//    else if(last[0].number%numm !== 0){var n_paper = ((last[0].number-(last[0].number%numm))/numm)+1;}
-//
-//    var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to >= ? ';
-//
-//        connection.query( sql11 , [ n_paper, n_paper ], function(err, rows, fields) {
-//        if (err) throw err;
-//        var price = JSON.parse(JSON.stringify(rows));
-//        console.log(' offprice: ', price);
-//
-//        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
-//
-//            connection.query( sql2 , [ order, last[0].number, price[0].price, last[0].id ], function(err, rows, fields) {
-//            if (err) throw err;
-//            console.log('update offprice: ', rows);
-//
-//                bot.sendMessage(user_id, text, {
-//                                             reply_markup: {
-//                                               inline_keyboard: [
-//                                                 [{
-//                                                   text: 'Сделать заказ еще одних вещей',
-//                                                   callback_data: 'more'
-//                                                 }],
-//
-//                                                 [{
-//                                                   text: 'Отправить заявку',
-//                                                   callback_data: 'send'
-//                                                 }]
-//                                               ]
-//                                             }
-//                                       })
-//                 })
-//        })
-//      })
-//      })
-//
-//}
-//
-//else if(res[0]==='a3') {var qwer = 'A3_number';
-//
-//var sql1 = ' SELECT * FROM ??  ORDER BY id DESC LIMIT 1 ';
-//
-//    connection.query( sql1 , [ order ], function(err, rows, fields) {
-//    if (err) throw err;
-//    var last = JSON.parse(JSON.stringify(rows));
-//
-//var sql = ' SELECT A3_number FROM product WHERE name = ? AND size = ?';
-//
-//    connection.query( sql , [ last[0].name, last[0].size ], function(err, rows, fields) {
-//    if (err) throw err;
-//    var num = JSON.parse(JSON.stringify(rows));
-//    var numm = num[0].number;
-//
-//    if(last[0].number%numm == 0){var n_paper = last[0].number/numm;}
-//    else if(last[0].number%numm !== 0){var n_paper = ((last[0].number-(last[0].number%numm))/numm)+1;}
-//
-//    var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to >= ? ';
-//
-//        connection.query( sql11 , [ n_paper, n_paper ], function(err, rows, fields) {
-//        if (err) throw err;
-//        var price = JSON.parse(JSON.stringify(rows));
-//        console.log(' offprice: ', price);
-//
-//        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
-//
-//            connection.query( sql2 , [ order, last[0].number, price[0].price, last[0].id ], function(err, rows, fields) {
-//            if (err) throw err;
-//            console.log('update offprice: ', rows);
-//
-//                bot.sendMessage(user_id, text, {
-//                                             reply_markup: {
-//                                               inline_keyboard: [
-//                                                 [{
-//                                                   text: 'Сделать заказ еще одних вещей',
-//                                                   callback_data: 'more'
-//                                                 }],
-//
-//                                                 [{
-//                                                   text: 'Отправить заявку',
-//                                                   callback_data: 'send'
-//                                                 }]
-//                                               ]
-//                                             }
-//                                       })
-//                 })
-//        })
-//      })
-//      })
-//
-//}
-//
-//else if(res[0]==='a4') {var qwer = 'A4_number';
-//var sql1 = ' SELECT * FROM ??  ORDER BY id DESC LIMIT 1 ';
-//
-//    connection.query( sql1 , [ order ], function(err, rows, fields) {
-//    if (err) throw err;
-//    var last = JSON.parse(JSON.stringify(rows));
-//
-//var sql = ' SELECT A4_number FROM product WHERE name = ? AND size = ?';
-//
-//    connection.query( sql , [ last[0].name, last[0].size ], function(err, rows, fields) {
-//    if (err) throw err;
-//    var num = JSON.parse(JSON.stringify(rows));
-//    var numm = num[0].number;
-//
-//    if(last[0].number%numm == 0){var n_paper = last[0].number/numm;}
-//    else if(last[0].number%numm !== 0){var n_paper = ((last[0].number-(last[0].number%numm))/numm)+1;}
-//
-//    var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to >= ? ';
-//
-//        connection.query( sql11 , [ n_paper, n_paper ], function(err, rows, fields) {
-//        if (err) throw err;
-//        var price = JSON.parse(JSON.stringify(rows));
-//        console.log(' offprice: ', price);
-//
-//        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
-//
-//            connection.query( sql2 , [ order, last[0].number, price[0].price, last[0].id ], function(err, rows, fields) {
-//            if (err) throw err;
-//            console.log('update offprice: ', rows);
-//
-//                bot.sendMessage(user_id, text, {
-//                                             reply_markup: {
-//                                               inline_keyboard: [
-//                                                 [{
-//                                                   text: 'Сделать заказ еще одних вещей',
-//                                                   callback_data: 'more'
-//                                                 }],
-//
-//                                                 [{
-//                                                   text: 'Отправить заявку',
-//                                                   callback_data: 'send'
-//                                                 }]
-//                                               ]
-//                                             }
-//                                       })
-//                 })
-//        })
-//      })
-//      })
-//
-//}
-//})
-//}
+function insert_n_paper (query) {
+
+var str = query.data;
+var res = str.split("#");
+
+var user_id = query.message.chat.id;
+var n_report = 'n_report'+user_id;
+var order = 'order'+user_id;
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+if(res[0]==='sra3') {
+
+    var sql1 = ' SELECT * FROM ??  ORDER BY id DESC LIMIT 1 ';
+
+    connection.query( sql1 , [ order ], function(err, rows, fields) {
+    if (err) throw err;
+    var last = JSON.parse(JSON.stringify(rows));
+
+    var sql = ' SELECT number FROM product WHERE name = ? AND size = ?';
+
+    connection.query( sql , [ last[0].name, last[0].size ], function(err, rows, fields) {
+    if (err) throw err;
+    var num = JSON.parse(JSON.stringify(rows));
+    var numm = num[0].number;
+
+    if(last[0].number%numm == 0){var n_paper = last[0].number/numm;}
+    else if(last[0].number%numm !== 0){var n_paper = ((last[0].number-(last[0].number%numm))/numm)+1;}
+
+    var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to >= ? ';
+
+        connection.query( sql11 , [ n_paper, n_paper ], function(err, rows, fields) {
+        if (err) throw err;
+        var price = JSON.parse(JSON.stringify(rows));
+        console.log(' offprice: ', price);
+
+        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
+
+            connection.query( sql2 , [ order, last[0].number, price[0].price, last[0].id ], function(err, rows, fields) {
+            if (err) throw err;
+            console.log('update offprice: ', rows);
+
+                bot.sendMessage(user_id, text, {
+                                             reply_markup: {
+                                               inline_keyboard: [
+                                                 [{
+                                                   text: 'Сделать заказ еще одних вещей',
+                                                   callback_data: 'more'
+                                                 }],
+
+                                                 [{
+                                                   text: 'Отправить заявку',
+                                                   callback_data: 'send'
+                                                 }]
+                                               ]
+                                             }
+                                       })
+                 })
+        })
+      })
+      })
+
+}
+
+else if(res[0]==='a3') {
+
+    var qwer = 'A3_number';
+
+    var sql1 = ' SELECT * FROM ??  ORDER BY id DESC LIMIT 1 ';
+
+    connection.query( sql1 , [ order ], function(err, rows, fields) {
+    if (err) throw err;
+    var last = JSON.parse(JSON.stringify(rows));
+
+    var sql = ' SELECT A3_number FROM product WHERE name = ? AND size = ?';
+
+    connection.query( sql , [ last[0].name, last[0].size ], function(err, rows, fields) {
+    if (err) throw err;
+    var num = JSON.parse(JSON.stringify(rows));
+    var numm = num[0].number;
+
+    if(last[0].number%numm == 0){var n_paper = last[0].number/numm;}
+    else if(last[0].number%numm !== 0){var n_paper = ((last[0].number-(last[0].number%numm))/numm)+1;}
+
+    var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to >= ? ';
+
+        connection.query( sql11 , [ n_paper, n_paper ], function(err, rows, fields) {
+        if (err) throw err;
+        var price = JSON.parse(JSON.stringify(rows));
+        console.log(' offprice: ', price);
+
+        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
+
+            connection.query( sql2 , [ order, last[0].number, price[0].price, last[0].id ], function(err, rows, fields) {
+            if (err) throw err;
+            console.log('update offprice: ', rows);
+
+                bot.sendMessage(user_id, text, {
+                                             reply_markup: {
+                                               inline_keyboard: [
+                                                 [{
+                                                   text: 'Сделать заказ еще одних вещей',
+                                                   callback_data: 'more'
+                                                 }],
+
+                                                 [{
+                                                   text: 'Отправить заявку',
+                                                   callback_data: 'send'
+                                                 }]
+                                               ]
+                                             }
+                                       })
+                 })
+        })
+      })
+      })
+
+}
+
+else if (res[0]==='a4') {
+
+    var qwer = 'A4_number';
+    var sql1 = ' SELECT * FROM ??  ORDER BY id DESC LIMIT 1 ';
+
+    connection.query( sql1 , [ order ], function(err, rows, fields) {
+    if (err) throw err;
+    var last = JSON.parse(JSON.stringify(rows));
+
+    var sql = ' SELECT A4_number FROM product WHERE name = ? AND size = ?';
+
+    connection.query( sql , [ last[0].name, last[0].size ], function(err, rows, fields) {
+    if (err) throw err;
+    var num = JSON.parse(JSON.stringify(rows));
+    var numm = num[0].number;
+
+    if(last[0].number%numm == 0){var n_paper = last[0].number/numm;}
+    else if(last[0].number%numm !== 0){var n_paper = ((last[0].number-(last[0].number%numm))/numm)+1;}
+
+    var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to >= ? ';
+
+        connection.query( sql11 , [ n_paper, n_paper ], function(err, rows, fields) {
+        if (err) throw err;
+        var price = JSON.parse(JSON.stringify(rows));
+        console.log(' offprice: ', price);
+
+        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
+
+            connection.query( sql2 , [ order, last[0].number, price[0].price, last[0].id ], function(err, rows, fields) {
+            if (err) throw err;
+            console.log('update offprice: ', rows);
+
+                bot.sendMessage(user_id, text, {
+                                             reply_markup: {
+                                               inline_keyboard: [
+                                                 [{
+                                                   text: 'Сделать заказ еще одних вещей',
+                                                   callback_data: 'more'
+                                                 }],
+
+                                                 [{
+                                                   text: 'Отправить заявку',
+                                                   callback_data: 'send'
+                                                 }]
+                                               ]
+                                             }
+                                       })
+                 })
+        })
+      })
+      })
+
+}
+})
+}
 
 
 
