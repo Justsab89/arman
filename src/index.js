@@ -4003,11 +4003,11 @@ if(res[0]==='sra3') {
 
     var sql = ' SELECT number FROM product WHERE name = ? AND size = ?';
 
-    connection.query( sql , [ last[0].name, last[0].size ], function(err, rows, fields) {
+    connection.query( sql , [ last[0].product, last[0].size ], function(err, rows, fields) {
     if (err) throw err;
     var num = JSON.parse(JSON.stringify(rows));
     console.log('num', num);
-    
+
     var numm = num[0].number;
 
 //    console.log('numm', num);
