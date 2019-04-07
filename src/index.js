@@ -3999,6 +3999,7 @@ if(res[0]==='sra3') {
     connection.query( sql1 , [ order ], function(err, rows, fields) {
     if (err) throw err;
     var last = JSON.parse(JSON.stringify(rows));
+    console.log('num', last);
 
     var sql = ' SELECT number FROM product WHERE name = ? AND size = ?';
 
@@ -4006,6 +4007,8 @@ if(res[0]==='sra3') {
     if (err) throw err;
     var num = JSON.parse(JSON.stringify(rows));
     var numm = num[0].number;
+    console.log('num', num);
+//    console.log('numm', num);
 
     if(last[0].number%numm == 0){var n_paper = last[0].number/numm;}
     else if(last[0].number%numm !== 0){var n_paper = ((last[0].number-(last[0].number%numm))/numm)+1;}
