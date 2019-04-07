@@ -3902,73 +3902,73 @@ var sql1 = ' SELECT id, paper_exp FROM ??  ORDER BY id DESC LIMIT 1 ';
 
 
 
-//function insert_number (query) {
-//
-//var str = query.data;
-//var res = str.split("#");
-//console.log('res is:', res[0]);
-//console.log('res is:', res[1]);
-//console.log('res is:', res[2]);
-//
-//var user_id = query.message.chat.id;
-//var n_report = 'n_report'+user_id;
-//var order = 'order'+user_id;
-//
-//    var mysql  = require('mysql');
-//    var pool  = mysql.createPool({
-//    host     : 'localhost',
-//    user     :  config.user,
-//    password :  config.db_password,
-//    database :  config.db_name
-//    })
-//
-//pool.getConnection(function(err, connection) {
-//
-//var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
-//
-//    connection.query( sql1 , [ order ], function(err, rows, fields) {
-//    if (err) throw err;
-//    var id = JSON.parse(JSON.stringify(rows));
-//
-//    var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to >= ? ';
-//
-//        connection.query( sql11 , [ res[1], res[1] ], function(err, rows, fields) {
-//        if (err) throw err;
-//        var price = JSON.parse(JSON.stringify(rows));
-//        console.log(' offprice: ', price);
-//
-//        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
-//
-//            connection.query( sql2 , [ order, res[1], price[0].price, id[0].id ], function(err, rows, fields) {
-//            if (err) throw err;
-//            console.log('update offprice: ', rows);
-//
-//                bot.sendMessage(admin, 'Выберите на какой бумаге будете печатать', {
-//                                     reply_markup: {
-//                                       inline_keyboard: [
-//                                         [{
-//                                           text: 'SRA3',
-//                                           callback_data: 'sra3#' + 'sra3'
-//                                         }],
-//
-//                                         [{
-//                                           text: 'A3',
-//                                           callback_data: 'a3#' + 'a3'
-//                                         }],
-//
-//                                         [{
-//                                           text: 'A4',
-//                                           callback_data: 'a4#' + 'a4'
-//                                         }]
-//                                         ]
-//                                     }
-//                               })
-//                 })
-//        })
-//      })
-//
-//})
-//}
+function insert_number (query) {
+
+var str = query.data;
+var res = str.split("#");
+console.log('res is:', res[0]);
+console.log('res is:', res[1]);
+console.log('res is:', res[2]);
+
+var user_id = query.message.chat.id;
+var n_report = 'n_report'+user_id;
+var order = 'order'+user_id;
+
+    var mysql  = require('mysql');
+    var pool  = mysql.createPool({
+    host     : 'localhost',
+    user     :  config.user,
+    password :  config.db_password,
+    database :  config.db_name
+    })
+
+pool.getConnection(function(err, connection) {
+
+var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
+
+    connection.query( sql1 , [ order ], function(err, rows, fields) {
+    if (err) throw err;
+    var id = JSON.parse(JSON.stringify(rows));
+
+    var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to >= ? ';
+
+        connection.query( sql11 , [ res[1], res[1] ], function(err, rows, fields) {
+        if (err) throw err;
+        var price = JSON.parse(JSON.stringify(rows));
+        console.log(' offprice: ', price);
+
+        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
+
+            connection.query( sql2 , [ order, res[1], price[0].price, id[0].id ], function(err, rows, fields) {
+            if (err) throw err;
+            console.log('update offprice: ', rows);
+
+                bot.sendMessage(admin, 'Выберите на какой бумаге будете печатать', {
+                                     reply_markup: {
+                                       inline_keyboard: [
+                                         [{
+                                           text: 'SRA3',
+                                           callback_data: 'sra3#' + 'sra3'
+                                         }],
+
+                                         [{
+                                           text: 'A3',
+                                           callback_data: 'a3#' + 'a3'
+                                         }],
+
+                                         [{
+                                           text: 'A4',
+                                           callback_data: 'a4#' + 'a4'
+                                         }]
+                                         ]
+                                     }
+                               })
+                 })
+        })
+      })
+
+})
+}
 
 
 
@@ -4158,79 +4158,79 @@ else if (res[0]==='a4') {
 
 
 
-function insert_number (query) {
-
-var str = query.data;
-var res = str.split("#");
-console.log('res is:', res[0]);
-console.log('res is:', res[1]);
-console.log('res is:', res[2]);
-
-var user_id = query.message.chat.id;
-var n_report = 'n_report'+user_id;
-var order = 'order'+user_id;
-
-    var mysql  = require('mysql');
-    var pool  = mysql.createPool({
-    host     : 'localhost',
-    user     :  config.user,
-    password :  config.db_password,
-    database :  config.db_name
-    })
-
-pool.getConnection(function(err, connection) {
-
-var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
-
-    connection.query( sql1 , [ order ], function(err, rows, fields) {
-    if (err) throw err;
-    var id = JSON.parse(JSON.stringify(rows));
-
-    var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to >= ? ';
-
-        connection.query( sql11 , [ res[1], res[1] ], function(err, rows, fields) {
-        if (err) throw err;
-        var price = JSON.parse(JSON.stringify(rows));
-        console.log(' offprice: ', price);
-
-        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
-
-            connection.query( sql2 , [ order, res[1], price[0].price, id[0].id ], function(err, rows, fields) {
-            if (err) throw err;
-            console.log('update offprice: ', rows);
-
-            var sql3 = ' SELECT * FROM ?? WHERE id_report = (SELECT id FROM ?? ORDER BY id DESC LIMIT 1) ';
-
-                connection.query( sql3 , [order, n_report], function(err, rows, fields) {
-                if (err) throw err;
-                var order = JSON.parse(JSON.stringify(rows));
-                var text = 'Вы сделали заявку на ';
-
-                for(var i = 0; i < order.length; i++){
-                text += order[i].product + ' размер ' + order[i].size + ' тиражом ' + order[i].number + '\n';
-                }
-
-                bot.sendMessage(user_id, text, {
-                                             reply_markup: {
-                                               inline_keyboard: [
-                                                 [{
-                                                   text: 'Сделать заказ еще одних вещей',
-                                                   callback_data: 'more'
-                                                 }],
-
-                                                 [{
-                                                   text: 'Отправить заявку',
-                                                   callback_data: 'send'
-                                                 }]
-                                               ]
-                                             }
-                                       })
-                 })
-        })
-      })
-    })
-})
-}
+//function insert_number (query) {
+//
+//var str = query.data;
+//var res = str.split("#");
+//console.log('res is:', res[0]);
+//console.log('res is:', res[1]);
+//console.log('res is:', res[2]);
+//
+//var user_id = query.message.chat.id;
+//var n_report = 'n_report'+user_id;
+//var order = 'order'+user_id;
+//
+//    var mysql  = require('mysql');
+//    var pool  = mysql.createPool({
+//    host     : 'localhost',
+//    user     :  config.user,
+//    password :  config.db_password,
+//    database :  config.db_name
+//    })
+//
+//pool.getConnection(function(err, connection) {
+//
+//var sql1 = ' SELECT id FROM ??  ORDER BY id DESC LIMIT 1 ';
+//
+//    connection.query( sql1 , [ order ], function(err, rows, fields) {
+//    if (err) throw err;
+//    var id = JSON.parse(JSON.stringify(rows));
+//
+//    var sql11 = ' SELECT price FROM tiraj WHERE n_from < ? AND n_to >= ? ';
+//
+//        connection.query( sql11 , [ res[1], res[1] ], function(err, rows, fields) {
+//        if (err) throw err;
+//        var price = JSON.parse(JSON.stringify(rows));
+//        console.log(' offprice: ', price);
+//
+//        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
+//
+//            connection.query( sql2 , [ order, res[1], price[0].price, id[0].id ], function(err, rows, fields) {
+//            if (err) throw err;
+//            console.log('update offprice: ', rows);
+//
+//            var sql3 = ' SELECT * FROM ?? WHERE id_report = (SELECT id FROM ?? ORDER BY id DESC LIMIT 1) ';
+//
+//                connection.query( sql3 , [order, n_report], function(err, rows, fields) {
+//                if (err) throw err;
+//                var order = JSON.parse(JSON.stringify(rows));
+//                var text = 'Вы сделали заявку на ';
+//
+//                for(var i = 0; i < order.length; i++){
+//                text += order[i].product + ' размер ' + order[i].size + ' тиражом ' + order[i].number + '\n';
+//                }
+//
+//                bot.sendMessage(user_id, text, {
+//                                             reply_markup: {
+//                                               inline_keyboard: [
+//                                                 [{
+//                                                   text: 'Сделать заказ еще одних вещей',
+//                                                   callback_data: 'more'
+//                                                 }],
+//
+//                                                 [{
+//                                                   text: 'Отправить заявку',
+//                                                   callback_data: 'send'
+//                                                 }]
+//                                               ]
+//                                             }
+//                                       })
+//                 })
+//        })
+//      })
+//    })
+//})
+//}
 
 
 
