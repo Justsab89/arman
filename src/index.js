@@ -4022,13 +4022,13 @@ if(res[0]==='sra3') {
         var price = JSON.parse(JSON.stringify(rows));
         console.log(' offprice: ', price);
 
-        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
+        var sql2 = ' UPDATE ?? SET number = ?, offprice = ?, n_paper = ? WHERE id = ? ';
 
-            connection.query( sql2 , [ order, last[0].number, price[0].price, last[0].id ], function(err, rows, fields) {
+            connection.query( sql2 , [ order, last[0].number, price[0].price, n_paper, last[0].id ], function(err, rows, fields) {
             if (err) throw err;
             console.log('update offprice: ', rows);
 
-                bot.sendMessage(user_id, text, {
+                bot.sendMessage(user_id, 'Выберите', {
                                              reply_markup: {
                                                inline_keyboard: [
                                                  [{
@@ -4062,7 +4062,7 @@ else if(res[0]==='a3') {
 
     var sql = ' SELECT A3_number FROM product WHERE name = ? AND size = ?';
 
-    connection.query( sql , [ last[0].name, last[0].size ], function(err, rows, fields) {
+    connection.query( sql , [ last[0].product, last[0].size ], function(err, rows, fields) {
     if (err) throw err;
     var num = JSON.parse(JSON.stringify(rows));
     var numm = num[0].number;
@@ -4077,13 +4077,13 @@ else if(res[0]==='a3') {
         var price = JSON.parse(JSON.stringify(rows));
         console.log(' offprice: ', price);
 
-        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
+        var sql2 = ' UPDATE ?? SET number = ?, offprice = ?, n_paper = ? WHERE id = ? ';
 
-            connection.query( sql2 , [ order, last[0].number, price[0].price, last[0].id ], function(err, rows, fields) {
+            connection.query( sql2 , [ order, last[0].number, price[0].price, n_paper, last[0].id ], function(err, rows, fields) {
             if (err) throw err;
             console.log('update offprice: ', rows);
 
-                bot.sendMessage(user_id, text, {
+                bot.sendMessage(user_id, 'Выберите', {
                                              reply_markup: {
                                                inline_keyboard: [
                                                  [{
@@ -4116,7 +4116,7 @@ else if (res[0]==='a4') {
 
     var sql = ' SELECT A4_number FROM product WHERE name = ? AND size = ?';
 
-    connection.query( sql , [ last[0].name, last[0].size ], function(err, rows, fields) {
+    connection.query( sql , [ last[0].product, last[0].size ], function(err, rows, fields) {
     if (err) throw err;
     var num = JSON.parse(JSON.stringify(rows));
     var numm = num[0].number;
@@ -4131,13 +4131,13 @@ else if (res[0]==='a4') {
         var price = JSON.parse(JSON.stringify(rows));
         console.log(' offprice: ', price);
 
-        var sql2 = ' UPDATE ?? SET number = ?, offprice = ? WHERE id = ? ';
+        var sql2 = ' UPDATE ?? SET number = ?, offprice = ?, n_paper = ? WHERE id = ? ';
 
-            connection.query( sql2 , [ order, last[0].number, price[0].price, last[0].id ], function(err, rows, fields) {
+            connection.query( sql2 , [ order, last[0].number, price[0].price, n_paper, last[0].id ], function(err, rows, fields) {
             if (err) throw err;
             console.log('update offprice: ', rows);
 
-                bot.sendMessage(user_id, text, {
+                bot.sendMessage(user_id, 'Выберите', {
                                              reply_markup: {
                                                inline_keyboard: [
                                                  [{
