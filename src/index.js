@@ -4256,7 +4256,7 @@ var product = JSON.parse(JSON.stringify(rows));
 var keyboard = [];
 
 for(var i = 0; i < product.name; i++){
-keyboard.push([{'text': ( product[0].name ) , 'callback_data': ('product ' + product[0].name)}]);
+keyboard.push([{'text': ( product[0].name ) , 'callback_data': ('product#' + product[0].name)}]);
 }
 
 const text = 'Выберите продукт '
