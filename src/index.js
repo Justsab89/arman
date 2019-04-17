@@ -4248,7 +4248,7 @@ function show_product (msg) {
 
 var user_id = msg.chat.id;
 
-var sql = ' SELECT DISTINCT name FROM products ';
+var sql = ' SELECT DISTINCT name FROM product ';
 
 connection.query( sql , function(err, rows, fields) {
 if (err) throw err;
