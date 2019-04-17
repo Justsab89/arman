@@ -4297,9 +4297,9 @@ console.log('NNtext ', splited)
 
 pool.getConnection(function(err, connection) {
 
-    var sql = ' INSERT INTO product (name, size, number, print_exp, print_profit, rizprint_exp, rizprint_profit, offprint_exp, offprint_profit, digprint_exp, digprint_profit, paper_exp, paper_type, cut_exp, cut_profit, intervalchik ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    var sql = ' INSERT INTO product (name, size, number, A3_number, A4_number, print_exp, print_profit, rizprint_exp, rizprint_profit, offprint_exp, offprint_profit, digprint_exp, digprint_profit, paper_exp, paper_type, cut_exp, cut_profit, intervalchik ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
-    connection.query( sql , [ splited[0], id_jk, splited[1], splited[2], splited[3], splited[4], splited[5], splited[6], splited[7], splited[8], splited[9], splited[10], splited[11], splited[12], splited[13], splited[14] ], function(err, rows, fields) {
+    connection.query( sql , [ splited[0], id_jk, splited[1], splited[2], splited[3], splited[4], splited[5], splited[6], splited[7], splited[8], splited[9], splited[10], splited[11], splited[12], splited[13], splited[14], splited[15], splited[16] ], function(err, rows, fields) {
     if (err) throw err;
 //, splited[15]
     })
