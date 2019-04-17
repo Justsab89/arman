@@ -7,7 +7,7 @@ const helper = require('./helper')
 const fs = require('fs')
 //const TaskTimer = require('tasktimer')
 //const database = require('./database')
-const admin = 336243307
+const admin = 110638690
 
 //SABYR  336243307
 //ARMAN  110638690
