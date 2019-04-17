@@ -3608,7 +3608,7 @@ pool.getConnection(function(err, connection) {
             if (err) throw err;
             var product = JSON.parse(JSON.stringify(rows));
             var keyboard = [];
-            keyboard.push([{'text': ( 'Указать нестандартный размер' ) , 'callback_data': ('size-other#' + 'боолванка' + '#' + res[1] + '#' + 'бооолванка' )}]);
+            keyboard.push([{'text': ( 'Указать нестандартный размер' ) , 'callback_data': ('size-other#' + 'б' + '#' + res[1] + '#' + 'б' )}]);
 
             for(var i = 0; i < product.length; i++){
             keyboard.push([{'text': ( product[i].size ) , 'callback_data': ('size#' + product[i].size + '#' + res[1] )}]);
@@ -3670,7 +3670,7 @@ pool.getConnection(function(err, connection) {
             if (err) throw err;
             var product = JSON.parse(JSON.stringify(rows));
             var keyboard = [];
-            keyboard.push([{'text': ( 'Указать нестандартный размер' ) , 'callback_data': ('size-other#' + 'боолванка' + '#' + res[1] + '#' + 'бооолванка' )}]);
+            keyboard.push([{'text': ( 'Указать нестандартный размер' ) , 'callback_data': ('size-other#' + 'б' + '#' + res[1] + '#' + 'б' )}]);
 
             for(var i = 0; i < product.length; i++){
             keyboard.push([{'text': ( product[i].size ) , 'callback_data': ('size#' + product[i].size + '#' + res[1] + '#' + product[i].id )}]);
