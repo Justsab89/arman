@@ -3258,7 +3258,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
                                     ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                                     ' Всего ' + digexp + ' + ' + digprofit + ' = ' + digtotal + '\n' +
-                                    ' На цифре за одну ' + dig1 + '\n' +;
+                                    ' На цифре за одну ' + dig1 ;
 
 
                           }
