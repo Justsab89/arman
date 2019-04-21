@@ -3309,7 +3309,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
 
                            }
 
-                     console.log('ATEXXXT non standard',text)
+//                     console.log('ATEXXXT non standard',text)
 
 
 
