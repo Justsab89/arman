@@ -3026,8 +3026,8 @@ var nomer = JSON.parse(JSON.stringify(rows));
                                var offprint = parseInt(counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper);
 
                  //              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
-    //                           var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
-                               var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
+                               var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
+//                               var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
 
                  //              var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
                                var digprint = parseInt(counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper);
