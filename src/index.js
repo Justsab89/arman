@@ -2963,7 +2963,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
             for(var i = 0; i < order.length; i++){
             text += order[i].product + ' размер ' + order[i].size + ' тиражом ' + order[i].number + '\n';
             }
-            console.log('POSLE INSERTA', text);
+            console.log('POSLE INSERTAAAA', text);
 
             var sql31 = ' SELECT size FROM product WHERE size = "non" AND name = (SELECT name FROM ?? WHERE size LIKE "%*%" AND id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1 ) ';
 
