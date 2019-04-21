@@ -2970,7 +2970,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
             connection.query( sql31 , [order_table, order_table], function(err, rows, fields) {
             if (err) throw err;
             var non = JSON.parse(JSON.stringify(rows));
-            console.log('POSLE INSERTA', non.length);
+            console.log('POSLE INSERTABBBB', non.length);
             if (non.length == 1) {
 
 // просчитываем для продукции со стандартным размером
