@@ -2971,7 +2971,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
             if (err) throw err;
             var non = JSON.parse(JSON.stringify(rows));
             console.log('POSLE INSERTABBBB', non.length);
-            if (non.length == 1) {
+            if (non.length == 0) {
 
 // просчитываем для продукции со стандартным размером
             var sql4 = ' SELECT product.name, product.size, product.number AS ina3, product.print_exp, product.print_profit, product.cut_exp, product.cut_profit, ' +
