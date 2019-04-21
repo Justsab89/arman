@@ -3009,6 +3009,9 @@ var nomer = JSON.parse(JSON.stringify(rows));
              //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
                            var rizprint_exp = counting[i].rizprint_exp*n_paper;
 
+            console.log('rizprint_exp ', counting[i].rizprint_exp);
+            console.log('rizprint_profit ', counting[i].rizprint_profit);
+
              //              var rizprint_profit = counting[i].rizprint_profit*n_paper;
                            var rizprint_profit = counting[i].rizprint_profit*n_paper;
 
@@ -3025,7 +3028,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
                            var offprint = parseInt(counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper);
 
              //              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
-                           var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
+//                           var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
                            var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
 
              //              var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
@@ -3100,7 +3103,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
                                     ' Всего ' + digexp + ' + ' + digprofit + ' = ' + digtotal + '\n' ;
 
                           }
-            console.log('ATEXXXT ',text)
+//            console.log('ATEXXXT ',text)
 
              var sql5 = ' SELECT product.name AS name, product.number AS ina3, product.print_exp AS print_exp, product.print_profit AS print_profit, ??.cut_exp AS cut_exp, ' +
                         ' product.offprint_exp AS offprint_exp, product.offprint_profit AS offprint_profit, product.digprint_exp AS digprint_exp, product.digprint_profit AS digprint_profit, ??.size AS size, ??.number AS number, ??.offprice AS offprice, ??.paper_exp AS paper_exp, ??.paper_type AS paper_type, ??.paper_side AS paper_side ' +
@@ -3109,7 +3112,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
              connection.query( sql5 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table ], function(err, rows, fields) {
              if (err) throw err;
              var counting = JSON.parse(JSON.stringify(rows));
-             console.log('НЕСТАНДАРт ', counting);
+//             console.log('НЕСТАНДАРт ', counting);
 
 
 
