@@ -3060,6 +3060,11 @@ var nomer = JSON.parse(JSON.stringify(rows));
                            var riztotal = rizexp + rizprofit;
 
                            var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+
+                           var riz1 = riztotal/order[0].number;
+                           var dig1 = digtotal/order[0].number;
+                           var off1 = offtotal/order[0].number;
+                           var print1 = total/order[0].number;
                           }
                           else if(counting[i].paper_exp === null & counting[i].A3_paper_exp !== null & counting[i].A4_paper_exp === null)
                           {
@@ -3129,6 +3134,11 @@ var nomer = JSON.parse(JSON.stringify(rows));
                            var riztotal = rizexp + rizprofit;
 
                            var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+
+                           var riz1 = riztotal/order[0].number;
+                           var dig1 = digtotal/order[0].number;
+                           var off1 = offtotal/order[0].number;
+                           var print1 = total/order[0].number;
                           }
                           else if(counting[i].paper_exp === null & counting[i].A3_paper_exp === null & counting[i].A4_paper_exp !== null)
                           {
@@ -3199,6 +3209,12 @@ var nomer = JSON.parse(JSON.stringify(rows));
                            var riztotal = rizexp + rizprofit;
 
                            var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+
+                           var riz1 = riztotal/order[0].number;
+                           var dig1 = digtotal/order[0].number;
+                           var off1 = offtotal/order[0].number;
+                           var print1 = total/order[0].number;
+
                           }
 
 
@@ -3224,21 +3240,26 @@ var nomer = JSON.parse(JSON.stringify(rows));
                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
                                     ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                                     ' Всего ' + exp + ' + ' + profit + ' = ' + total + '\n' +
+                                    ' На струйнике за одну ' + print1 + '\n' +
                                     'Ризограф печать' + '\n' +
                                     ' ЦП ' + rizprint_exp + ' + ' + rizprint_profit + ' = ' + rizprint + '\n' +
                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
                                     ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                                     ' Всего ' + rizexp + ' + ' + rizprofit + ' = ' + riztotal + '\n' +
+                                    ' На ризографе за одну ' + riz1 + '\n' +
                                     'Офсетная печать' + '\n' +
                                     ' ЦП ' + offprint_exp + ' + ' + offprint_profit + ' = ' + offprint + '\n' +
                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
                                     ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
                                     ' Всего ' + offexp + ' + ' + offprofit + ' = ' + offtotal + '\n' +
+                                    ' На офсете за одну ' + off1 + '\n' +
                                     'Цифровая печать' + '\n' +
                                     ' ЦП ' + digprint_exp + ' + ' + digprint_profit + ' = ' + digprint + '\n' +
                                     ' ЦБ ' + paper_exp + ' = ' + paper_exp + '\n' +
                                     ' ЦР ' + cut_exp + ' + ' + cut_profit + ' = ' + cut + '\n' +
-                                    ' Всего ' + digexp + ' + ' + digprofit + ' = ' + digtotal + '\n' ;
+                                    ' Всего ' + digexp + ' + ' + digprofit + ' = ' + digtotal + '\n' +
+                                    ' На цифре за одну ' + dig1 + '\n' +;
+
 
                           }
 //            console.log('ATEXXXT ',text)
