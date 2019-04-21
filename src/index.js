@@ -3113,7 +3113,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
              connection.query( sql5 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table ], function(err, rows, fields) {
              if (err) throw err;
              var counting = JSON.parse(JSON.stringify(rows));
-//             console.log('НЕСТАНДАРт ', counting);
+             console.log('НЕСТАНДАРт ', counting);
 
 
 
