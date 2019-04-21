@@ -2992,59 +2992,54 @@ var nomer = JSON.parse(JSON.stringify(rows));
 
 
              //           var paper_exp = counting[i].paper_exp*n_paper;
-                          if(counting[i].paper_exp !== null & counting[i].A3_paper_exp === null & counting[i].A4_paper_exp === null) {var paper_exp = parseInt(counting[i].paper_exp*n_paper);}
-                          else if(counting[i].paper_exp === null & counting[i].A3_paper_exp !== null & counting[i].A4_paper_exp === null) {var paper_exp = parseInt(counting[i].A3_paper_exp*n_paper);}
-                          else if(counting[i].paper_exp === null & counting[i].A3_paper_exp === null & counting[i].A4_paper_exp !== null) {var paper_exp = parseInt(counting[i].A4_paper_exp*n_paper);}
+                          if(counting[i].paper_exp !== null & counting[i].A3_paper_exp === null & counting[i].A4_paper_exp === null)
+                          {
+                               var paper_exp = parseInt(counting[i].paper_exp*n_paper);
+                 //              var print_exp = counting[i].print_exp*n_paper;
+                               var print_exp = parseInt(counting[i].print_exp*n_paper);
 
-             //              var print_exp = counting[i].print_exp*n_paper;
-                           var print_exp = parseInt(counting[i].print_exp*n_paper);
+                 //              var print_profit = counting[i].print_profit*n_paper;
+                               var print_profit = parseInt(counting[i].print_profit*n_paper);
 
-             //              var print_profit = counting[i].print_profit*n_paper;
-                           var print_profit = parseInt(counting[i].print_profit*n_paper);
+                 //              var offprint_exp = counting[i].offprice*n_paper/2;
+                               var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
 
-             //              var offprint_exp = counting[i].offprice*n_paper/2;
-                           var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+                 //              var offprint_profit = counting[i].offprice*n_paper/2;
+                               var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
 
-             //              var offprint_profit = counting[i].offprice*n_paper/2;
-                           var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+                 //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
+                               var rizprint_exp = counting[i].rizprint_exp*n_paper;
 
-             //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
-                           var rizprint_exp = counting[i].rizprint_exp*n_paper;
+                 //              var rizprint_profit = counting[i].rizprint_profit*n_paper;
+                               var rizprint_profit = counting[i].rizprint_profit*n_paper;
 
-            console.log('rizprint_exp ', counting[i].rizprint_exp);
-            console.log('rizprint_profit ', counting[i].rizprint_profit);
+                 //              var digprint_exp = counting[i].digprint_exp*n_paper;
+                               var digprint_exp = parseInt(counting[i].digprint_exp*n_paper);
 
-             //              var rizprint_profit = counting[i].rizprint_profit*n_paper;
-                           var rizprint_profit = counting[i].rizprint_profit*n_paper;
+                 //              var digprint_profit = counting[i].digprint_profit*n_paper;
+                               var digprint_profit = parseInt(counting[i].digprint_profit*n_paper);
 
-             //              var digprint_exp = counting[i].digprint_exp*n_paper;
-                           var digprint_exp = parseInt(counting[i].digprint_exp*n_paper);
+                 //              var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
+                               var print = parseInt(counting[i].print_exp*n_paper + counting[i].print_profit*n_paper);
 
-             //              var digprint_profit = counting[i].digprint_profit*n_paper;
-                           var digprint_profit = parseInt(counting[i].digprint_profit*n_paper);
+                 //              var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
+                               var offprint = parseInt(counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper);
 
-             //              var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
-                           var print = parseInt(counting[i].print_exp*n_paper + counting[i].print_profit*n_paper);
+                 //              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
+    //                           var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
+                               var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
 
-             //              var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
-                           var offprint = parseInt(counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper);
+                 //              var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
+                               var digprint = parseInt(counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper);
 
-             //              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
-//                           var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
-                           var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
+                 //              var cut_exp = counting[i].cut_exp*n_paper;
+                               var cut_exp = parseInt(counting[i].cut_exp*n_paper);
 
-             //              var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
-                           var digprint = parseInt(counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper);
+                 //              var cut_profit = counting[i].cut_profit*n_paper;
+                               var cut_profit = parseInt(counting[i].cut_profit*n_paper);
 
-             //              var cut_exp = counting[i].cut_exp*n_paper;
-                           var cut_exp = parseInt(counting[i].cut_exp*n_paper);
-
-             //              var cut_profit = counting[i].cut_profit*n_paper;
-                           var cut_profit = parseInt(counting[i].cut_profit*n_paper);
-
-             //              var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
-                           var cut = parseInt(counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper);
-
+                 //              var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
+                               var cut = parseInt(counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper);
                            var exp = print_exp + paper_exp + cut_exp;
                            var profit = print_profit + cut_profit;
                            var total = profit + exp;
@@ -3065,6 +3060,147 @@ var nomer = JSON.parse(JSON.stringify(rows));
                            var riztotal = rizexp + rizprofit;
 
                            var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+                          }
+                          else if(counting[i].paper_exp === null & counting[i].A3_paper_exp !== null & counting[i].A4_paper_exp === null)
+                          {
+                               var paper_exp = parseInt(counting[i].A3_paper_exp*n_paper);
+                 //              var print_exp = counting[i].print_exp*n_paper;
+                               var print_exp = parseInt(counting[i].print_exp*n_paper);
+
+                 //              var print_profit = counting[i].print_profit*n_paper;
+                               var print_profit = parseInt(counting[i].print_profit*n_paper);
+
+                 //              var offprint_exp = counting[i].offprice*n_paper/2;
+                               var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+
+                 //              var offprint_profit = counting[i].offprice*n_paper/2;
+                               var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+
+                 //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
+                               var rizprint_exp = counting[i].rizprint_exp*n_paper;
+
+                 //              var rizprint_profit = counting[i].rizprint_profit*n_paper;
+                               var rizprint_profit = counting[i].rizprint_profit*n_paper;
+
+                 //              var digprint_exp = counting[i].digprint_exp*n_paper;
+                               var digprint_exp = parseInt(counting[i].digprint_exp*n_paper);
+
+                 //              var digprint_profit = counting[i].digprint_profit*n_paper;
+                               var digprint_profit = parseInt(counting[i].digprint_profit*n_paper);
+
+                 //              var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
+                               var print = parseInt(counting[i].print_exp*n_paper + counting[i].print_profit*n_paper);
+
+                 //              var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
+                               var offprint = parseInt(counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper);
+
+                 //              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
+    //                           var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
+                               var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
+
+                 //              var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
+                               var digprint = parseInt(counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper);
+
+                 //              var cut_exp = counting[i].cut_exp*n_paper;
+                               var cut_exp = parseInt(counting[i].cut_exp*n_paper);
+
+                 //              var cut_profit = counting[i].cut_profit*n_paper;
+                               var cut_profit = parseInt(counting[i].cut_profit*n_paper);
+
+                 //              var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
+                               var cut = parseInt(counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper);
+                           var exp = print_exp + paper_exp + cut_exp;
+                           var profit = print_profit + cut_profit;
+                           var total = profit + exp;
+                           var offexp = offprint_exp + paper_exp + cut_exp;
+                           var offprofit = offprint_profit + cut_profit;
+                           var offtotal = offexp + offprofit;
+                           var digexp = digprint_exp + paper_exp + cut_exp;
+             //              var digexp2 = parseInt(digexp);
+
+                           var digprofit = digprint_profit + cut_profit;
+             //              var digprofit2 = parseInt(digprofit);
+
+                           var digtotal = digexp + digprofit;
+             //              var digtotal2 = parseInt(digtotal);
+
+                           var rizexp = rizprint_exp + paper_exp + cut_exp;
+                           var rizprofit = rizprint_profit + cut_profit;
+                           var riztotal = rizexp + rizprofit;
+
+                           var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+                          }
+                          else if(counting[i].paper_exp === null & counting[i].A3_paper_exp === null & counting[i].A4_paper_exp !== null)
+                          {
+                          var paper_exp = parseInt(counting[i].A4_paper_exp*n_paper);
+
+                 //              var print_exp = counting[i].print_exp*n_paper;
+                               var print_exp = parseInt(counting[i].print_exp*n_paper/2);
+
+                 //              var print_profit = counting[i].print_profit*n_paper;
+                               var print_profit = parseInt(counting[i].print_profit*n_paper/2);
+
+                 //              var offprint_exp = counting[i].offprice*n_paper/2;
+                               var offprint_exp = parseInt(counting[i].offprice*n_paper/2);
+
+                 //              var offprint_profit = counting[i].offprice*n_paper/2;
+                               var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
+
+                 //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
+                               var rizprint_exp = counting[i].rizprint_exp*n_paper/2;
+
+                 //              var rizprint_profit = counting[i].rizprint_profit*n_paper;
+                               var rizprint_profit = counting[i].rizprint_profit*n_paper/2;
+
+                 //              var digprint_exp = counting[i].digprint_exp*n_paper;
+                               var digprint_exp = parseInt(counting[i].digprint_exp*n_paper/2);
+
+                 //              var digprint_profit = counting[i].digprint_profit*n_paper;
+                               var digprint_profit = parseInt(counting[i].digprint_profit*n_paper/2);
+
+                 //              var print = counting[i].print_exp*n_paper + counting[i].print_profit*n_paper;
+                               var print = parseInt(counting[i].print_exp*n_paper + counting[i].print_profit*n_paper);
+
+                 //              var offprint = counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper;
+                               var offprint = parseInt(counting[i].offprint_exp*n_paper + counting[i].offprint_profit*n_paper);
+
+                 //              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
+    //                           var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
+                               var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
+
+                 //              var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
+                               var digprint = parseInt(counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper);
+
+                 //              var cut_exp = counting[i].cut_exp*n_paper;
+                               var cut_exp = parseInt(counting[i].cut_exp*n_paper/2);
+
+                 //              var cut_profit = counting[i].cut_profit*n_paper;
+                               var cut_profit = parseInt(counting[i].cut_profit*n_paper/2);
+
+                 //              var cut = counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper;
+                               var cut = parseInt(counting[i].cut_exp*n_paper +counting[i].cut_profit*n_paper);
+                           var exp = print_exp + paper_exp + cut_exp;
+                           var profit = print_profit + cut_profit;
+                           var total = profit + exp;
+                           var offexp = offprint_exp + paper_exp + cut_exp;
+                           var offprofit = offprint_profit + cut_profit;
+                           var offtotal = offexp + offprofit;
+                           var digexp = digprint_exp + paper_exp + cut_exp;
+             //              var digexp2 = parseInt(digexp);
+
+                           var digprofit = digprint_profit + cut_profit;
+             //              var digprofit2 = parseInt(digprofit);
+
+                           var digtotal = digexp + digprofit;
+             //              var digtotal2 = parseInt(digtotal);
+
+                           var rizexp = rizprint_exp + paper_exp + cut_exp;
+                           var rizprofit = rizprint_profit + cut_profit;
+                           var riztotal = rizexp + rizprofit;
+
+                           var sum = print_exp+print_profit+paper_exp+cut_exp+cut_profit;
+                          }
+
 
                            var paper_type = counting[i].paper_type;
                            var paper_side = counting[i].paper_side;
