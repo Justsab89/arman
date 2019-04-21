@@ -3007,10 +3007,10 @@ var nomer = JSON.parse(JSON.stringify(rows));
                            var offprint_profit = parseInt(counting[i].offprice*n_paper/2);
 
              //              var rizprint_exp = counting[i].rizprint_exp*n_paper;
-                           var rizprint_exp = parseInt(counting[i].rizprint_exp*n_paper);
+                           var rizprint_exp = counting[i].rizprint_exp*n_paper;
 
              //              var rizprint_profit = counting[i].rizprint_profit*n_paper;
-                           var rizprint_profit = parseInt(counting[i].rizprint_profit*n_paper);
+                           var rizprint_profit = counting[i].rizprint_profit*n_paper;
 
              //              var digprint_exp = counting[i].digprint_exp*n_paper;
                            var digprint_exp = parseInt(counting[i].digprint_exp*n_paper);
@@ -3026,6 +3026,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
 
              //              var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
                            var rizprint = parseInt(counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper);
+                           var rizprint = counting[i].rizprint_exp*n_paper + counting[i].rizprint_profit*n_paper;
 
              //              var digprint = counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper;
                            var digprint = parseInt(counting[i].digprint_exp*n_paper + counting[i].digprint_profit*n_paper);
