@@ -2978,7 +2978,7 @@ var nomer = JSON.parse(JSON.stringify(rows));
                        ' product.offprint_exp, product.offprint_profit, product.digprint_exp, product.digprint_profit, product.rizprint_exp, product.rizprint_profit, ??.number AS number, ??.offprice AS offprice, ??.paper_exp AS paper_exp, ??.A3_paper_exp AS A3_paper_exp, ??.A4_paper_exp AS A4_paper_exp, ??.paper_type, ??.paper_side, ??.n_paper ' +
                        ' FROM product JOIN ?? WHERE product.name = ??.product AND product.size = ??.size AND ??.size NOT LIKE "%*%" AND ??.id_report = (SELECT id_report FROM ?? ORDER BY id DESC LIMIT 1) ';
 
-            connection.query( sql4 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table], function(err, rows, fields) {
+            connection.query( sql4 , [order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table, order_table], function(err, rows, fields) {
             if (err) throw err;
             var counting = JSON.parse(JSON.stringify(rows));
 //            console.log('joining result ', counting);
