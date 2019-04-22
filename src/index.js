@@ -4582,9 +4582,9 @@ console.log('NNtext ', splited)
 
 pool.getConnection(function(err, connection) {
 
-    var sql = ' INSERT INTO paper (thickness, price, A3_price, A4_price ) VALUES (?,?) ';
+    var sql = ' INSERT INTO paper (thickness, price, A3_price, A4_price ) VALUES (?,?,?,?) ';
 
-    connection.query( sql , [ splited[0], splited[1] ], function(err, rows, fields) {
+    connection.query( sql , [  splited[0], splited[1], splited[2], splited[3] ], function(err, rows, fields) {
     if (err) throw err;
 
         var sql1 = ' SELECT * FROM paper ';
@@ -4594,7 +4594,9 @@ pool.getConnection(function(err, connection) {
         var paper = JSON.parse(JSON.stringify(rows));
         var text = 'Цены по бумагам: \n';
         for(var i = 0; i < paper.length; i++){
-        text += paper[i].thickness  + ' гр - цена ' + paper[i].price + ' тг' + '\n';
+        text += paper[i].thickness  + ' гр - цена ' + paper[i].price + ' тг' + '\n' +
+                paper[i].thickness  + ' гр - цена ' + paper[i].A3_price + ' тг' + '\n' +
+                paper[i].thickness  + ' гр - цена ' + paper[i].A4_price + ' тг' + '\n' ;
         }
         bot.sendMessage(user_id, text)
         })
