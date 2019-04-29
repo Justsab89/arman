@@ -4568,7 +4568,8 @@ var user_id = msg.chat.id;
 var msg_text = msg.text;
 
 var text = msg_text.replace("/paper", "");
-var splited = text.split("#");
+var text2 = text.split(' ').join('');
+var splited = text2.split("#");
 
 console.log('NNtext ', splited)
 
