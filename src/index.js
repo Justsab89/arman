@@ -4596,7 +4596,7 @@ pool.getConnection(function(err, connection) {
         var paper = JSON.parse(JSON.stringify(rows));
         var text = 'Цены по бумагам: \n';
         for(var i = 0; i < paper.length; i++){
-        text += paper[i].thickness  + ' гр - цена SRA3 ' + paper[i].price + ', A3 ' + paper[i].A3_price + ', A4 ' + paper[i].A4_price + '\n' ;
+        text += paper[i].thickness  + ' - цены SRA3: ' + paper[i].price + ', A3: ' + paper[i].A3_price + ', A4: ' + paper[i].A4_price + '\n' ;
 //        text += paper[i].thickness  + ' гр - цена ' + paper[i].price + ' тг' + '\n' +
 //                paper[i].thickness  + ' гр - цена ' + paper[i].A3_price + ' тг' + '\n' +
 //                paper[i].thickness  + ' гр - цена ' + paper[i].A4_price + ' тг' + '\n' ;
