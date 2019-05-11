@@ -7,7 +7,7 @@ const helper = require('./helper')
 const fs = require('fs')
 //const TaskTimer = require('tasktimer')
 //const database = require('./database')
-const admin = 110638690
+const admin = 336243307
 
 //SABYR  336243307
 //ARMAN  110638690
@@ -257,13 +257,11 @@ const text = '☑️ Чтобы ввести новый продукт набе�
              '\nОдиннацатое наценка печати на офсете: 8 ' +
              '\nДвенадцатое себестоимость печати на цифровом: 30 ' +
              '\nТринадцатое наценка печати на цифровом: 10 ' +
-             '\nЧетырнадцатое себестоимость бумаги А3: НОЛЬ ' +
-             '\nПятнадцатое вид бумаги А3: НОЛЬ ' +
              '\nШестнадцатое себестоимость резки: 5 ' +
              '\nСемнадцатое наценка резки: 2 ' +
              '\nВосемнадцатое интервал: 100 ' +
              '\nВ итоге вы вводите следующую команду' +
-             '\n/product флаер#A5#8#8#4#20#10#10#5#12#8#30#10#20#5#5#2#100\n' +
+             '\n/product флаер#A5#8#8#4#20#10#10#5#12#8#30#10#5#2#100\n' +
              '\n\n☑️ Чтобы ввести цену на тираж наберите команду /tiraj затем в этом порядке через # наберите 3 данных' +
              '\nПервое цену за тираж: 50' +
              '\nВторое кол-во ОТ: 0' +
@@ -4449,7 +4447,8 @@ var user_id = msg.chat.id;
 var msg_text = msg.text;
 
 var text = msg_text.replace("/product", "");
-var splited = text.split("#");
+var text2 = text.split(' ').join('');
+var splited = text2.split("#");
 var id_jk = splited.splice(1,1);
 var edited_text = splited.join(" ");
 console.log('edited_text ', edited_text)
@@ -4466,11 +4465,11 @@ console.log('NNtext ', splited)
 
 pool.getConnection(function(err, connection) {
 
-    var sql = ' INSERT INTO product (name, size, number, A3_number, A4_number, print_exp, print_profit, rizprint_exp, rizprint_profit, offprint_exp, offprint_profit, digprint_exp, digprint_profit, paper_exp, paper_type, cut_exp, cut_profit, intervalchik ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    var sql = ' INSERT INTO product (name, size, number, A3_number, A4_number, print_exp, print_profit, rizprint_exp, rizprint_profit, offprint_exp, offprint_profit, digprint_exp, digprint_profit, cut_exp, cut_profit, intervalchik ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
-    connection.query( sql , [ splited[0], id_jk, splited[1], splited[2], splited[3], splited[4], splited[5], splited[6], splited[7], splited[8], splited[9], splited[10], splited[11], splited[12], splited[13], splited[14], splited[15], splited[16] ], function(err, rows, fields) {
+    connection.query( sql , [ splited[0], id_jk, splited[1], splited[2], splited[3], splited[4], splited[5], splited[6], splited[7], splited[8], splited[9], splited[10], splited[11], splited[12], splited[13], splited[14] ], function(err, rows, fields) {
     if (err) throw err;
-//, splited[15]
+
     })
 })
 })
